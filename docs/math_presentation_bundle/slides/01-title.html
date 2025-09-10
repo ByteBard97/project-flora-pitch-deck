@@ -1,0 +1,53 @@
+<div class="slide title-slide">
+    <h1 class="main-title">Stop Fighting Wraparound</h1>
+    <h2 class="subtitle">Embed Your Rings!</h2>
+    
+    <div class="visual-element">
+        <svg width="400" height="200" viewBox="0 0 400 200">
+            <!-- Circle representing wraparound -->
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#4CAF50" stroke-width="3"/>
+            
+            <!-- Points near wraparound -->
+            <circle cx="170" cy="100" r="8" fill="#FF5722"/>
+            <circle cx="30" cy="100" r="8" fill="#2196F3"/>
+            
+            <!-- Arrow showing "wrong" linear distance -->
+            <path d="M 170 100 L 30 100" stroke="#FF5722" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+            <text x="100" y="90" text-anchor="middle" fill="#FF5722" font-size="14">140° apart?</text>
+            
+            <!-- Arrow showing correct arc distance -->
+            <path d="M 170 100 A 80 80 0 0 0 30 100" fill="none" stroke="#4CAF50" stroke-width="3"/>
+            <text x="100" y="130" text-anchor="middle" fill="#4CAF50" font-size="14" fill="#FFC107">20° apart!</text>
+            
+            <!-- Embedding arrow -->
+            <path d="M 220 100 L 280 100" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <text x="250" y="90" text-anchor="middle" fill="#666" font-size="12" fill="#FFC107">embed</text>
+            
+            <!-- 2D representation -->
+            <g transform="translate(320, 100)">
+                <line x1="-50" y1="0" x2="50" y2="0" stroke="#999" stroke-width="1"/>
+                <line x1="0" y1="-50" x2="0" y2="50" stroke="#999" stroke-width="1"/>
+                <circle cx="40" cy="0" r="8" fill="#FF5722"/>
+                <circle cx="-40" cy="0" r="8" fill="#2196F3"/>
+                <text x="0" y="-60" text-anchor="middle" fill="#666" font-size="12" fill="#FFC107">ℝ²</text>
+            </g>
+            
+            <!-- Arrow marker -->
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+    
+    <div class="presenter-info">
+        <p>A practical guide to handling circular quantities in code</p>
+        <div class="company-branding">
+            <span class="ceres-logo">CERES</span>
+            <span class="ceres-ai">AI</span>
+        </div>
+        <p class="date">Ceres Tech Talk</p>
+    </div>
+</div>
+

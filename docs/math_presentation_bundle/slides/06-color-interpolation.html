@@ -1,0 +1,96 @@
+<div class="slide">
+    <h1>Color Interpolation (HSV Hue)</h1>
+    
+    <div class="color-problem">
+        <h3>🎨 The Problem: Fade from Red to Magenta</h3>
+        <div class="color-display">
+            <div class="color-box" style="background: hsl(10, 100%, 50%);">
+                <span>Red<br>10°</span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="color-box" style="background: hsl(350, 100%, 50%);">
+                <span>Magenta<br>350°</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="approaches">
+        <div class="approach-bad">
+            <h4>❌ Linear Interpolation</h4>
+            <div class="color-gradient bad-gradient">
+                <div class="color-step" style="background: hsl(10, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(68, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(126, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(180, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(238, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(296, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(350, 100%, 50%);"></div>
+            </div>
+            <pre><code>mid_hue = (10 + 350) / 2 = 180°  # CYAN!?
+# Goes through entire rainbow!</code></pre>
+        </div>
+        
+        <div class="approach-good">
+            <h4>✅ Circular Interpolation</h4>
+            <div class="color-gradient good-gradient">
+                <div class="color-step" style="background: hsl(10, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(6, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(2, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(358, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(354, 100%, 50%);"></div>
+                <div class="color-step" style="background: hsl(350, 100%, 50%);"></div>
+            </div>
+            <pre><code>vec1 = [cos(10°), sin(10°)]
+vec2 = [cos(350°), sin(350°)]
+vec_mid = normalize((vec1 + vec2) / 2)
+mid_hue = atan2(vec_mid)  # 0° (stays red!)</code></pre>
+        </div>
+    </div>
+    
+    <div class="implementation-example">
+        <h3>Production-Ready Color Lerp</h3>
+        <pre><code class="javascript">function lerpHue(h1, h2, t) {
+    // Convert hues to radians
+    const theta1 = h1 * Math.PI / 180;
+    const theta2 = h2 * Math.PI / 180;
+    
+    // Embed on unit circle
+    const v1 = [Math.cos(theta1), Math.sin(theta1)];
+    const v2 = [Math.cos(theta2), Math.sin(theta2)];
+    
+    // Interpolate vectors
+    const vt = [
+        (1 - t) * v1[0] + t * v2[0],
+        (1 - t) * v1[1] + t * v2[1]
+    ];
+    
+    // Normalize and convert back
+    const norm = Math.sqrt(vt[0]**2 + vt[1]**2);
+    const thetaT = Math.atan2(vt[1]/norm, vt[0]/norm);
+    
+    return (thetaT * 180 / Math.PI + 360) % 360;
+}
+
+// CSS gradient generator
+function generateGradient(h1, h2, steps) {
+    const colors = [];
+    for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const h = lerpHue(h1, h2, t);
+        colors.push(`hsl(${h}, 100%, 50%)`);
+    }
+    return `linear-gradient(90deg, ${colors.join(', ')})`;
+}</code></pre>
+    </div>
+    
+    <div class="use-cases">
+        <h3>Where This Matters</h3>
+        <ul>
+            <li>🎮 <strong>Game UI:</strong> Health bar color transitions</li>
+            <li>📊 <strong>Data Viz:</strong> Temperature/pressure heatmaps</li>
+            <li>🎬 <strong>Animation:</strong> Smooth color transitions</li>
+            <li>🖼️ <strong>Image Processing:</strong> Color correction algorithms</li>
+        </ul>
+    </div>
+</div>
+

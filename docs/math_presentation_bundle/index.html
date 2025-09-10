@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Fighting Wraparound: Embed Your Rings!</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Code syntax highlighting with Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    
+    <!-- Leaflet CSS for GIS demo -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    
+    <!-- Code block styling -->
+    <style>
+        /* Style code blocks */
+        pre code {
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            display: block;
+        }
+        
+        /* Maintain our colored container backgrounds */
+        .bad-code, .code-example {
+            background: linear-gradient(180deg, rgba(255,123,123,0.08), rgba(255,123,123,0.04)) !important;
+            border-left: 4px solid var(--accent3) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+        
+        .good-code, .code-solution {
+            background: linear-gradient(180deg, rgba(155,255,176,0.08), rgba(155,255,176,0.04)) !important;
+            border-left: 4px solid var(--accent2) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+        
+        .implementation-example {
+            background: linear-gradient(180deg, rgba(156,39,176,0.08), rgba(156,39,176,0.04)) !important;
+            border-left: 4px solid #9C27B0 !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+        
+        .universal-class {
+            background: linear-gradient(180deg, rgba(33,150,243,0.08), rgba(33,150,243,0.04)) !important;
+            border-left: 4px solid #2196F3 !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+        
+        .approach-bad, .approach-good {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+    </style>
+
+    <!-- Math rendering with MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                renderActions: {
+                    addMenu: []  // Disable context menu for cleaner presentation
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slideshow-container">
+        <div id="slide-content"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-button" onclick="previousSlide()">◀ Previous</button>
+        <button class="nav-button" onclick="nextSlide()">Next ▶</button>
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">0</span>
+    </div>
+
+    <!-- Code highlighting JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    
+    <!-- Leaflet JavaScript for GIS demo -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- PixiJS for interactive math demos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.0/pixi.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            hljs.highlightAll();
+        });
+    </script>
+    
+    <!-- Interactive demo modules (for bundle version) -->
+    <script src="js/vector-calculator.js"></script>
+    <script src="js/timeseries-analyzer.js"></script>
+    
+    <script src="presentation.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+presentation:
+  title: "Handwritten Text Generation Pipeline - From Font to Natural Ink"
+  author: "Geoff"
+  date: "2025-09-09"
+
+slides:
+  - "01-title-slide.html"
+  - "02-overview.html"
+  - "03-stage0-font-loading.html"
+  - "04-stage1-skeleton-extraction.html"
+  - "05-stage2-stroke-connection.html"
+  - "06-stage3-candidate-scoring.html"
+  - "07-stage4-kernel-estimation.html"
+  - "08-stage5-stroke-program.html"
+  - "09-stage6-discontinuity.html"
+  - "10-stage7-ink-rendering.html"
+  - "11-shader-magic.html"
+  - "12-results-comparison.html"
+  - "13-key-innovations.html"
+  - "14-conclusion.html"
+
+build:
+  single_file: true          # Create single HTML file for phone calls
+  bundle_folder: true        # Create folder bundle for full quality
+  webp_quality: 90          # WebP compression quality (0-100)
+  max_image_width: 1920     # Resize images larger than this
+  compress_json: true       # Minify JSON files

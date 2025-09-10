@@ -1,0 +1,33 @@
+presentation:
+  title: "Stop Fighting Wraparound: Embed Your Rings!"
+  subtitle: "The One Math Trick That Fixes Circular Quantity Bugs"
+  author: "Geoff"
+  date: "2025-09-09"
+  venue: "Ceres Tech Talk"
+
+slides:
+  - "01-title.html"
+  - "02-the-bug.html"
+  - "03-midnight-bug.html"
+  - "04-the-solution.html"
+  - "13-circular-statistics.html"
+  - "14-discrete-calculus.html"
+  - "15-other-circular-quantities.html"
+  - "16-arbitrary-wrap-points.html"
+  - "05-robot-heading.html"
+  - "06-color-interpolation.html"
+  - "07-general-pattern.html"
+  - "08-mathematical-insight.html"
+  - "09-takeaways.html"
+  - "11-interactive-demo.html"
+  - "12-gis-demo.html"
+  - "16-vector-calculator.html"
+  - "17-timeseries-analyzer.html"
+  - "10-questions.html"
+
+build:
+  single_file: true # Create single HTML file for phone calls
+  bundle_folder: true # Create folder bundle for full quality
+  webp_quality: 90 # WebP compression quality (0-100)
+  max_image_width: 1920 # Resize images larger than this
+  compress_json: true # Minify JSON files
