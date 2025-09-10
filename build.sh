@@ -24,15 +24,15 @@ python3 -c "import yaml" 2>/dev/null || {
 python3 simple_builder.py "$@"
 
 # Check if build was successful
-if [ -f "dist/math_presentation_bundled.html" ] && [ -d "dist/math_presentation_bundle" ]; then
+if [ -f "docs/index.html" ] && [ -d "docs/math_presentation_bundle" ]; then
     echo ""
     echo "✅ Build completed successfully!"
-    echo "📄 Single file: dist/math_presentation_bundled.html" 
-    echo "📁 Bundle folder: dist/math_presentation_bundle/"
+    echo "📄 Single file: docs/index.html" 
+    echo "📁 Bundle folder: docs/math_presentation_bundle/"
     
     # Show file sizes
-    single_size=$(du -h dist/math_presentation_bundled.html | cut -f1)
-    bundle_size=$(du -sh dist/math_presentation_bundle | cut -f1)
+    single_size=$(du -h docs/index.html | cut -f1)
+    bundle_size=$(du -sh docs/math_presentation_bundle | cut -f1)
     echo "📊 Single file: $single_size, Bundle: $bundle_size"
     echo ""
     echo "🚀 Ready to share with colleagues!"
