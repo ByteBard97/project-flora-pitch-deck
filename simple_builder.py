@@ -157,10 +157,9 @@ class SimpleMathBuilder:
         )
         
         # Remove external JS module references (they're now embedded)
-        bundled_html = bundled_html.replace(
-            '    <!-- Interactive demo modules (for bundle version) -->\n    <script src="js/vector-calculator.js"></script>\n    <script src="js/timeseries-analyzer.js"></script>\n    \n    ',
-            ''
-        )
+        bundled_html = bundled_html.replace('<script src="js/vector-calculator.js"></script>', '')
+        bundled_html = bundled_html.replace('<script src="js/timeseries-analyzer.js"></script>', '')
+        bundled_html = bundled_html.replace('    <!-- Interactive demo modules (for bundle version) -->', '')
         
         # Replace external JS with embedded JS
         bundled_html = bundled_html.replace(

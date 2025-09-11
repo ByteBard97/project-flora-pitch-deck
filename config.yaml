@@ -3,7 +3,7 @@ presentation:
   subtitle: "The One Math Trick That Fixes Circular Quantity Bugs"
   author: "Geoff"
   date: "2025-09-09"
-  venue: "ByteBard97Talk"
+  venue: "CeresTalk"
 
 slides:
   - "01-title.html"

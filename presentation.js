@@ -74,23 +74,33 @@ async function loadSlide(index) {
         });
 
         // Initialize demos based on slide content
-        // Check if this is the interactive demo slide (look for the canvas element)
-        if (slideContent.querySelector('#demo-canvas')) {
+        console.log('🔍 Checking slide for interactive elements...');
+        
+        // Check if this is the interactive demo slide (look for the svg element)
+        if (slideContent.querySelector('#demo-svg')) {
+            console.log('🎮 Interactive Demo slide detected, initializing...');
+            console.log('initInteractiveDemo function exists:', typeof initInteractiveDemo);
             setTimeout(initInteractiveDemo, 100);
         }
         
         // Check if this is the GIS demo slide (look for the map container)
         if (slideContent.querySelector('#map')) {
+            console.log('🗺️  GIS Demo slide detected, initializing...');
+            console.log('initGISDemo function exists:', typeof initGISDemo);
             setTimeout(initGISDemo, 100);
         }
         
         // Check if this is the Vector Calculator slide
         if (slideContent.querySelector('#vector-calculator-container')) {
+            console.log('🧮 Vector Calculator slide detected, initializing...');
+            console.log('initVectorCalculator function exists:', typeof initVectorCalculator);
             setTimeout(initVectorCalculator, 100);
         }
         
         // Check if this is the Time Series Analyzer slide
         if (slideContent.querySelector('#timeseries-analyzer-container')) {
+            console.log('📈 Time Series Analyzer slide detected, initializing...');
+            console.log('initTimeSeriesAnalyzer function exists:', typeof initTimeSeriesAnalyzer);
             setTimeout(initTimeSeriesAnalyzer, 100);
         }
         
@@ -120,8 +130,9 @@ function updateNavigation() {
     const prevButton = document.querySelector('.nav-button');
     const nextButton = document.querySelector('.nav-button:last-child');
     
-    prevButton.disabled = currentSlide === 0;
-    nextButton.disabled = currentSlide === totalSlides - 1;
+    // Never disable buttons since we wrap around
+    prevButton.disabled = false;
+    nextButton.disabled = false;
     
     document.getElementById('current-slide').textContent = currentSlide + 1;
     document.getElementById('total-slides').textContent = totalSlides;
@@ -130,17 +141,21 @@ function updateNavigation() {
 function nextSlide() {
     if (currentSlide < totalSlides - 1) {
         currentSlide++;
-        loadSlide(currentSlide);
-        updateNavigation();
+    } else {
+        currentSlide = 0; // Wrap to first slide
     }
+    loadSlide(currentSlide);
+    updateNavigation();
 }
 
 function previousSlide() {
     if (currentSlide > 0) {
         currentSlide--;
-        loadSlide(currentSlide);
-        updateNavigation();
+    } else {
+        currentSlide = totalSlides - 1; // Wrap to last slide
     }
+    loadSlide(currentSlide);
+    updateNavigation();
 }
 
 // Jump to specific slide (for development/testing)
@@ -447,29 +462,3 @@ function initGISDemo() {
     }
 }
 
-// Time Series Analyzer functionality for slide 17
-function initTimeSeriesAnalyzer() {
-    // Check if PIXI is loaded
-    if (typeof PIXI === 'undefined') {
-        console.log('PIXI not loaded yet for time series analyzer, retrying...');
-        setTimeout(initTimeSeriesAnalyzer, 200);
-        return;
-    }
-    
-    const container = document.getElementById('timeseries-analyzer-container');
-    if (!container) {
-        console.log('Time series analyzer container not found');
-        return;
-    }
-    
-    // Clean up any existing app
-    if (window.currentInteractiveApp) {
-        window.currentInteractiveApp.destroy(true, { children: true, texture: true, baseTexture: true });
-        window.currentInteractiveApp = null;
-    }
-    
-    // Basic placeholder - implement time series functionality here
-    container.innerHTML = '<div style="color: white; padding: 20px; text-align: center;">Time Series Analyzer - Coming Soon</div>';
-    
-    console.log('Time Series Analyzer initialized');
-}

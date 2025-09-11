@@ -1,6 +1,8 @@
 // Time Series Analyzer Interactive Demo
 // Visualizes circular statistics and derivatives for angle sequences
 
+console.log('📈 TIME SERIES ANALYZER: JavaScript file loaded!');
+
 // Global state for the time series analyzer
 let timeSeriesState = {
     points: [],
@@ -8,7 +10,8 @@ let timeSeriesState = {
 };
 
 function initTimeSeriesAnalyzer() {
-    console.log('Initializing Time Series Analyzer...');
+    console.log('📈 TIME SERIES ANALYZER: Function called!');
+    console.log('📈 TIME SERIES ANALYZER: Initializing Time Series Analyzer...');
     
     // Check if PIXI is loaded
     if (typeof PIXI === 'undefined') {
@@ -23,10 +26,20 @@ function initTimeSeriesAnalyzer() {
         return;
     }
     
-    // Clean up any existing app
-    if (window.currentInteractiveApp) {
-        window.currentInteractiveApp.destroy(true, { children: true, texture: true, baseTexture: true });
-        window.currentInteractiveApp = null;
+    // Clean up any existing app for this specific container
+    window.interactiveApps ??= new Map();
+    const key = container.id;
+    const existingApp = window.interactiveApps.get(key);
+    if (existingApp) {
+        existingApp.destroy(true, { children: true, texture: true, baseTexture: true });
+        window.interactiveApps.delete(key);
+    }
+    
+    // Check if container is visible and has dimensions
+    if (container.offsetWidth === 0 || container.offsetHeight === 0) {
+        console.log('Container not visible yet, retrying...');
+        setTimeout(() => initTimeSeriesAnalyzer(), 100);
+        return;
     }
     
     // Create PIXI application
@@ -38,12 +51,23 @@ function initTimeSeriesAnalyzer() {
     });
     
     container.appendChild(app.view);
-    window.currentInteractiveApp = app;
+    window.interactiveApps.set(key, app);
     
-    // Reuse the atan2 filter from vector calculator
+    // Create background layer for atan2 filter
+    const backgroundLayer = new PIXI.Graphics();
+    backgroundLayer.beginFill(0x000000);
+    backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+    backgroundLayer.endFill();
+    app.stage.addChild(backgroundLayer);
+    
+    // Enhanced atan2 filter for time series with mean alignment and confidence
     const atan2Filter = new PIXI.Filter(undefined, `
         precision mediump float;
         uniform vec2 u_resolution;
+        uniform float u_basis;
+        uniform float u_strength;
+        uniform float u_step_deg;
+        uniform float u_contour_alpha;
         
         vec3 hsl2rgb(float h, float s, float l) {
             float c = (1.0 - abs(2.0 * l - 1.0)) * s;
@@ -70,27 +94,52 @@ function initTimeSeriesAnalyzer() {
         
         void main() {
             vec2 centered_coord = gl_FragCoord.xy - u_resolution / 2.0;
-            float angle = atan(centered_coord.y, centered_coord.x);
+            float raw_angle = atan(centered_coord.y, centered_coord.x);
+            
+            // Apply basis rotation - field aligns with circular mean
+            float angle = raw_angle - u_basis;
+            
             float hue = (angle + 3.14159265) / (2.0 * 3.14159265);
             float distance = length(centered_coord) / min(u_resolution.x, u_resolution.y) * 2.0;
-            float lightness = 0.2 + 0.3 * (1.0 - min(distance, 1.0));
-            vec3 color = hsl2rgb(hue, 0.6, lightness);
-            gl_FragColor = vec4(color, 1.0);
+            
+            // Modulate lightness by strength (|R|) - bright when clustered, dim when spread
+            float base_lightness = 0.2 + 0.3 * (1.0 - min(distance, 1.0));
+            float lightness = base_lightness + 0.4 * u_strength;
+            
+            // Add contour lines for geometric structure
+            float step_rad = u_step_deg * 3.14159265 / 180.0;
+            float contour_dist = abs(mod(angle + 3.14159265, step_rad) - step_rad * 0.5);
+            float contour_line = 1.0 - smoothstep(0.0, 0.02, contour_dist);
+            
+            vec3 base_color = hsl2rgb(hue, 0.6, lightness);
+            vec3 contour_color = mix(base_color, vec3(1.0), contour_line * u_contour_alpha);
+            
+            gl_FragColor = vec4(contour_color, 1.0);
         }
     `, {
-        u_resolution: [app.screen.width, app.screen.height]
+        u_resolution: [app.screen.width, app.screen.height],
+        u_basis: 0.0,
+        u_strength: 0.0,
+        u_step_deg: 15.0,
+        u_contour_alpha: 0.2
     });
     
-    // Apply background filter
-    app.stage.filterArea = app.screen;
-    app.stage.filters = [atan2Filter];
+    // Apply background filter only to background layer
+    backgroundLayer.filterArea = app.screen;
+    backgroundLayer.filters = [atan2Filter];
     
-    // Create graphics objects
+    // Create graphics objects on top of background
     const graphics = new PIXI.Graphics();
     app.stage.addChild(graphics);
     
-    // Make stage interactive
-    app.stage.interactive = true;
+    // Make stage interactive (PIXI v7 API)
+    app.stage.eventMode = 'static';
+    app.stage.hitArea = app.screen;
+    app.stage.cursor = 'crosshair';
+    
+    console.log('📈 Interactive setup - eventMode:', app.stage.eventMode, 'hitArea:', app.stage.hitArea);
+    console.log('📈 Stage interactive?', app.stage.interactive);
+    console.log('📈 Stage children count:', app.stage.children.length);
     
     // Circular mean calculation
     function calculateCircularMean(angles) {
@@ -124,6 +173,36 @@ function initTimeSeriesAnalyzer() {
     // Drawing function
     function draw() {
         graphics.clear();
+        
+        // Update field uniforms based on current data
+        if (timeSeriesState.points.length > 0) {
+            const angles = timeSeriesState.points.map(p => p.angle);
+            
+            if (timeSeriesState.operationMode === 'average') {
+                // Calculate circular mean and strength
+                const meanAngle = calculateCircularMean(angles);
+                
+                // Calculate |R| for confidence/strength
+                let x = 0, y = 0;
+                for (const angle of angles) {
+                    x += Math.cos(angle);
+                    y += Math.sin(angle);
+                }
+                const strength = Math.sqrt(x*x + y*y) / angles.length; // |R|
+                
+                // Align field with mean, brightness shows confidence
+                atan2Filter.uniforms.u_basis = meanAngle;
+                atan2Filter.uniforms.u_strength = strength;
+            } else {
+                // For derivatives mode, use global field
+                atan2Filter.uniforms.u_basis = 0.0;
+                atan2Filter.uniforms.u_strength = 0.5; // Neutral brightness
+            }
+        } else {
+            // No points yet, neutral field
+            atan2Filter.uniforms.u_basis = 0.0;
+            atan2Filter.uniforms.u_strength = 0.0;
+        }
         
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
@@ -203,16 +282,28 @@ function initTimeSeriesAnalyzer() {
     }
     
     // Event handlers
+    console.log('📈 Setting up event handlers...');
+    
     app.stage.on('pointerdown', (event) => {
+        console.log('📈 POINTER DOWN detected:', event.data.global);
         const pos = event.data.global;
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
         
         const angle = Math.atan2(pos.y - centerY, pos.x - centerX);
         
+        console.log('📈 Adding point at angle:', angle);
+        
         // Add new point
         timeSeriesState.points.push({ angle: angle });
         draw();
+        
+        console.log('📈 Total points now:', timeSeriesState.points.length);
+    });
+    
+    app.stage.on('pointermove', (event) => {
+        // Just a test to see if ANY events work
+        console.log('📈 POINTER MOVE detected');
     });
     
     // Hook up dropdown
@@ -233,6 +324,25 @@ function initTimeSeriesAnalyzer() {
             app.stage.children = app.stage.children.filter(child => !(child instanceof PIXI.Text));
             draw();
         });
+    }
+    
+    // Add resize observer to handle container size changes
+    if (window.ResizeObserver) {
+        const resizeObserver = new ResizeObserver(() => {
+            if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+                app.renderer.resize(container.offsetWidth, container.offsetHeight);
+                atan2Filter.uniforms.u_resolution = [app.screen.width, app.screen.height];
+                backgroundLayer.filterArea = app.screen;
+                app.stage.hitArea = app.screen;
+                // Resize background layer
+                backgroundLayer.clear();
+                backgroundLayer.beginFill(0x000000);
+                backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+                backgroundLayer.endFill();
+                draw(); // This will update u_basis and u_strength again
+            }
+        });
+        resizeObserver.observe(container);
     }
     
     // Initial draw

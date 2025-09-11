@@ -609,7 +609,7 @@ li {
   gap: 0.1em;
 }
 
-.ByteBard97-logo {
+.Ceres-logo {
   font-size: 2.2em;
   font-weight: 700;
   color: #4caf50;
@@ -617,7 +617,7 @@ li {
   text-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
 }
 
-.ByteBard97-ai {
+.Ceres-ai {
   font-size: 2.2em;
   font-weight: 300;
   color: #70b5ff;
@@ -949,10 +949,14 @@ li {
         });
     </script>
     
-<script>
+
+    
+    
+    
+    <script>
 // Embedded slide data for bundled version
 window.slideData = {
-  "0": "<div class='slide title-slide'> <h1 class='main-title'>Stop Fighting Wraparound</h1> <h2 class='subtitle'>Embed Your Rings!</h2> <div class='visual-element'> <svg width='400' height='200' viewBox='0 0 400 200'> <!-- Circle representing wraparound --> <circle cx='100' cy='100' r='80' fill='none' stroke='#4CAF50' stroke-width='3' /> <!-- Points near wraparound --> <circle cx='170' cy='100' r='8' fill='#FF5722' /> <circle cx='30' cy='100' r='8' fill='#2196F3' /> <!-- Arrow showing 'wrong' linear distance --> <path d='M 170 100 L 30 100' stroke='#FF5722' stroke-width='2' stroke-dasharray='5,5' opacity='0.5' /> <text x='100' y='90' text-anchor='middle' fill='#FF5722' font-size='14'> 140° apart? </text> <!-- Arrow showing correct arc distance --> <path d='M 170 100 A 80 80 0 0 0 30 100' fill='none' stroke='#4CAF50' stroke-width='3' /> <text x='100' y='130' text-anchor='middle' fill='#4CAF50' font-size='14' fill='#FFC107' > 20° apart! </text> <!-- Embedding arrow --> <path d='M 220 100 L 280 100' stroke='#666' stroke-width='2' marker-end='url(#arrowhead)' /> <text x='250' y='90' text-anchor='middle' fill='#666' font-size='12' fill='#FFC107' > embed </text> <!-- 2D representation --> <g transform='translate(320, 100)'> <line x1='-50' y1='0' x2='50' y2='0' stroke='#999' stroke-width='1' /> <line x1='0' y1='-50' x2='0' y2='50' stroke='#999' stroke-width='1' /> <circle cx='40' cy='0' r='8' fill='#FF5722' /> <circle cx='-40' cy='0' r='8' fill='#2196F3' /> <text x='0' y='-60' text-anchor='middle' fill='#666' font-size='12' fill='#FFC107' > ℝ² </text> </g> <!-- Arrow marker --> <defs> <marker id='arrowhead' markerWidth='10' markerHeight='7' refX='10' refY='3.5' orient='auto' > <polygon points='0 0, 10 3.5, 0 7' fill='#666' /> </marker> </defs> </svg> </div> <div class='presenter-info'> <p>A practical guide to handling circular quantities in code</p> <p class='author'>ByteBard</p> <p class='date'>Tech Talk</p> </div> </div>",
+  "0": "<div class='slide title-slide'> <h1 class='main-title'>Stop Fighting Wraparound</h1> <h2 class='subtitle'>Embed Your Rings!</h2> <div class='visual-element'> <svg width='400' height='200' viewBox='0 0 400 200'> <!-- Circle representing wraparound --> <circle cx='100' cy='100' r='80' fill='none' stroke='#4CAF50' stroke-width='3' /> <!-- Points near wraparound --> <circle cx='170' cy='100' r='8' fill='#FF5722' /> <circle cx='30' cy='100' r='8' fill='#2196F3' /> <!-- Arrow showing 'wrong' linear distance --> <path d='M 170 100 L 30 100' stroke='#FF5722' stroke-width='2' stroke-dasharray='5,5' opacity='0.5' /> <text x='100' y='90' text-anchor='middle' fill='#FF5722' font-size='14'> 140° apart? </text> <!-- Arrow showing correct arc distance --> <path d='M 170 100 A 80 80 0 0 0 30 100' fill='none' stroke='#4CAF50' stroke-width='3' /> <text x='100' y='130' text-anchor='middle' fill='#4CAF50' font-size='14' fill='#FFC107' > 20° apart! </text> <!-- Embedding arrow --> <path d='M 220 100 L 280 100' stroke='#666' stroke-width='2' marker-end='url(#arrowhead)' /> <text x='250' y='90' text-anchor='middle' fill='#666' font-size='12' fill='#FFC107' > embed </text> <!-- 2D representation --> <g transform='translate(320, 100)'> <line x1='-50' y1='0' x2='50' y2='0' stroke='#999' stroke-width='1' /> <line x1='0' y1='-50' x2='0' y2='50' stroke='#999' stroke-width='1' /> <circle cx='40' cy='0' r='8' fill='#FF5722' /> <circle cx='-40' cy='0' r='8' fill='#2196F3' /> <text x='0' y='-60' text-anchor='middle' fill='#666' font-size='12' fill='#FFC107' > ℝ² </text> </g> <!-- Arrow marker --> <defs> <marker id='arrowhead' markerWidth='10' markerHeight='7' refX='10' refY='3.5' orient='auto' > <polygon points='0 0, 10 3.5, 0 7' fill='#666' /> </marker> </defs> </svg> </div> <div class='presenter-info'> <p>A practical guide to handling circular quantities in code</p> <p class='author'>Ceres</p> <p class='date'>Tech Talk</p> </div> </div>",
 
   "1": "<div class='slide'> <h1>The Bug We've All Written</h1> <div class='highlight-box'> <h3>❌ The Naive Approach</h3> <pre><code class='language-python'>def average_angle(angle1, angle2):\n    return (angle1 + angle2) / 2  # Seems reasonable...\n# Example: Average heading between two compass readings\nheading1 = 350  # degrees\nheading2 = 10   # degrees\naverage = average_angle(heading1, heading2)\nprint(f'Average: {average}°')  # 180° - COMPLETELY WRONG!</code></pre> </div> <div class='visual-demo'> <svg width='600' height='600' viewBox='0 0 300 300'> <!-- Compass circle --> <circle cx='150' cy='150' r='120' fill='none' stroke='#333' stroke-width='2'/> <!-- Compass labels --> <text x='150' y='20' text-anchor='middle' font-size='16' font-weight='bold' fill='#FFC107'>N (0°)</text> <text x='280' y='155' text-anchor='middle' font-size='16' font-weight='bold' fill='#FFC107'>E (90°)</text> <text x='150' y='290' text-anchor='middle' font-size='16' font-weight='bold' fill='#FFC107'>S (180°)</text> <text x='20' y='155' text-anchor='middle' font-size='16' font-weight='bold' fill='#FFC107'>W (270°)</text> <!-- Heading 1: 350° --> <line x1='150' y1='150' x2='140' y2='30' stroke='#2196F3' stroke-width='4'/> <circle cx='140' cy='30' r='8' fill='#2196F3'/> <text x='110' y='20' font-size='14' fill='#FFC107'>350°</text> <!-- Heading 2: 10° --> <line x1='150' y1='150' x2='160' y2='30' stroke='#4CAF50' stroke-width='4'/> <circle cx='160' cy='30' r='8' fill='#4CAF50'/> <text x='190' y='20' font-size='14' fill='#FFC107'>10°</text> <!-- Wrong average: 180° --> <line x1='150' y1='150' x2='150' y2='270' stroke='#FF5722' stroke-width='4' stroke-dasharray='5,5'/> <circle cx='150' cy='270' r='8' fill='#FF5722'/> <text x='150' y='260' text-anchor='middle' font-size='16' fill='#FF5722' font-weight='bold'> Wrong: 180° </text> <!-- Correct average indicator --> <line x1='150' y1='150' x2='150' y2='30' stroke='#FFC107' stroke-width='3' opacity='0.7'/> <text x='220' y='60' font-size='14' fill='#ffffff' font-weight='bold'>Should be ~0°!</text> </svg> </div> <div class='warning-box'> <h3>What Went Wrong?</h3> <ul> <li>350° and 10° are <strong>20° apart</strong> on the circle</li> <li>But linear math sees them as <strong>340° apart</strong></li> <li>The average points in the <strong>opposite direction</strong>!</li> </ul> </div> </div>",
 
@@ -974,7 +978,7 @@ window.slideData = {
 
   "10": "<div class='slide'> <h1>The General Pattern</h1> <div class='pattern-table'> <h3>Any Circular Quantity Can Be Embedded!</h3> <table> <thead> <tr> <th>Wraparound Quantity</th> <th>Traditional Problems</th> <th>Embedding Solution</th> <th>Benefits</th> </tr> </thead> <tbody> <tr> <td><strong>Angle</strong><br>θ ∈ [0, 2π)</td> <td>Gimbal lock, discontinuities</td> <td>(cos θ, sin θ) ∈ ℝ²</td> <td>Smooth interpolation</td> </tr> <tr> <td><strong>Time of Day</strong><br>t ∈ [0, 24)</td> <td>Midnight wraparound</td> <td>(cos 2πt/24, sin 2πt/24)</td> <td>No special cases</td> </tr> <tr> <td><strong>Day of Week</strong><br>d ∈ {0..6}</td> <td>Weekend averaging</td> <td>e^(2πid/7) or 7D one-hot</td> <td>Correct statistics</td> </tr> <tr> <td><strong>Phase</strong><br>φ ∈ [-π, π)</td> <td>Phase unwrapping</td> <td>e^(iφ) ∈ ℂ</td> <td>Natural operations</td> </tr> <tr> <td><strong>Encoder Position</strong><br>n ∈ [0, 4096)</td> <td>Rollover detection</td> <td>(cos 2πn/4096, sin 2πn/4096)</td> <td>Continuous tracking</td> </tr> </tbody> </table> </div> <div class='universal-class'> <h3>One Class to Rule Them All</h3> <pre><code class='language-python'>class CircularQuantity:\n    '''Universal handler for any quantity that wraps around'''\n    \n    def __init__(self, value, period):\n        self.period = period\n        self.value = value % period  # Normalize to [0, period)\n        \n        # THE KEY: Embed on unit circle\n        theta = 2 * np.pi * self.value / period\n        self.vec = np.array([np.cos(theta), np.sin(theta)])\n    \n    def shortest_distance_to(self, other):\n        '''Always returns shortest signed distance'''\n        angle = np.arctan2(\n            self.vec[0] * other.vec[1] - self.vec[1] * other.vec[0],\n            self.vec[0] * other.vec[0] + self.vec[1] * other.vec[1]\n        )\n        return angle * self.period / (2 * np.pi)\n    \n    def average_with(self, others):\n        '''Proper circular mean'''\n        all_vecs = [self.vec] + [o.vec for o in others]\n        mean_vec = np.mean(all_vecs, axis=0)\n        mean_vec /= np.linalg.norm(mean_vec)  # Renormalize\n        \n        angle = np.arctan2(mean_vec[1], mean_vec[0])\n        mean_value = angle * self.period / (2 * np.pi)\n        return CircularQuantity(mean_value, self.period)\n    \n    def interpolate_to(self, other, t):\n        '''Smooth interpolation along shortest path'''\n        # SLERP for perfect circular interpolation\n        dot = np.dot(self.vec, other.vec)\n        omega = np.arccos(np.clip(dot, -1, 1))\n        \n        if abs(omega) < 1e-10:  # Vectors are identical\n            return self\n        \n        vec_t = (np.sin((1-t)*omega)/np.sin(omega) * self.vec +\n                 np.sin(t*omega)/np.sin(omega) * other.vec)\n        \n        angle = np.arctan2(vec_t[1], vec_t[0])\n        value = angle * self.period / (2 * np.pi)\n        return CircularQuantity(value, self.period)</code></pre> </div> <div class='examples-grid'> <div class='example'> <h4>📐 Angles</h4> <pre><code>a1 = CircularQuantity(350, 360)\na2 = CircularQuantity(10, 360)\ndist = a1.shortest_distance_to(a2)\n# Result: 20°</code></pre> </div> <div class='example'> <h4>⏰ Time</h4> <pre><code>t1 = CircularQuantity(23.5, 24)\nt2 = CircularQuantity(0.5, 24)\navg = t1.average_with([t2])\n# Result: 0.0 (midnight)</code></pre> </div> <div class='example'> <h4>📅 Weekdays</h4> <pre><code>days = [CircularQuantity(6, 7),  # Sat\n        CircularQuantity(0, 7),  # Sun\n        CircularQuantity(1, 7)]  # Mon\navg = days[0].average_with(days[1:])\n# Result: 0 (Sunday)</code></pre> </div> <div class='example'> <h4>🔄 Encoder</h4> <pre><code>e1 = CircularQuantity(4090, 4096)\ne2 = CircularQuantity(10, 4096)\ndelta = e1.shortest_distance_to(e2)\n# Result: 20 counts</code></pre> </div> </div> </div>",
 
-  "11": "<div class='slide'> <h1>The Mathematical Insight</h1> <div class='info-box'> <h3>Why Does This Work?</h3> <div class='visual-demo'> <svg width='600' height='150' viewBox='0 0 600 150'> <!-- Line with endpoints --> <g transform='translate(100, 75)'> <line x1='-60' y1='0' x2='60' y2='0' stroke='#333' stroke-width='3'/> <circle cx='-60' cy='0' r='6' fill='#FF5722'/> <circle cx='60' cy='0' r='6' fill='#FF5722'/> <text x='0' y='30' text-anchor='middle' font-size='14' fill='#FFC107'>Line has endpoints</text> </g> <!-- vs --> <text x='300' y='80' text-anchor='middle' font-size='20' fill='#FFC107'>vs</text> <!-- Circle --> <g transform='translate(500, 75)'> <circle cx='0' cy='0' r='50' fill='none' stroke='#333' stroke-width='3'/> <text x='0' y='80' text-anchor='middle' font-size='14' fill='#FFC107'>Circle has none!</text> </g> </svg> </div> <p class='text-center'>A circle (S¹) is topologically different from a line segment. Linear math breaks at the wraparound point.</p> </div> <div class='two-column-equal'> <div class='card'> <h3>🌐 The Circle Problem</h3> <ul> <li><strong>Circles have no 'beginning' or 'end'</strong></li> <li>359° and 1° are neighbors</li> <li>But arithmetic says 359 - 1 = 358 🤦</li> <li>→ Solution: Use 2D vectors instead!</li> </ul> </div> <div class='card'> <h3>🔄 The Wrapping Function</h3> <svg width='300' height='120' viewBox='0 0 300 120'> <path d='M 20 80 Q 70 20, 120 80 T 220 80 T 280 80' stroke='#2196F3' stroke-width='3' fill='none'/> <text x='50' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>0°</text> <text x='120' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>360°</text> <text x='190' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>720°</text> <text x='260' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>1080°</text> </svg> <p>Angles wrap around: 370° = 10°, 730° = 10°, etc. The infinite line wraps onto the finite circle.</p> </div> </div> <div class='success-box'> <h3>🔑 The Universal Pattern</h3> <div class='process-flow'> <div class='process-step'> <h4>Problem Space</h4> <p>Non-linear manifold</p> <small>(circle, sphere, torus)</small> </div> <div class='process-step'> <h4>Embedding</h4> <p>Lift to linear space</p> <small>(ℝ², ℝ³, ℂ)</small> </div> <div class='process-step'> <h4>Computation</h4> <p>Do linear algebra</p> <small>(add, average, interpolate)</small> </div> <div class='process-step'> <h4>Projection</h4> <p>Map back to manifold</p> <small>(atan2, normalize)</small> </div> </div> </div> <div class='two-column'> <div class='warning-box'> <h3>🎯 Where Else This Appears</h3> <ul> <li><strong>Quaternions:</strong> 3D rotations in 4D space</li> <li><strong>Complex Numbers:</strong> 2D rotations in ℂ</li> <li><strong>Fourier Transform:</strong> Signals on unit circle</li> <li><strong>Neural Networks:</strong> Learned embeddings</li> </ul> </div> <div class='highlight-box'> <h3>💭 Mathematical Insight</h3> <blockquote style='font-style: italic; margin: 10px 0;'> 'The introduction of numbers as coordinates is an act of violence.' <br><cite style='font-size: 14px;'>— Hermann Weyl</cite> </blockquote> <p><strong>But sometimes, the right coordinates make the violence worthwhile!</strong></p> </div> </div> </div>",
+  "11": "<div class='slide'> <h1>The Mathematical Insight</h1> <div class='info-box'> <h3>Why Does This Work?</h3> <div class='visual-demo'> <svg width='600' height='150' viewBox='0 0 600 150'> <!-- Line with endpoints --> <g transform='translate(100, 75)'> <line x1='-60' y1='0' x2='60' y2='0' stroke='#333' stroke-width='3'/> <circle cx='-60' cy='0' r='6' fill='#FF5722'/> <circle cx='60' cy='0' r='6' fill='#FF5722'/> <text x='0' y='30' text-anchor='middle' font-size='14' fill='#FFC107'>Line has endpoints</text> </g> <!-- vs --> <text x='300' y='80' text-anchor='middle' font-size='20' fill='#FFC107'>vs</text> <!-- Circle --> <g transform='translate(500, 40)'> <circle cx='0' cy='0' r='50' fill='none' stroke='#333' stroke-width='3'/> <text x='0' y='70' text-anchor='middle' font-size='14' fill='#FFC107'>Circle has none!</text> </g> </svg> </div> <p class='text-center'>A circle (S¹) is topologically different from a line segment. Linear math breaks at the wraparound point.</p> </div> <div class='two-column-equal'> <div class='card'> <h3>🌐 The Circle Problem</h3> <ul> <li><strong>Circles have no 'beginning' or 'end'</strong></li> <li>359° and 1° are neighbors</li> <li>But arithmetic says 359 - 1 = 358 🤦</li> <li>→ Solution: Use 2D vectors instead!</li> </ul> </div> <div class='card'> <h3>🔄 The Wrapping Function</h3> <svg width='300' height='120' viewBox='0 0 300 120'> <path d='M 20 80 Q 70 20, 120 80 T 220 80 T 280 80' stroke='#2196F3' stroke-width='3' fill='none'/> <text x='50' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>0°</text> <text x='120' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>360°</text> <text x='190' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>720°</text> <text x='260' y='60' text-anchor='middle' font-size='12' fill='#FFC107'>1080°</text> </svg> <p>Angles wrap around: 370° = 10°, 730° = 10°, etc. The infinite line wraps onto the finite circle.</p> </div> </div> <div class='success-box'> <h3>🔑 The Universal Pattern</h3> <div class='process-flow'> <div class='process-step'> <h4>Problem Space</h4> <p>Non-linear manifold</p> <small>(circle, sphere, torus)</small> </div> <div class='process-step'> <h4>Embedding</h4> <p>Lift to linear space</p> <small>(ℝ², ℝ³, ℂ)</small> </div> <div class='process-step'> <h4>Computation</h4> <p>Do linear algebra</p> <small>(add, average, interpolate)</small> </div> <div class='process-step'> <h4>Projection</h4> <p>Map back to manifold</p> <small>(atan2, normalize)</small> </div> </div> </div> <div class='two-column'> <div class='warning-box'> <h3>🎯 Where Else This Appears</h3> <ul> <li><strong>Quaternions:</strong> 3D rotations in 4D space</li> <li><strong>Complex Numbers:</strong> 2D rotations in ℂ</li> <li><strong>Fourier Transform:</strong> Signals on unit circle</li> <li><strong>Neural Networks:</strong> Learned embeddings</li> </ul> </div> <div class='highlight-box'> <h3>💭 Mathematical Insight</h3> <blockquote style='font-style: italic; margin: 10px 0;'> 'The introduction of numbers as coordinates is an act of violence.' <br><cite style='font-size: 14px;'>— Hermann Weyl</cite> </blockquote> <p><strong>But sometimes, the right coordinates make the violence worthwhile!</strong></p> </div> </div> </div>",
 
   "12": "<div class='slide'> <h1>Key Takeaways</h1> <div class='main-takeaway'> <h2>🎯 The Golden Rule</h2> <div class='golden-rule'> <p>When you see a quantity that wraps around,</p> <p><strong>ask: 'Can I embed this on a circle?'</strong></p> </div> </div> <div class='practical-steps'> <h3>Your Debugging Checklist</h3> <div class='checklist'> <div class='check-item'> <span class='checkbox'>✓</span> <div> <h4>Spot the Wraparound</h4> <p>Does your value jump discontinuously? (359° → 0°, 11:59 PM → 12:00 AM)</p> </div> </div> <div class='check-item'> <span class='checkbox'>✓</span> <div> <h4>Identify the Period</h4> <p>What's the cycle length? (360° for angles, 24 hours for time, 7 for weekdays)</p> </div> </div> <div class='check-item'> <span class='checkbox'>✓</span> <div> <h4>Choose Your Embedding</h4> <p>Usually: <code style='display: inline-block;'>(cos(<span style='display: inline-block; vertical-align: middle;'><span style='display: block; text-align: center; border-bottom: 1px solid;'>2πx</span><span style='display: block; text-align: center;'>T</span></span>), sin(<span style='display: inline-block; vertical-align: middle;'><span style='display: block; text-align: center; border-bottom: 1px solid;'>2πx</span><span style='display: block; text-align: center;'>T</span></span>))</code> where <code>T</code> is the period</p> </div> </div> <div class='check-item'> <span class='checkbox'>✓</span> <div> <h4>Work in Vector Space</h4> <p>Do all math on the vectors, not the raw values</p> </div> </div> <div class='check-item'> <span class='checkbox'>✓</span> <div> <h4>Project Back When Needed</h4> <p>Use <code>atan2(y, x)</code> to recover the original quantity</p> </div> </div> </div> </div> <div class='libraries-section'> <h3>Don't Reinvent: Use Libraries!</h3> <div class='library-grid'> <div class='library'> <h4>Python</h4> <ul> <li><code>scipy.stats.circmean</code></li> <li><code>astropy.coordinates</code></li> <li><code>pyquaternion</code></li> </ul> </div> <div class='library'> <h4>JavaScript</h4> <ul> <li><code>d3-interpolate</code></li> <li><code>three.js Quaternion</code></li> <li><code>tinycolor2</code></li> </ul> </div> <div class='library'> <h4>C++</h4> <ul> <li><code>Eigen::AngleAxis</code></li> <li><code>boost::geometry</code></li> <li><code>tf2</code> (ROS)</li> </ul> </div> <div class='library'> <h4>MATLAB</h4> <ul> <li><code>circstat toolbox</code></li> <li><code>Aerospace Toolbox</code></li> <li><code>angle()</code>, <code>unwrap()</code></li> </ul> </div> </div> </div> <div class='red-flags'> <h3>🚩 Red Flags in Your Code</h3> <div class='flag-list'> <div class='flag'> <code>if (angle > 180) angle -= 360;</code> <span>→ Use circular math instead</span> </div> <div class='flag'> <code>if (crossed_midnight) /* special case */</code> <span>→ Embed on 24-hour circle</span> </div> <div class='flag'> <code>while (phase > π) phase -= 2π;</code> <span>→ Work with complex exponentials</span> </div> <div class='flag'> <code>// TODO: handle wraparound</code> <span>→ Today's the day!</span> </div> </div> </div> <div class='success-story'> <div class='story-content'> <h3>🎉 Success Story</h3> <p>'After this talk, I fixed a 3-year-old GPS bearing bug in 5 lines of code. The robot finally drives in straight lines!'</p> <cite>— Future You</cite> </div> </div> </div>",
 
@@ -1067,23 +1071,33 @@ async function loadSlide(index) {
         });
 
         // Initialize demos based on slide content
-        // Check if this is the interactive demo slide (look for the canvas element)
-        if (slideContent.querySelector('#demo-canvas')) {
+        console.log('🔍 Checking slide for interactive elements...');
+        
+        // Check if this is the interactive demo slide (look for the svg element)
+        if (slideContent.querySelector('#demo-svg')) {
+            console.log('🎮 Interactive Demo slide detected, initializing...');
+            console.log('initInteractiveDemo function exists:', typeof initInteractiveDemo);
             setTimeout(initInteractiveDemo, 100);
         }
         
         // Check if this is the GIS demo slide (look for the map container)
         if (slideContent.querySelector('#map')) {
+            console.log('🗺️  GIS Demo slide detected, initializing...');
+            console.log('initGISDemo function exists:', typeof initGISDemo);
             setTimeout(initGISDemo, 100);
         }
         
         // Check if this is the Vector Calculator slide
         if (slideContent.querySelector('#vector-calculator-container')) {
+            console.log('🧮 Vector Calculator slide detected, initializing...');
+            console.log('initVectorCalculator function exists:', typeof initVectorCalculator);
             setTimeout(initVectorCalculator, 100);
         }
         
         // Check if this is the Time Series Analyzer slide
         if (slideContent.querySelector('#timeseries-analyzer-container')) {
+            console.log('📈 Time Series Analyzer slide detected, initializing...');
+            console.log('initTimeSeriesAnalyzer function exists:', typeof initTimeSeriesAnalyzer);
             setTimeout(initTimeSeriesAnalyzer, 100);
         }
         
@@ -1113,8 +1127,9 @@ function updateNavigation() {
     const prevButton = document.querySelector('.nav-button');
     const nextButton = document.querySelector('.nav-button:last-child');
     
-    prevButton.disabled = currentSlide === 0;
-    nextButton.disabled = currentSlide === totalSlides - 1;
+    // Never disable buttons since we wrap around
+    prevButton.disabled = false;
+    nextButton.disabled = false;
     
     document.getElementById('current-slide').textContent = currentSlide + 1;
     document.getElementById('total-slides').textContent = totalSlides;
@@ -1123,17 +1138,21 @@ function updateNavigation() {
 function nextSlide() {
     if (currentSlide < totalSlides - 1) {
         currentSlide++;
-        loadSlide(currentSlide);
-        updateNavigation();
+    } else {
+        currentSlide = 0; // Wrap to first slide
     }
+    loadSlide(currentSlide);
+    updateNavigation();
 }
 
 function previousSlide() {
     if (currentSlide > 0) {
         currentSlide--;
-        loadSlide(currentSlide);
-        updateNavigation();
+    } else {
+        currentSlide = totalSlides - 1; // Wrap to last slide
     }
+    loadSlide(currentSlide);
+    updateNavigation();
 }
 
 // Jump to specific slide (for development/testing)
@@ -1440,40 +1459,20 @@ function initGISDemo() {
     }
 }
 
-// Time Series Analyzer functionality for slide 17
-function initTimeSeriesAnalyzer() {
-    // Check if PIXI is loaded
-    if (typeof PIXI === 'undefined') {
-        console.log('PIXI not loaded yet for time series analyzer, retrying...');
-        setTimeout(initTimeSeriesAnalyzer, 200);
-        return;
-    }
-    
-    const container = document.getElementById('timeseries-analyzer-container');
-    if (!container) {
-        console.log('Time series analyzer container not found');
-        return;
-    }
-    
-    // Clean up any existing app
-    if (window.currentInteractiveApp) {
-        window.currentInteractiveApp.destroy(true, { children: true, texture: true, baseTexture: true });
-        window.currentInteractiveApp = null;
-    }
-    
-    // Basic placeholder - implement time series functionality here
-    container.innerHTML = '<div style="color: white; padding: 20px; text-align: center;">Time Series Analyzer - Coming Soon</div>';
-    
-    console.log('Time Series Analyzer initialized');
-}
+
 
 // Vector Calculator Interactive Demo
 // Visualizes vector addition and subtraction using angle representation
+
+console.log('🧮 VECTOR CALCULATOR: JavaScript file loaded!');
 
 // GLSL Fragment Shader for atan2 background visualization
 const atan2FragmentShader = `
 precision mediump float;
 uniform vec2 u_resolution;
+uniform float u_basis;
+uniform float u_step_deg;
+uniform float u_contour_alpha;
 
 // Convert HSL to RGB
 vec3 hsl2rgb(float h, float s, float l) {
@@ -1501,7 +1500,10 @@ vec3 hsl2rgb(float h, float s, float l) {
 
 void main() {
     vec2 centered_coord = gl_FragCoord.xy - u_resolution / 2.0;
-    float angle = atan(centered_coord.y, centered_coord.x);
+    float raw_angle = atan(centered_coord.y, centered_coord.x);
+    
+    // Apply basis rotation - this makes the field rotate with operations
+    float angle = raw_angle - u_basis;
     
     // Map angle from [-PI, PI] to [0, 1] for hue
     float hue = (angle + 3.14159265) / (2.0 * 3.14159265);
@@ -1510,8 +1512,15 @@ void main() {
     float distance = length(centered_coord) / min(u_resolution.x, u_resolution.y) * 2.0;
     float lightness = 0.3 + 0.4 * (1.0 - min(distance, 1.0));
     
-    vec3 color = hsl2rgb(hue, 0.8, lightness);
-    gl_FragColor = vec4(color, 1.0);
+    // Add contour lines (isogons) for better geometric understanding
+    float step_rad = u_step_deg * 3.14159265 / 180.0;
+    float contour_dist = abs(mod(angle + 3.14159265, step_rad) - step_rad * 0.5);
+    float contour_line = 1.0 - smoothstep(0.0, 0.02, contour_dist);
+    
+    vec3 base_color = hsl2rgb(hue, 0.8, lightness);
+    vec3 contour_color = mix(base_color, vec3(1.0), contour_line * u_contour_alpha);
+    
+    gl_FragColor = vec4(contour_color, 1.0);
 }
 `;
 
@@ -1523,8 +1532,9 @@ let vectorCalculatorState = {
 };
 
 function initVectorCalculator() {
-    console.log('Initializing Vector Calculator...');
-    console.log('Current state:', vectorCalculatorState);
+    console.log('🧮 VECTOR CALCULATOR: Function called!');
+    console.log('🧮 VECTOR CALCULATOR: Initializing Vector Calculator...');
+    console.log('🧮 VECTOR CALCULATOR: Current state:', vectorCalculatorState);
     
     // Check if PIXI is loaded
     if (typeof PIXI === 'undefined') {
@@ -1539,10 +1549,20 @@ function initVectorCalculator() {
         return;
     }
     
-    // Clean up any existing app
-    if (window.currentInteractiveApp) {
-        window.currentInteractiveApp.destroy(true, { children: true, texture: true, baseTexture: true });
-        window.currentInteractiveApp = null;
+    // Clean up any existing app for this specific container
+    window.interactiveApps ??= new Map();
+    const key = container.id;
+    const existingApp = window.interactiveApps.get(key);
+    if (existingApp) {
+        existingApp.destroy(true, { children: true, texture: true, baseTexture: true });
+        window.interactiveApps.delete(key);
+    }
+    
+    // Check if container is visible and has dimensions
+    if (container.offsetWidth === 0 || container.offsetHeight === 0) {
+        console.log('Container not visible yet, retrying...');
+        setTimeout(() => initVectorCalculator(), 100);
+        return;
     }
     
     // Create PIXI application
@@ -1554,18 +1574,28 @@ function initVectorCalculator() {
     });
     
     container.appendChild(app.view);
-    window.currentInteractiveApp = app;
+    window.interactiveApps.set(key, app);
+    
+    // Create background layer for atan2 filter
+    const backgroundLayer = new PIXI.Graphics();
+    backgroundLayer.beginFill(0x000000);
+    backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+    backgroundLayer.endFill();
+    app.stage.addChild(backgroundLayer);
     
     // Create custom filter for atan2 background
     const atan2Filter = new PIXI.Filter(undefined, atan2FragmentShader, {
-        u_resolution: [app.screen.width, app.screen.height]
+        u_resolution: [app.screen.width, app.screen.height],
+        u_basis: 0.0,
+        u_step_deg: 15.0,
+        u_contour_alpha: 0.3
     });
     
-    // Apply background filter
-    app.stage.filterArea = app.screen;
-    app.stage.filters = [atan2Filter];
+    // Apply background filter only to background layer
+    backgroundLayer.filterArea = app.screen;
+    backgroundLayer.filters = [atan2Filter];
     
-    // Create graphics objects
+    // Create graphics objects on top of background
     const graphics = new PIXI.Graphics();
     app.stage.addChild(graphics);
     
@@ -1573,19 +1603,31 @@ function initVectorCalculator() {
     let isDragging = false;
     let dragTarget = null;
     
-    // Make stage interactive
-    app.stage.interactive = true;
+    // Make stage interactive (PIXI v7 API)
+    app.stage.eventMode = 'static';
+    app.stage.hitArea = app.screen;
+    app.stage.cursor = 'crosshair';
+    
+    console.log('🧮 Interactive setup - eventMode:', app.stage.eventMode, 'hitArea:', app.stage.hitArea);
     
     // Drawing function
     function draw() {
         graphics.clear();
         
+        // Remove old text objects
+        app.stage.children = app.stage.children.filter(child => !(child instanceof PIXI.Text));
+        
+        // Update the field basis to show the operation in action
+        // In addition mode: field rotates by p2_angle showing θ ↦ θ + p2
+        // In subtraction mode: field rotates by p2_angle showing θ ↦ θ - p2
+        atan2Filter.uniforms.u_basis = vectorCalculatorState.p2_angle;
+        
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
         const radius = Math.min(centerX, centerY) * 0.7;
         
-        // Draw unit circle
-        graphics.lineStyle(3, 0xFFFFFF, 0.8);
+        // Draw unit circle with high contrast
+        graphics.lineStyle(4, 0xFFFFFF, 1.0);
         graphics.drawCircle(centerX, centerY, radius);
         
         // Calculate positions
@@ -1594,22 +1636,34 @@ function initVectorCalculator() {
         const p2x = centerX + Math.cos(vectorCalculatorState.p2_angle) * radius;
         const p2y = centerY + Math.sin(vectorCalculatorState.p2_angle) * radius;
         
-        // Draw vectors with thicker lines
-        graphics.lineStyle(6, 0xFF6B6B, 1.0);
+        // Draw vectors with high contrast outlines for visibility against atan2 background
+        // Vector 1 (red) with white outline
+        graphics.lineStyle(10, 0xFFFFFF, 1.0);
+        graphics.moveTo(centerX, centerY);
+        graphics.lineTo(p1x, p1y);
+        graphics.lineStyle(6, 0xFF3333, 1.0);
         graphics.moveTo(centerX, centerY);
         graphics.lineTo(p1x, p1y);
         
-        graphics.lineStyle(6, 0x4ECDC4, 1.0);
+        // Vector 2 (cyan) with white outline  
+        graphics.lineStyle(10, 0xFFFFFF, 1.0);
+        graphics.moveTo(centerX, centerY);
+        graphics.lineTo(p2x, p2y);
+        graphics.lineStyle(6, 0x33CCCC, 1.0);
         graphics.moveTo(centerX, centerY);
         graphics.lineTo(p2x, p2y);
         
-        // Draw result based on operation mode
+        // Draw result based on operation mode with high contrast
         if (vectorCalculatorState.operationMode === 'addition') {
             const resultAngle = vectorCalculatorState.p1_angle + vectorCalculatorState.p2_angle;
             const resultX = centerX + Math.cos(resultAngle) * radius;
             const resultY = centerY + Math.sin(resultAngle) * radius;
             
-            graphics.lineStyle(6, 0xFFE66D);
+            // Result vector with white outline
+            graphics.lineStyle(10, 0xFFFFFF, 1.0);
+            graphics.moveTo(centerX, centerY);
+            graphics.lineTo(resultX, resultY);
+            graphics.lineStyle(6, 0xFFDD00, 1.0);
             graphics.moveTo(centerX, centerY);
             graphics.lineTo(resultX, resultY);
         } else {
@@ -1618,32 +1672,76 @@ function initVectorCalculator() {
             const resultX = centerX + Math.cos(angleDiff) * radius;
             const resultY = centerY + Math.sin(angleDiff) * radius;
             
-            graphics.lineStyle(6, 0xFF8B94);
+            // Difference vector with white outline
+            graphics.lineStyle(10, 0xFFFFFF, 1.0);
+            graphics.moveTo(centerX, centerY);
+            graphics.lineTo(resultX, resultY);
+            graphics.lineStyle(6, 0xFF6600, 1.0);
             graphics.moveTo(centerX, centerY);
             graphics.lineTo(resultX, resultY);
         }
         
-        // Draw draggable handles with white outlines for visibility
-        graphics.lineStyle(3, 0xFFFFFF, 1.0);
-        graphics.beginFill(0xFF6B6B, 1.0);
-        graphics.drawCircle(p1x, p1y, 15);
+        // Draw draggable handles with thick white outlines for high visibility
+        graphics.lineStyle(5, 0xFFFFFF, 1.0);
+        graphics.beginFill(0xFF3333, 1.0);
+        graphics.drawCircle(p1x, p1y, 18);
         graphics.endFill();
         
-        graphics.lineStyle(3, 0xFFFFFF, 1.0);
-        graphics.beginFill(0x4ECDC4, 1.0);
-        graphics.drawCircle(p2x, p2y, 15);
+        graphics.lineStyle(5, 0xFFFFFF, 1.0);
+        graphics.beginFill(0x33CCCC, 1.0);
+        graphics.drawCircle(p2x, p2y, 18);
         graphics.endFill();
         
-        // Add text labels near handles
-        graphics.lineStyle(0);
-        graphics.beginFill(0xFFFFFF, 0.9);
-        graphics.drawCircle(p1x + 20, p1y - 20, 8);
-        graphics.drawCircle(p2x + 20, p2y - 20, 8);
-        graphics.endFill();
+        // Add angle value labels to show atan2 values
+        const p1AngleDeg = (vectorCalculatorState.p1_angle * 180 / Math.PI).toFixed(1);
+        const p2AngleDeg = (vectorCalculatorState.p2_angle * 180 / Math.PI).toFixed(1);
+        
+        // Create text objects for angle values
+        const p1Text = new PIXI.Text(`${p1AngleDeg}°`, {
+            fontSize: 16,
+            fill: 0xFFFFFF,
+            fontWeight: 'bold',
+            stroke: 0x000000,
+            strokeThickness: 3
+        });
+        p1Text.anchor.set(0.5);
+        p1Text.x = p1x + 25;
+        p1Text.y = p1y - 25;
+        app.stage.addChild(p1Text);
+        
+        const p2Text = new PIXI.Text(`${p2AngleDeg}°`, {
+            fontSize: 16,
+            fill: 0xFFFFFF,
+            fontWeight: 'bold',
+            stroke: 0x000000,
+            strokeThickness: 3
+        });
+        p2Text.anchor.set(0.5);
+        p2Text.x = p2x + 25;
+        p2Text.y = p2y - 25;
+        app.stage.addChild(p2Text);
+        
+        // Show result angle
+        if (vectorCalculatorState.operationMode === 'addition') {
+            const resultAngle = vectorCalculatorState.p1_angle + vectorCalculatorState.p2_angle;
+            const resultAngleDeg = (resultAngle * 180 / Math.PI).toFixed(1);
+            const resultText = new PIXI.Text(`Result: ${resultAngleDeg}°`, {
+                fontSize: 18,
+                fill: 0xFFDD00,
+                fontWeight: 'bold',
+                stroke: 0x000000,
+                strokeThickness: 3
+            });
+            resultText.anchor.set(0.5);
+            resultText.x = centerX;
+            resultText.y = centerY - radius - 40;
+            app.stage.addChild(resultText);
+        }
     }
     
     // Event handlers
     app.stage.on('pointerdown', (event) => {
+        console.log('🧮 POINTER DOWN detected:', event.data.global);
         const pos = event.data.global;
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
@@ -1654,18 +1752,24 @@ function initVectorCalculator() {
         const p2x = centerX + Math.cos(vectorCalculatorState.p2_angle) * radius;
         const p2y = centerY + Math.sin(vectorCalculatorState.p2_angle) * radius;
         
+        console.log('🧮 Handle positions - P1:', {x: p1x, y: p1y}, 'P2:', {x: p2x, y: p2y});
+        
         // Check if clicking on handles (larger hit area for easier interaction)
         const dist1 = Math.sqrt((pos.x - p1x) ** 2 + (pos.y - p1y) ** 2);
         const dist2 = Math.sqrt((pos.x - p2x) ** 2 + (pos.y - p2y) ** 2);
         
+        console.log('🧮 Distances - P1:', dist1, 'P2:', dist2);
+        
         if (dist1 < 30) {
             isDragging = true;
             dragTarget = 'p1';
-            console.log('Dragging red handle');
+            console.log('🧮 Dragging red handle');
         } else if (dist2 < 30) {
             isDragging = true;
             dragTarget = 'p2';
-            console.log('Dragging blue handle');
+            console.log('🧮 Dragging blue handle');
+        } else {
+            console.log('🧮 Click outside handles');
         }
     });
     
@@ -1692,6 +1796,11 @@ function initVectorCalculator() {
         dragTarget = null;
     });
     
+    app.stage.on('pointerupoutside', () => {
+        isDragging = false;
+        dragTarget = null;
+    });
+    
     // Hook up dropdown
     const dropdown = document.getElementById('vector-operation');
     if (dropdown) {
@@ -1699,6 +1808,25 @@ function initVectorCalculator() {
             vectorCalculatorState.operationMode = e.target.value;
             draw();
         });
+    }
+    
+    // Add resize observer to handle container size changes
+    if (window.ResizeObserver) {
+        const resizeObserver = new ResizeObserver(() => {
+            if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+                app.renderer.resize(container.offsetWidth, container.offsetHeight);
+                atan2Filter.uniforms.u_resolution = [app.screen.width, app.screen.height];
+                backgroundLayer.filterArea = app.screen;
+                app.stage.hitArea = app.screen;
+                // Resize background layer
+                backgroundLayer.clear();
+                backgroundLayer.beginFill(0x000000);
+                backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+                backgroundLayer.endFill();
+                draw(); // This will update u_basis again
+            }
+        });
+        resizeObserver.observe(container);
     }
     
     // Initial draw
@@ -1710,6 +1838,8 @@ function initVectorCalculator() {
 // Time Series Analyzer Interactive Demo
 // Visualizes circular statistics and derivatives for angle sequences
 
+console.log('📈 TIME SERIES ANALYZER: JavaScript file loaded!');
+
 // Global state for the time series analyzer
 let timeSeriesState = {
     points: [],
@@ -1717,7 +1847,8 @@ let timeSeriesState = {
 };
 
 function initTimeSeriesAnalyzer() {
-    console.log('Initializing Time Series Analyzer...');
+    console.log('📈 TIME SERIES ANALYZER: Function called!');
+    console.log('📈 TIME SERIES ANALYZER: Initializing Time Series Analyzer...');
     
     // Check if PIXI is loaded
     if (typeof PIXI === 'undefined') {
@@ -1732,10 +1863,20 @@ function initTimeSeriesAnalyzer() {
         return;
     }
     
-    // Clean up any existing app
-    if (window.currentInteractiveApp) {
-        window.currentInteractiveApp.destroy(true, { children: true, texture: true, baseTexture: true });
-        window.currentInteractiveApp = null;
+    // Clean up any existing app for this specific container
+    window.interactiveApps ??= new Map();
+    const key = container.id;
+    const existingApp = window.interactiveApps.get(key);
+    if (existingApp) {
+        existingApp.destroy(true, { children: true, texture: true, baseTexture: true });
+        window.interactiveApps.delete(key);
+    }
+    
+    // Check if container is visible and has dimensions
+    if (container.offsetWidth === 0 || container.offsetHeight === 0) {
+        console.log('Container not visible yet, retrying...');
+        setTimeout(() => initTimeSeriesAnalyzer(), 100);
+        return;
     }
     
     // Create PIXI application
@@ -1747,12 +1888,23 @@ function initTimeSeriesAnalyzer() {
     });
     
     container.appendChild(app.view);
-    window.currentInteractiveApp = app;
+    window.interactiveApps.set(key, app);
     
-    // Reuse the atan2 filter from vector calculator
+    // Create background layer for atan2 filter
+    const backgroundLayer = new PIXI.Graphics();
+    backgroundLayer.beginFill(0x000000);
+    backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+    backgroundLayer.endFill();
+    app.stage.addChild(backgroundLayer);
+    
+    // Enhanced atan2 filter for time series with mean alignment and confidence
     const atan2Filter = new PIXI.Filter(undefined, `
         precision mediump float;
         uniform vec2 u_resolution;
+        uniform float u_basis;
+        uniform float u_strength;
+        uniform float u_step_deg;
+        uniform float u_contour_alpha;
         
         vec3 hsl2rgb(float h, float s, float l) {
             float c = (1.0 - abs(2.0 * l - 1.0)) * s;
@@ -1779,27 +1931,52 @@ function initTimeSeriesAnalyzer() {
         
         void main() {
             vec2 centered_coord = gl_FragCoord.xy - u_resolution / 2.0;
-            float angle = atan(centered_coord.y, centered_coord.x);
+            float raw_angle = atan(centered_coord.y, centered_coord.x);
+            
+            // Apply basis rotation - field aligns with circular mean
+            float angle = raw_angle - u_basis;
+            
             float hue = (angle + 3.14159265) / (2.0 * 3.14159265);
             float distance = length(centered_coord) / min(u_resolution.x, u_resolution.y) * 2.0;
-            float lightness = 0.2 + 0.3 * (1.0 - min(distance, 1.0));
-            vec3 color = hsl2rgb(hue, 0.6, lightness);
-            gl_FragColor = vec4(color, 1.0);
+            
+            // Modulate lightness by strength (|R|) - bright when clustered, dim when spread
+            float base_lightness = 0.2 + 0.3 * (1.0 - min(distance, 1.0));
+            float lightness = base_lightness + 0.4 * u_strength;
+            
+            // Add contour lines for geometric structure
+            float step_rad = u_step_deg * 3.14159265 / 180.0;
+            float contour_dist = abs(mod(angle + 3.14159265, step_rad) - step_rad * 0.5);
+            float contour_line = 1.0 - smoothstep(0.0, 0.02, contour_dist);
+            
+            vec3 base_color = hsl2rgb(hue, 0.6, lightness);
+            vec3 contour_color = mix(base_color, vec3(1.0), contour_line * u_contour_alpha);
+            
+            gl_FragColor = vec4(contour_color, 1.0);
         }
     `, {
-        u_resolution: [app.screen.width, app.screen.height]
+        u_resolution: [app.screen.width, app.screen.height],
+        u_basis: 0.0,
+        u_strength: 0.0,
+        u_step_deg: 15.0,
+        u_contour_alpha: 0.2
     });
     
-    // Apply background filter
-    app.stage.filterArea = app.screen;
-    app.stage.filters = [atan2Filter];
+    // Apply background filter only to background layer
+    backgroundLayer.filterArea = app.screen;
+    backgroundLayer.filters = [atan2Filter];
     
-    // Create graphics objects
+    // Create graphics objects on top of background
     const graphics = new PIXI.Graphics();
     app.stage.addChild(graphics);
     
-    // Make stage interactive
-    app.stage.interactive = true;
+    // Make stage interactive (PIXI v7 API)
+    app.stage.eventMode = 'static';
+    app.stage.hitArea = app.screen;
+    app.stage.cursor = 'crosshair';
+    
+    console.log('📈 Interactive setup - eventMode:', app.stage.eventMode, 'hitArea:', app.stage.hitArea);
+    console.log('📈 Stage interactive?', app.stage.interactive);
+    console.log('📈 Stage children count:', app.stage.children.length);
     
     // Circular mean calculation
     function calculateCircularMean(angles) {
@@ -1833,6 +2010,36 @@ function initTimeSeriesAnalyzer() {
     // Drawing function
     function draw() {
         graphics.clear();
+        
+        // Update field uniforms based on current data
+        if (timeSeriesState.points.length > 0) {
+            const angles = timeSeriesState.points.map(p => p.angle);
+            
+            if (timeSeriesState.operationMode === 'average') {
+                // Calculate circular mean and strength
+                const meanAngle = calculateCircularMean(angles);
+                
+                // Calculate |R| for confidence/strength
+                let x = 0, y = 0;
+                for (const angle of angles) {
+                    x += Math.cos(angle);
+                    y += Math.sin(angle);
+                }
+                const strength = Math.sqrt(x*x + y*y) / angles.length; // |R|
+                
+                // Align field with mean, brightness shows confidence
+                atan2Filter.uniforms.u_basis = meanAngle;
+                atan2Filter.uniforms.u_strength = strength;
+            } else {
+                // For derivatives mode, use global field
+                atan2Filter.uniforms.u_basis = 0.0;
+                atan2Filter.uniforms.u_strength = 0.5; // Neutral brightness
+            }
+        } else {
+            // No points yet, neutral field
+            atan2Filter.uniforms.u_basis = 0.0;
+            atan2Filter.uniforms.u_strength = 0.0;
+        }
         
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
@@ -1912,16 +2119,28 @@ function initTimeSeriesAnalyzer() {
     }
     
     // Event handlers
+    console.log('📈 Setting up event handlers...');
+    
     app.stage.on('pointerdown', (event) => {
+        console.log('📈 POINTER DOWN detected:', event.data.global);
         const pos = event.data.global;
         const centerX = app.screen.width / 2;
         const centerY = app.screen.height / 2;
         
         const angle = Math.atan2(pos.y - centerY, pos.x - centerX);
         
+        console.log('📈 Adding point at angle:', angle);
+        
         // Add new point
         timeSeriesState.points.push({ angle: angle });
         draw();
+        
+        console.log('📈 Total points now:', timeSeriesState.points.length);
+    });
+    
+    app.stage.on('pointermove', (event) => {
+        // Just a test to see if ANY events work
+        console.log('📈 POINTER MOVE detected');
     });
     
     // Hook up dropdown
@@ -1942,6 +2161,25 @@ function initTimeSeriesAnalyzer() {
             app.stage.children = app.stage.children.filter(child => !(child instanceof PIXI.Text));
             draw();
         });
+    }
+    
+    // Add resize observer to handle container size changes
+    if (window.ResizeObserver) {
+        const resizeObserver = new ResizeObserver(() => {
+            if (container.offsetWidth > 0 && container.offsetHeight > 0) {
+                app.renderer.resize(container.offsetWidth, container.offsetHeight);
+                atan2Filter.uniforms.u_resolution = [app.screen.width, app.screen.height];
+                backgroundLayer.filterArea = app.screen;
+                app.stage.hitArea = app.screen;
+                // Resize background layer
+                backgroundLayer.clear();
+                backgroundLayer.beginFill(0x000000);
+                backgroundLayer.drawRect(0, 0, app.screen.width, app.screen.height);
+                backgroundLayer.endFill();
+                draw(); // This will update u_basis and u_strength again
+            }
+        });
+        resizeObserver.observe(container);
     }
     
     // Initial draw
