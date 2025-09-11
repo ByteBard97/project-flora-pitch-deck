@@ -274,19 +274,19 @@
                     <div id="atan2Surface3d" style="width:100%;height:calc(100% - 90px);position:relative;border-radius:10px;overflow:hidden;"></div>
                     <div id="atan2ViewControls" style="margin:8px;background:#0f141a;padding:8px;border-radius:6px;">
                         <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center;margin-bottom:6px;">
-                            <label style="font-size:11px;color:var(--muted);">Azimuth:</label>
+                            <label style="font-size:11px;color:#a3aab6;">Azimuth:</label>
                             <input type="range" id="azimuthSlider" min="0" max="360" value="135" style="width:100%;">
-                            <span id="azimuthValue" style="font-size:11px;color:var(--muted);">135°</span>
+                            <span id="azimuthValue" style="font-size:11px;color:#a3aab6;">135°</span>
                         </div>
                         <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center;margin-bottom:6px;">
-                            <label style="font-size:11px;color:var(--muted);">Elevation:</label>
+                            <label style="font-size:11px;color:#a3aab6;">Elevation:</label>
                             <input type="range" id="elevationSlider" min="-90" max="90" value="35" style="width:100%;">
-                            <span id="elevationValue" style="font-size:11px;color:var(--muted);">35°</span>
+                            <span id="elevationValue" style="font-size:11px;color:#a3aab6;">35°</span>
                         </div>
                         <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center;">
-                            <label style="font-size:11px;color:var(--muted);">Zoom:</label>
-                            <input type="range" id="zoomSlider" min="3" max="12" value="7.5" step="0.1" style="width:100%;">
-                            <span id="zoomValue" style="font-size:11px;color:var(--muted);">7.5</span>
+                            <label style="font-size:11px;color:#a3aab6;">Zoom:</label>
+                            <input type="range" id="zoomSlider" min="4" max="24" value="12" step="0.5" style="width:100%;">
+                            <span id="zoomValue" style="font-size:11px;color:#a3aab6;">12</span>
                         </div>
                     </div>
                     <div class="panel-title">4. Output (atan2)</div>
@@ -1115,11 +1115,14 @@ import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
 let three = null;
 
+// ---- Z scale factor to normalize surface height ----
+const ZSCALE = 0.35;  // keeps Z dimension comparable to X/Y
+
 // ---- orbital camera system ----
 let cameraParams = {
   azimuth: 135,    // degrees around Z-axis (0-360)
   elevation: 35,   // degrees pitch (-90 to +90)
-  zoom: 7.5        // distance from origin
+  zoom: 12         // distance from origin (increased for better starting view)
 };
 
 function updateCameraFromOrbit() {
@@ -1186,10 +1189,10 @@ function buildAtan2TwoSheets(R=1.4, NX=160, NY=160){
       const [r,g,b] = hslToRgb(hue, 0.55, 0.55);                // use hslToRgb()
       // upper sheet (+2π in lower-left)
       const zu = (x<0 && y<0) ? z + 2*Math.PI : z;
-      up.pos.set([x,y,zu], k*3);  up.col.set([r/255,g/255,b/255], k*3);
+      up.pos.set([x,y,zu * ZSCALE], k*3);  up.col.set([r/255,g/255,b/255], k*3);
       // lower sheet (−2π in upper-left)
       const zl = (x<0 && y>0) ? z - 2*Math.PI : z;
-      lo.pos.set([x,y,zl], k*3);  lo.col.set([r/255,g/255,b/255], k*3);
+      lo.pos.set([x,y,zl * ZSCALE], k*3);  lo.col.set([r/255,g/255,b/255], k*3);
       k++;
     }
   }
@@ -1224,17 +1227,57 @@ function initAtan2Surface(){
 
   const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1116);
   const camera = new THREE.PerspectiveCamera(38, w/h, 0.1, 100);
+  
+  // Set camera to Z-up orientation (instead of Three.js default Y-up)
+  camera.up.set(0, 0, 1);
 
   scene.add(new THREE.HemisphereLight(0xeeeeff, 0x232a33, 0.7));
   const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(3.5,5.0,6.5); scene.add(key);
 
-  // axes / grid-ish frame (thin gray)
-  const axisMat = new THREE.LineBasicMaterial({ color:0x8893a2 });
-  const line = (a,b)=> new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]), axisMat);
-  scene.add(line([-2,0,0],[2,0,0])); scene.add(line([0,-2,0],[0,2,0])); scene.add(line([0,0,-4],[0,0,4]));
+  // axes with standard RGB coloring (X=red, Y=green, Z=blue)
+  const xAxisMat = new THREE.LineBasicMaterial({ color:0xff4444 }); // red
+  const yAxisMat = new THREE.LineBasicMaterial({ color:0x44ff44 }); // green  
+  const zAxisMat = new THREE.LineBasicMaterial({ color:0x4444ff }); // blue
+  const xAxis = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-2,0,0), new THREE.Vector3(2,0,0)]), xAxisMat);
+  const yAxis = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,-2,0), new THREE.Vector3(0,2,0)]), yAxisMat);
+  const zAxis = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,-4), new THREE.Vector3(0,0,4)]), zAxisMat);
+  scene.add(xAxis, yAxis, zAxis);
 
   const {upper, lower} = buildAtan2TwoSheets(1.4, 160, 160);
   scene.add(upper, lower);
+
+  // Add grid lines over the surface
+  const gridMat = new THREE.LineBasicMaterial({ color:0x666666, transparent:true, opacity:0.4 });
+  const gridSpacing = 0.2; // spacing between grid lines
+  const gridExtent = 1.4;  // how far the grid extends
+  
+  // Create grid lines in X direction
+  for (let y = -gridExtent; y <= gridExtent; y += gridSpacing) {
+    const points = [];
+    for (let x = -gridExtent; x <= gridExtent; x += 0.05) {
+      const z = Math.atan2(y, x);
+      // Apply same two-sheet logic as surface
+      const zAdjusted = (x < 0 && y < 0) ? z + Math.PI * 2 : 
+                       (x < 0 && y > 0) ? z - Math.PI * 2 : z;
+      points.push(new THREE.Vector3(x, y, zAdjusted * ZSCALE));
+    }
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    scene.add(new THREE.Line(lineGeo, gridMat));
+  }
+  
+  // Create grid lines in Y direction
+  for (let x = -gridExtent; x <= gridExtent; x += gridSpacing) {
+    const points = [];
+    for (let y = -gridExtent; y <= gridExtent; y += 0.05) {
+      const z = Math.atan2(y, x);
+      // Apply same two-sheet logic as surface
+      const zAdjusted = (x < 0 && y < 0) ? z + Math.PI * 2 : 
+                       (x < 0 && y > 0) ? z - Math.PI * 2 : z;
+      points.push(new THREE.Vector3(x, y, zAdjusted * ZSCALE));
+    }
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    scene.add(new THREE.Line(lineGeo, gridMat));
+  }
 
   // dashed branch cut on negative x-axis
   const dashGeo = new THREE.BufferGeometry().setFromPoints([ new THREE.Vector3(-1.4,0,0), new THREE.Vector3(0,0,0) ]);
@@ -1254,37 +1297,47 @@ function initAtan2Surface(){
   // Set up orbital camera controls
   updateCameraFromOrbit();
   
-  // Wire up slider event handlers
-  const azimuthSlider = document.getElementById('azimuthSlider');
-  const elevationSlider = document.getElementById('elevationSlider');
-  const zoomSlider = document.getElementById('zoomSlider');
-  const azimuthValue = document.getElementById('azimuthValue');
-  const elevationValue = document.getElementById('elevationValue');
-  const zoomValue = document.getElementById('zoomValue');
-  
-  if (azimuthSlider) {
-    azimuthSlider.addEventListener('input', (e) => {
-      cameraParams.azimuth = parseFloat(e.target.value);
-      azimuthValue.textContent = cameraParams.azimuth + '°';
-      updateCameraFromOrbit();
-    });
-  }
-  
-  if (elevationSlider) {
-    elevationSlider.addEventListener('input', (e) => {
-      cameraParams.elevation = parseFloat(e.target.value);
-      elevationValue.textContent = cameraParams.elevation + '°';
-      updateCameraFromOrbit();
-    });
-  }
-  
-  if (zoomSlider) {
-    zoomSlider.addEventListener('input', (e) => {
-      cameraParams.zoom = parseFloat(e.target.value);
-      zoomValue.textContent = cameraParams.zoom.toFixed(1);
-      updateCameraFromOrbit();
-    });
-  }
+  // Wire up slider event handlers with better error checking
+  setTimeout(() => {
+    const azimuthSlider = document.getElementById('azimuthSlider');
+    const elevationSlider = document.getElementById('elevationSlider');
+    const zoomSlider = document.getElementById('zoomSlider');
+    const azimuthValue = document.getElementById('azimuthValue');
+    const elevationValue = document.getElementById('elevationValue');
+    const zoomValue = document.getElementById('zoomValue');
+    
+    console.log('Setting up camera sliders:', {azimuthSlider, elevationSlider, zoomSlider});
+    
+    if (azimuthSlider && azimuthValue) {
+      azimuthSlider.addEventListener('input', (e) => {
+        cameraParams.azimuth = parseFloat(e.target.value);
+        azimuthValue.textContent = cameraParams.azimuth + '°';
+        updateCameraFromOrbit();
+      });
+    } else {
+      console.error('Azimuth slider or value element not found');
+    }
+    
+    if (elevationSlider && elevationValue) {
+      elevationSlider.addEventListener('input', (e) => {
+        cameraParams.elevation = parseFloat(e.target.value);
+        elevationValue.textContent = cameraParams.elevation + '°';
+        updateCameraFromOrbit();
+      });
+    } else {
+      console.error('Elevation slider or value element not found');
+    }
+    
+    if (zoomSlider && zoomValue) {
+      zoomSlider.addEventListener('input', (e) => {
+        cameraParams.zoom = parseFloat(e.target.value);
+        zoomValue.textContent = cameraParams.zoom.toFixed(1);
+        updateCameraFromOrbit();
+      });
+    } else {
+      console.error('Zoom slider or value element not found');
+    }
+  }, 100); // Small delay to ensure DOM is ready
 }
 
 // ---- plot inputs + mean on the surface ----
@@ -1299,7 +1352,7 @@ function updateAtan2Markers(angles, k=1){
   // inputs
   for (let i=0;i<angles.length;i++){
     const th = (angles[i]*k)%(Math.PI*2);
-    const x = Math.cos(th), y = Math.sin(th), z = Math.atan2(y,x);
+    const x = Math.cos(th), y = Math.sin(th), z = Math.atan2(y,x) * ZSCALE;
 
     const lineGeo = new THREE.BufferGeometry().setFromPoints([ new THREE.Vector3(x,y,0), new THREE.Vector3(x,y,z) ]);
     g.add(new THREE.Line(lineGeo, pillarMat));
@@ -1312,11 +1365,11 @@ function updateAtan2Markers(angles, k=1){
   let sx=0, sy=0; for (const t of angles){ sx += Math.cos(k*t); sy += Math.sin(k*t); }
   sx/=angles.length; sy/=angles.length; const r = Math.hypot(sx,sy);
   if (r > 1e-6){
-    const mz = Math.atan2(sy,sx);
+    const mz = Math.atan2(sy,sx) * ZSCALE;
     const mean = new THREE.Mesh(new THREE.SphereGeometry(0.07, 24, 16),
       new THREE.MeshStandardMaterial({ color:0x2ecc71, emissive:0x0a3d1f, roughness:0.4 }));
     mean.position.set(sx,sy,mz); g.add(mean);
-    // XY arrow
+    // XY arrow at Z=0 plane
     const arr = new THREE.ArrowHelper(new THREE.Vector3(sx,sy,0).normalize(), new THREE.Vector3(0,0,0), r, 0x2ecc71, 0.12, 0.08);
     g.add(arr);
   }
