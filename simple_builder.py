@@ -95,6 +95,8 @@ class SimpleMathBuilder:
                 if logo_base64 and 'ceres-tech-logo.png' in clean_content:
                     clean_content = clean_content.replace("src='ceres-tech-logo.png'", f"src='{logo_base64}'")
                     clean_content = clean_content.replace('src="ceres-tech-logo.png"', f'src="{logo_base64}"')
+                    clean_content = clean_content.replace("src='../ceres-tech-logo.png'", f"src='{logo_base64}'")
+                    clean_content = clean_content.replace('src="../ceres-tech-logo.png"', f'src="{logo_base64}"')
 
                 # Convert double quotes to single quotes ONLY in HTML attributes, not in script blocks
                 # Split by script tags first to preserve JavaScript
@@ -122,8 +124,9 @@ class SimpleMathBuilder:
         slides_js_dict = "{\n"
         for i, key in enumerate(sorted(loaded_slides.keys(), key=int)):  # Sort numerically
             content = loaded_slides[key]
-            # Escape any backslashes and escape script tags for JavaScript
+            # Escape any backslashes, quotes, and script tags for JavaScript
             escaped_content = content.replace('\\', '\\\\')
+            escaped_content = escaped_content.replace('"', '\\"')
             escaped_content = escaped_content.replace('</script>', '<\\/script>')
             
             # Preserve newlines in code blocks but replace them elsewhere
@@ -159,6 +162,8 @@ class SimpleMathBuilder:
             additional_js += Path("js/vector-calculator.js").read_text(encoding='utf-8') + "\n\n"
         if Path("js/timeseries-analyzer.js").exists():
             additional_js += Path("js/timeseries-analyzer.js").read_text(encoding='utf-8') + "\n\n"
+        if Path("js/hue-drag-wheel.js").exists():
+            additional_js += Path("js/hue-drag-wheel.js").read_text(encoding='utf-8') + "\n\n"
         
         # Replace placeholders in the template
         modified_js = modified_js_template.replace('{{SLIDES_DATA}}', slides_js_dict)
@@ -173,6 +178,7 @@ class SimpleMathBuilder:
         # Remove external JS module references (they're now embedded)
         bundled_html = bundled_html.replace('<script src="js/vector-calculator.js"></script>', '')
         bundled_html = bundled_html.replace('<script src="js/timeseries-analyzer.js"></script>', '')
+        bundled_html = bundled_html.replace('<script src="js/hue-drag-wheel.js"></script>', '')
         bundled_html = bundled_html.replace('    <!-- Interactive demo modules (for bundle version) -->', '')
         
         # Replace external JS with embedded JS
@@ -221,6 +227,8 @@ class SimpleMathBuilder:
             shutil.copy2("js/vector-calculator.js", js_dir / "vector-calculator.js")
         if Path("js/timeseries-analyzer.js").exists():
             shutil.copy2("js/timeseries-analyzer.js", js_dir / "timeseries-analyzer.js")
+        if Path("js/hue-drag-wheel.js").exists():
+            shutil.copy2("js/hue-drag-wheel.js", js_dir / "hue-drag-wheel.js")
         
         # Copy all slides
         for slide_file in self.config['slides']:

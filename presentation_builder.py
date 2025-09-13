@@ -12,19 +12,17 @@ Usage:
 # Useful for development and troubleshooting. Set to False for production builds.
 SAVE_DEBUG = False
 
-import re
 import json
-import base64
+import re
 import shutil
 import zipfile
 from pathlib import Path
 from datetime import datetime
-from PIL import Image
 import yaml
 from asset_manager import AssetManager
 from slide_processor import SlideProcessor
 from json_embedder import JSONDataEmbedder
-from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, JSON_EMBED, BUNDLE_PRESENTATION
+from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, BUNDLE_PRESENTATION
 
 
 class PresentationBuilder:
@@ -32,7 +30,7 @@ class PresentationBuilder:
     
     def __init__(self, config_path="config.yaml"):
         self.config = self._load_config(config_path)
-        self.build_dir = Path("dist")
+        self.build_dir = Path("docs")
         self.asset_manager = AssetManager(self.config, self.build_dir)
         self.slide_processor = SlideProcessor(self.config, self.asset_manager)
         self.json_embedder = JSONDataEmbedder()
@@ -60,36 +58,38 @@ class PresentationBuilder:
     
     def build_all(self):
         """Main build function - creates both single file and bundle"""
-        print("🚀 Building LWIR Presentation...")
-        
         # Clean and create build directory
         if self.build_dir.exists():
             shutil.rmtree(self.build_dir)
         self.build_dir.mkdir()
-        
+
         # Build outputs
         if self.config['build']['single_file']:
             self.build_single_file()
-        
+
         if self.config['build']['bundle_folder']:
             self.build_bundle()
-        
+
         # Create manifest
         self._create_manifest()
-        
+
         print(f"✅ Build complete! Output in {self.build_dir}")
         self._print_build_summary()
     
     def build_single_file(self):
         """Build single HTML file with everything embedded"""
-        print("📦 Building single file...")
-        
         # Collect slides for single file mode
         slides_content = self.slide_processor.collect_slides(output_mode='single')
-        
+
+        # Save intermediate JSON for debugging
+        json_debug_path = self.build_dir / "slides_debug.json"
+        with open(json_debug_path, 'w', encoding='utf-8') as f:
+            json.dump(slides_content, f, indent=2, ensure_ascii=False)
+        print(f"   📄 Debug: Saved slides data to {json_debug_path}")
+
         # Create HTML with embedded everything
         html_content = self._create_single_file_html(slides_content)
-        
+
         # Process images as base64 for single file
         for slide in slides_content:
             for asset in slide['assets']:
@@ -98,24 +98,24 @@ class PresentationBuilder:
                     original_path = Path(asset['original'])
                     temp_dir = self.build_dir / "temp"
                     temp_dir.mkdir(exist_ok=True)
-                    
+
                     local_name = self.asset_manager._generate_asset_name(original_path, 'image')
                     temp_path = temp_dir / local_name
-                    
+
                     # Process the image
                     self.asset_manager._process_asset(original_path, local_name, 'image', 'bundle')
                     asset['processed'] = str(self.build_dir / "presentation_bundle" / "assets" / local_name)
-        
+
         # Embed assets as base64
         html_content = self.asset_manager.embed_as_base64(html_content, self.asset_manager.assets_collected)
-        
+
         # Write single file
-        single_file_path = self.build_dir / "presentation.html"
+        single_file_path = self.build_dir / "index.html"
         single_file_path.write_text(html_content, encoding='utf-8')
-        
+
         file_size = single_file_path.stat().st_size / (1024*1024)
-        print(f"   ✅ Single file: {single_file_path} ({file_size:.1f}MB)")
-        
+        print(f"   📄 Single file: {file_size:.1f}MB")
+
         # Clean up temp directory
         temp_dir = self.build_dir / "temp"
         if temp_dir.exists():
@@ -123,100 +123,142 @@ class PresentationBuilder:
     
     def build_bundle(self):
         """Build bundle folder with separate assets"""
-        print("📁 Building bundle folder...")
-        
         bundle_dir = self.build_dir / "presentation_bundle"
         bundle_dir.mkdir(exist_ok=True)
-        
+
         # Collect slides for bundle mode
         slides_content = self.slide_processor.collect_slides(output_mode='bundle')
-        
+
         # Create directory structure
         (bundle_dir / "css").mkdir(exist_ok=True)
         (bundle_dir / "js").mkdir(exist_ok=True)
         (bundle_dir / "assets").mkdir(exist_ok=True)
-        
+
         # Copy CSS
         if Path("styles.css").exists():
             shutil.copy2("styles.css", bundle_dir / "css" / "styles.css")
-        
-        # Copy Plotly library if exists
-        plotly_path = Path("plotly-2.27.0.min.js")
-        if plotly_path.exists():
-            shutil.copy2(plotly_path, bundle_dir / "js" / "plotly-2.27.0.min.js")
-            print(f"   📊 Copied Plotly library")
-        
+
+        # Copy interactive JavaScript modules
+        js_modules = ["vector-calculator.js", "timeseries-analyzer.js", "hue-drag-wheel.js"]
+        js_count = 0
+        for module in js_modules:
+            module_path = Path("js") / module
+            if module_path.exists():
+                shutil.copy2(module_path, bundle_dir / "js" / module)
+                js_count += 1
+
+        if js_count > 0:
+            print(f"   🎮 Copied {js_count} interactive modules")
+
         # Create presentation.js with embedded slide data
         presentation_js = self._create_bundle_javascript(slides_content)
         (bundle_dir / "js" / "presentation.js").write_text(presentation_js, encoding='utf-8')
-        
+
         # Create index.html
         index_html = self._create_bundle_html()
         (bundle_dir / "index.html").write_text(index_html, encoding='utf-8')
-        
+
         # Create ZIP
         zip_path = self.build_dir / "presentation_bundle.zip"
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
             for file in bundle_dir.rglob('*'):
                 if file.is_file():
                     zf.write(file, file.relative_to(bundle_dir))
-        
+
         zip_size = zip_path.stat().st_size / (1024*1024)
-        print(f"   ✅ Bundle: {zip_path} ({zip_size:.1f}MB)")
+        print(f"   📁 Bundle: {zip_size:.1f}MB")
     
     def _create_single_file_html(self, slides_content):
         """Create complete single-file HTML"""
         css_content = Path("styles.css").read_text() if Path("styles.css").exists() else ""
-        
+
         # Get embedded JSON data
         json_embed_js = self.json_embedder.load_and_embed_json_data()
-        
+
         # Create slides JavaScript data
         slides_js_data = []
         for slide in slides_content:
+            content_to_process = slide['content']
+
+            # --- START OF COMPREHENSIVE FIX ---
+            # 1. Escape any potential script-breaking tags first
+            processed_content = content_to_process.replace('</script>', '<\\/script>')
+
+            # 2. Split content to safely process HTML without breaking code or scripts
+            parts = re.split(r'(<pre><code[^>]*>.*?</code></pre>|<script[^>]*>.*?</script>)', processed_content, flags=re.DOTALL)
+
+            final_parts = []
+            for part in parts:
+                is_code = re.match(r'<pre><code[^>]*>.*?</code></pre>', part, re.DOTALL)
+                is_script = re.match(r'<script[^>]*>.*?</script>', part, re.DOTALL)
+
+                if is_code or is_script:
+                    # For code and script blocks, preserve them as is.
+                    # json.dumps will handle escaping newlines and quotes inside them correctly.
+                    final_parts.append(part)
+                else:
+                    # This is regular HTML content.
+                    # a. Replace double quotes with single quotes to simplify things.
+                    part = part.replace('"', "'")
+                    # b. Replace newline characters with spaces to prevent JS syntax errors.
+                    part = part.replace('\n', ' ').replace('\r', '')
+                    # c. Collapse multiple spaces into one for cleanliness
+                    part = re.sub(r'\s+', ' ', part)
+                    final_parts.append(part)
+
+            # 3. Join the processed parts back together
+            final_content = ''.join(final_parts)
+            # --- END OF COMPREHENSIVE FIX ---
+
             slides_js_data.append({
-                'content': slide['content'],
+                'content': final_content,  # Use the fully processed content
                 'title': slide['title']
             })
-        
+
         slides_json = json.dumps(slides_js_data, ensure_ascii=False, separators=(',', ':'))
         
         # Create navigation JavaScript
         nav_js = self._create_navigation_javascript()
         
-        # DEBUG: Save intermediate versions without Plotly
-        debug_html_no_plotly = SINGLE_FILE.replace('{{TITLE}}', self.config['presentation']['title']) \
-                                        .replace('{{CSS_CONTENT}}', css_content) \
-                                        .replace('{{PLOTLY_SCRIPT}}', '<!-- Plotly library removed for debugging -->') \
-                                        .replace('{{TOTAL_SLIDES}}', str(len(slides_content))) \
-                                        .replace('{{JSON_EMBED_JS}}', json_embed_js) \
-                                        .replace('{{SLIDES_JSON}}', slides_json) \
-                                        .replace('{{NAVIGATION_JS}}', nav_js)
+        # DEBUG: Save intermediate versions
+        debug_html = SINGLE_FILE.replace('{{TITLE}}', self.config['presentation']['title']) \
+                                .replace('{{CSS_CONTENT}}', css_content) \
+                                .replace('{{INTERACTIVE_SCRIPTS}}', '<!-- Interactive scripts removed for debugging -->') \
+                                .replace('{{TOTAL_SLIDES}}', str(len(slides_content))) \
+                                .replace('{{JSON_EMBED_JS}}', json_embed_js) \
+                                .replace('{{SLIDES_JSON}}', slides_json) \
+                                .replace('{{NAVIGATION_JS}}', nav_js)
         
         # Save debug versions (if enabled)
         if SAVE_DEBUG:
             debug_dir = self.build_dir / "debug"
             debug_dir.mkdir(exist_ok=True)
             
-            (debug_dir / "presentation_no_plotly.html").write_text(debug_html_no_plotly, encoding='utf-8')
+            (debug_dir / "presentation_debug.html").write_text(debug_html, encoding='utf-8')
             (debug_dir / "json_embed.js").write_text(json_embed_js, encoding='utf-8')
             (debug_dir / "navigation.js").write_text(nav_js, encoding='utf-8')
             (debug_dir / "slides_data.json").write_text(slides_json, encoding='utf-8')
             
             print(f"   🐛 Debug files saved to {debug_dir}")
         
-        # Embed Plotly library for final version
-        plotly_script = ""
-        plotly_path = Path("plotly-2.27.0.min.js")
-        if plotly_path.exists():
-            plotly_js = plotly_path.read_text(encoding='utf-8')
-            plotly_js_escaped = plotly_js.replace('</', '<\\/')
-            plotly_script = f'<script>{plotly_js_escaped}</script>'
-            print(f"   📦 Embedded Plotly.js library")
-        
+        # Embed interactive JavaScript modules for final version
+        interactive_scripts = ""
+        js_embedded_count = 0
+        js_modules = ["vector-calculator.js", "timeseries-analyzer.js", "hue-drag-wheel.js"]
+        for module in js_modules:
+            module_path = Path("js") / module
+            if module_path.exists():
+                module_js = module_path.read_text(encoding='utf-8')
+                module_js_escaped = module_js.replace('</', '<\\/')
+                interactive_scripts += f'<script>{module_js_escaped}</script>\n'
+                js_embedded_count += 1
+
+        if js_embedded_count > 0:
+            print(f"   📦 Embedded {js_embedded_count} interactive modules")
+
         return SINGLE_FILE.replace('{{TITLE}}', self.config['presentation']['title']) \
                         .replace('{{CSS_CONTENT}}', css_content) \
-                        .replace('{{PLOTLY_SCRIPT}}', plotly_script) \
+                        .replace('{{INTERACTIVE_SCRIPTS}}', interactive_scripts) \
                         .replace('{{TOTAL_SLIDES}}', str(len(slides_content))) \
                         .replace('{{JSON_EMBED_JS}}', json_embed_js) \
                         .replace('{{SLIDES_JSON}}', slides_json) \

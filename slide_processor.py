@@ -52,7 +52,7 @@ class SlideProcessor:
                 print(f"   ❌ Slide not found: {slide_filename}")
                 continue
             
-            print(f"   Processing slide {i}: {slide_filename}...")
+            # Quietly process slide
             content = slide_file.read_text(encoding='utf-8')
             
             # Extract title from HTML
