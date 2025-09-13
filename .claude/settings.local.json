@@ -5,7 +5,8 @@
       "Bash(python3:*)",
       "Bash(python:*)",
       "Bash(./build.sh)",
-      "Bash(/dev/null)"
+      "Bash(/dev/null)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

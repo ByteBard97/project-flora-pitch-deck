@@ -33,6 +33,11 @@ const totalSlides = window.slideData ? Object.keys(window.slideData).length : sl
 // Load slide content (either from embedded data or fetch)
 async function loadSlide(index) {
     if (index < 0 || index >= totalSlides) return;
+
+    console.log(`${'='.repeat(80)}`);
+    console.log(`🎬 LOADING SLIDE ${index + 1}/${totalSlides}: ${slideFiles[index]?.split('/').pop() || `slide-${index}`}`);
+    console.log(`   Full path: ${slideFiles[index] || `slide-${index}`}`);
+    console.log(`${'='.repeat(80)}`);
     
     // Clean up any existing interactive app
     if (window.currentInteractiveApp) {
@@ -157,21 +162,25 @@ function updateNavigation() {
 }
 
 function nextSlide() {
+    console.log(`🔄 nextSlide() called - currentSlide: ${currentSlide}, totalSlides: ${totalSlides}`);
     if (currentSlide < totalSlides - 1) {
         currentSlide++;
     } else {
         currentSlide = 0; // Wrap to first slide
     }
+    console.log(`🔄 About to call loadSlide(${currentSlide})`);
     loadSlide(currentSlide);
     updateNavigation();
 }
 
 function previousSlide() {
+    console.log(`🔄 previousSlide() called - currentSlide: ${currentSlide}, totalSlides: ${totalSlides}`);
     if (currentSlide > 0) {
         currentSlide--;
     } else {
         currentSlide = totalSlides - 1; // Wrap to last slide
     }
+    console.log(`🔄 About to call loadSlide(${currentSlide})`);
     loadSlide(currentSlide);
     updateNavigation();
 }
@@ -222,6 +231,7 @@ function waitForLibrariesAndInit() {
             console.log('   fc.layoutLabel available:', typeof fc.layoutLabel === 'function');
 
             // Initialize presentation
+            console.log(`🚀 Initializing presentation - calling loadSlide(0)`);
             loadSlide(0);
             updateNavigation();
             slidesLoaded = true;

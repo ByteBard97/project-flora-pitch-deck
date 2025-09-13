@@ -303,7 +303,13 @@ class PresentationBuilder:
     
     def _create_navigation_javascript(self):
         """Create reusable navigation JavaScript"""
-        return NAVIGATION
+        # Use the actual presentation.js file instead of the template
+        presentation_js_path = Path("presentation.js")
+        if presentation_js_path.exists():
+            return presentation_js_path.read_text(encoding='utf-8')
+        else:
+            # Fallback to template if presentation.js doesn't exist
+            return NAVIGATION
     
     def _create_manifest(self):
         """Create asset manifest"""

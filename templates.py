@@ -414,6 +414,12 @@ SINGLE_FILE = '''<!DOCTYPE html>
 
 const slidesData = {{SLIDES_JSON}};
 
+// Set up window.slideData for embedded mode compatibility
+window.slideData = {};
+slidesData.forEach((slide, index) => {
+    window.slideData[index.toString()] = slide.content;
+});
+
 {{NAVIGATION_JS}}
     </script>
 </body>
@@ -459,7 +465,12 @@ NAVIGATION = '''let currentSlide = 0;
 
 function showSlide(index) {
     if (index < 0 || index >= slidesData.length) return;
-    
+
+    console.log(`${'='.repeat(80)}`);
+    console.log(`🎬 LOADING SLIDE ${index + 1}/${slidesData.length}: ${slidesData[index].title || `slide-${index}`}`);
+    console.log(`   Title: ${slidesData[index].title || 'Untitled'}`);
+    console.log(`${'='.repeat(80)}`);
+
     const slideContent = document.getElementById('slide-content');
     slideContent.innerHTML = slidesData[index].content;
     
