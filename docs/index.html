@@ -935,6 +935,17 @@ li {
             border-radius: 8px !important;
             padding: 1em !important;
         }
+
+        /* Crisp "halo" under label text to keep it readable */
+        svg text {
+            paint-order: stroke;
+            stroke: rgba(8,12,16,.75);
+            stroke-width: 3;
+        }
+        /* Optional: keep strokes consistent when scaling */
+        svg *[stroke] {
+            vector-effect: non-scaling-stroke;
+        }
     </style>
 
     <!-- Math rendering with MathJax -->
@@ -1168,6 +1179,44 @@ li {
             console.log('   ✅ Moved', texts.length, 'text elements to front');
         }
 
+        // Ensure SVG has the filter definitions for labels
+        function ensureLabelFilters(svgEl) {
+            const NS = "http://www.w3.org/2000/svg";
+            let defs = svgEl.querySelector("defs");
+            if (!defs) {
+                defs = document.createElementNS(NS, "defs");
+                svgEl.insertBefore(defs, svgEl.firstChild);
+            }
+
+            if (!svgEl.querySelector("#label-shadow")) {
+                const f = document.createElementNS(NS, "filter");
+                f.setAttribute("id", "label-shadow");
+                f.innerHTML = '<feDropShadow dx="0" dy=".7" stdDeviation="1.2" flood-color="#000" flood-opacity=".55"/>';
+                defs.appendChild(f);
+            }
+            if (!svgEl.querySelector("#label-glow")) {
+                const f = document.createElementNS(NS, "filter");
+                f.setAttribute("id", "label-glow");
+                f.setAttribute("x", "-20%");
+                f.setAttribute("y", "-20%");
+                f.setAttribute("width", "140%");
+                f.setAttribute("height", "140%");
+                f.innerHTML = '<feGaussianBlur in="SourceAlpha" stdDeviation="1.4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+                defs.appendChild(f);
+            }
+        }
+
+        // Apply styling filters to labels
+        function styleLabels(svgEl, { use = "shadow" } = {}) {
+            console.log('🎨 Applying', use, 'filter to text labels');
+            ensureLabelFilters(svgEl);
+            const texts = svgEl.querySelectorAll("text");
+            texts.forEach(t => {
+                t.setAttribute("filter", 'url(#label-' + use + ')');
+            });
+            console.log('   ✅ Applied', use, 'filter to', texts.length, 'text elements');
+        }
+
         // Reduce the size of filled endpoint circles; leave stroked rings alone
         function shrinkEndpoints(svgEl, targetR = 5) {
             console.log('🔴 Shrinking endpoint bulbs to radius', targetR);
@@ -1185,17 +1234,21 @@ li {
             console.log('   ✅ Shrunk', shrunkCount, 'filled circles from larger sizes to', targetR);
         }
 
-        // One-stop function called after rendering each slide's SVG
+        // Called after each slide's SVG is inserted (comprehensive enhancement pipeline)
         window.fixSVGLayoutAndLabels = function fixSVGLayoutAndLabels(svgEl) {
-            console.log('🔧 fixSVGLayoutAndLabels called');
+            console.log('🔧 fixSVGLayoutAndLabels called - running full enhancement pipeline');
+
             if (window.fixSVGLayout) {
-                window.fixSVGLayout(svgEl);           // your expandViewBox
+                window.fixSVGLayout(svgEl);         // your viewBox pad step
             }
             if (window.applyLabelLayout) {
-                window.applyLabelLayout(svgEl);       // your label spacing
+                window.applyLabelLayout(svgEl);     // space labels (greedy)
             }
-            bringTextToFront(svgEl);                  // move text above shapes
-            shrinkEndpoints(svgEl, 5);                // shrink filled circle endpoints
+            bringTextToFront(svgEl);                // labels above graphics
+            styleLabels(svgEl, { use: "shadow" });  // halo + subtle shadow
+            shrinkEndpoints(svgEl, 5);              // smaller bulbs globally
+
+            console.log('   ✅ Enhancement pipeline completed');
         };
 
         // Auto-fix all SVGs when a slide is loaded
