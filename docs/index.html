@@ -1160,14 +1160,42 @@ li {
             console.log('   ✅ Label layout applied to', textNodes.length, 'existing text elements (no new nodes created)');
         };
 
+        // Move every <text> to the end of its parent so it paints on top
+        function bringTextToFront(svgEl) {
+            console.log('📤 Bringing text elements to front');
+            const texts = svgEl.querySelectorAll('text');
+            texts.forEach(t => t.parentNode.appendChild(t)); // append = top of paint order
+            console.log('   ✅ Moved', texts.length, 'text elements to front');
+        }
+
+        // Reduce the size of filled endpoint circles; leave stroked rings alone
+        function shrinkEndpoints(svgEl, targetR = 5) {
+            console.log('🔴 Shrinking endpoint bulbs to radius', targetR);
+            let shrunkCount = 0;
+            svgEl.querySelectorAll('circle').forEach(c => {
+                const r0 = +c.getAttribute('r') || 0;
+                const fill = (c.getAttribute('fill') || '').trim().toLowerCase();
+                const hasFill = fill && fill !== 'none';
+                // Heuristic: rings in your slides have fill="none", endpoints are filled
+                if (hasFill && r0 > targetR) {
+                    c.setAttribute('r', targetR);
+                    shrunkCount++;
+                }
+            });
+            console.log('   ✅ Shrunk', shrunkCount, 'filled circles from larger sizes to', targetR);
+        }
+
         // One-stop function called after rendering each slide's SVG
         window.fixSVGLayoutAndLabels = function fixSVGLayoutAndLabels(svgEl) {
             console.log('🔧 fixSVGLayoutAndLabels called');
             if (window.fixSVGLayout) {
-                window.fixSVGLayout(svgEl); // existing expandViewBox/padding
+                window.fixSVGLayout(svgEl);           // your expandViewBox
             }
-            // use greedy first; flip to anneal: true for tighter but slower packing
-            window.applyLabelLayout(svgEl, { anneal: false });
+            if (window.applyLabelLayout) {
+                window.applyLabelLayout(svgEl);       // your label spacing
+            }
+            bringTextToFront(svgEl);                  // move text above shapes
+            shrinkEndpoints(svgEl, 5);                // shrink filled circle endpoints
         };
 
         // Auto-fix all SVGs when a slide is loaded
