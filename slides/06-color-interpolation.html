@@ -51,7 +51,7 @@
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      /* Place red at the TOP so geometry + visuals line up */
+      /* Rotated -90deg: red is now at North (0°) */
       background: conic-gradient(
         from -90deg,
         hsl(0, 100%, 50%),
@@ -135,12 +135,12 @@
 
   <div class="card">
     <p>
-      Drag the two handles <strong>A</strong> and <strong>B</strong> on the
-      hue wheel. The vectors are colored by their hues. We show two
-      "midpoints": the <strong>correct circular midpoint</strong> (shortest
-      arc, <code>t=0.5</code>) and the
-      <strong>naive linear midpoint</strong> (just averaging numbers). Watch
-      how naive linear often cuts through unrelated hues.
+      Drag the two handles <strong>A</strong> and <strong>B</strong> on the hue
+      wheel. The vectors are colored by their hues. We show two "midpoints": the
+      <strong>correct circular midpoint</strong> (shortest arc,
+      <code>t=0.5</code>) and the <strong>naive linear midpoint</strong> (just
+      averaging numbers). Watch how naive linear often cuts through unrelated
+      hues.
     </p>
   </div>
 
@@ -164,7 +164,7 @@
         <circle
           cx="200"
           cy="200"
-          r="158"
+          r="179"
           fill="none"
           stroke="rgba(255,255,255,.22)"
           stroke-width="1"
@@ -319,7 +319,9 @@
         </div>
         <div class="chip">
           <span class="dot" id="dotMid"></span>
-          <span class="mono">Circular mid (t=0.5): <span id="degMid">0°</span></span>
+          <span class="mono"
+            >Circular mid (t=0.5): <span id="degMid">0°</span></span
+          >
         </div>
         <div class="chip">
           <span class="dot" id="dotNaive"></span>
@@ -327,11 +329,7 @@
         </div>
       </div>
       <div class="midbars">
-        <div
-          class="bar"
-          id="barCircular"
-          title="Circular midpoint path"
-        ></div>
+        <div class="bar" id="barCircular" title="Circular midpoint path"></div>
         <small>
           Correct (circular): follows the shorter arc between A and B.
         </small>

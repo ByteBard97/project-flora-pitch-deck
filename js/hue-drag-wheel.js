@@ -6,6 +6,14 @@ function initHueDragWheel() {
     return;
   }
 
+  // Define constants for the hue wheel
+  const R = 179;  // Radius corrected to visual center of the ring
+  const S = 100;  // Saturation percentage for HSL colors
+  const L = 50;   // Lightness percentage for HSL colors
+
+  const lineA = svg.querySelector("#lineA");
+  const lineB = svg.querySelector("#lineB");
+  const lineMid = svg.querySelector("#lineMid");
   const lineNaive = svg.querySelector("#lineNaive");
   const hA = svg.querySelector("#handleA");
   const hB = svg.querySelector("#handleB");
@@ -33,14 +41,14 @@ function initHueDragWheel() {
   const deg2rad = (d) => (d * Math.PI) / 180;
   const rad2deg = (r) => (r * 180) / Math.PI;
 
-  // Wheel uses conic-gradient from -90deg, i.e., hue 0 at the TOP; hue increases clockwise.
+  // Rotated hue wheel: red at North (0°), hue increases clockwise
   function posOnRing(h) {
-    const a = deg2rad(h - 90);
+    const a = deg2rad(h - 90); // Apply -90deg rotation
     return [200 + R * Math.cos(a), 200 + R * Math.sin(a)];
   }
   function hueFromPoint(x, y) {
     const a = Math.atan2(y - 200, x - 200);
-    return clamp360(rad2deg(a) + 90);
+    return clamp360(rad2deg(a) + 90); // Apply +90deg rotation
   }
   function shortestDelta(a, b) {
     return ((b - a + 540) % 360) - 180;
@@ -56,7 +64,8 @@ function initHueDragWheel() {
     const [x, y] = posOnRing(hue);
     elLine.setAttribute("x2", x);
     elLine.setAttribute("y2", y);
-    elLine.setAttribute("stroke", `hsl(${hue} ${S}% ${L}%)`);
+    // Color the line according to its hue
+    elLine.setAttribute("stroke", `hsl(${hue}, ${S}%, ${L}%)`);
     elLine.setAttribute("stroke-width", width);
     if (dash) {
       elLine.setAttribute("stroke-dasharray", dash);
@@ -65,28 +74,26 @@ function initHueDragWheel() {
     }
     elHandle.setAttribute("cx", x);
     elHandle.setAttribute("cy", y);
+    // Color the handle with the same hue, slightly lighter
     elHandle.setAttribute(
       "fill",
-      `hsl(${hue} ${S}% ${Math.max(20, Math.min(80, L))}%)`
+      `hsl(${hue}, ${S}%, ${Math.min(70, L + 20)}%)`
     );
-    elLabel.setAttribute("x", x);
-    elLabel.setAttribute("y", y - 14);
+    // Position label slightly outside the handle
+    const labelOffset = 18;
+    const angle = deg2rad(hue - 90); // Apply rotation for label positioning
+    elLabel.setAttribute("x", x + labelOffset * Math.cos(angle));
+    elLabel.setAttribute("y", y + labelOffset * Math.sin(angle));
   }
   function setChip(dot, degree, hue) {
-    dot.style.background = `hsl(${hue} ${S}% ${L}%)`;
+    dot.style.background = `hsl(${hue}, ${S}%, ${L}%)`;
     degree.textContent = `${Math.round(hue)}°`;
   }
   function setArc(h1, h2) {
     const dShort = shortestDelta(h1, h2);
-    const useLong = false;
-    const large = useLong
-      ? Math.abs(dShort) < 180
-        ? 1
-        : 0
-      : Math.abs(dShort) > 180
-      ? 1
-      : 0;
-    const sweepFlag = (h2 - h1 + 360) % 360 < 180 ? 1 : 0;
+    // Always draw the shortest arc
+    const large = Math.abs(dShort) > 180 ? 1 : 0;
+    const sweepFlag = dShort > 0 ? 1 : 0; // Positive delta = clockwise sweep
     const [ax, ay] = posOnRing(h1);
     const [bx, by] = posOnRing(h2);
     arc.setAttribute(
@@ -102,8 +109,8 @@ function initHueDragWheel() {
       const t = i / steps;
       const hm = clamp360(h1 + shortestDelta(h1, h2) * t);
       const hn = clamp360(h1 + (h2 - h1) * t);
-      colsCirc.push(`hsl(${hm} ${S}% ${L}%)`);
-      colsNaive.push(`hsl(${hn} ${S}% ${L}%)`);
+      colsCirc.push(`hsl(${hm}, ${S}%, ${L}%)`);
+      colsNaive.push(`hsl(${hn}, ${S}%, ${L}%)`);
     }
     barCircular.style.background = `linear-gradient(90deg, ${colsCirc.join(
       ","
@@ -114,8 +121,8 @@ function initHueDragWheel() {
   }
 
   // State
-  let H1 = 10,
-    H2 = 350; // defaults
+  let H1 = 340, // Start with red-magenta
+    H2 = 40;  // Start with orange
   function render() {
     const Hmid = circularMid(H1, H2);
     const Hnaive = naiveMid(H1, H2);

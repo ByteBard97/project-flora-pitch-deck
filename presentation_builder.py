@@ -25,6 +25,9 @@ from json_embedder import JSONDataEmbedder
 from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, BUNDLE_PRESENTATION
 
 
+JS_MODULES = ["hue-drag-wheel.js"]
+#"vector-calculator.js", "timeseries-analyzer.js", 
+
 class PresentationBuilder:
     """Main builder orchestrating the presentation build process"""
     
@@ -76,6 +79,24 @@ class PresentationBuilder:
         print(f"✅ Build complete! Output in {self.build_dir}")
         self._print_build_summary()
     
+    def _create_unified_js(self):
+        """Reads and combines all interactive JavaScript modules."""
+        unified_js = ""
+        js_embedded_count = 0
+        for module in JS_MODULES:
+            module_path = Path("js") / module
+            if module_path.exists():
+                module_js = module_path.read_text(encoding='utf-8')
+                # Escape </script> tags to avoid breaking the parent script block
+                module_js_escaped = module_js.replace('</', '<\\/')
+                unified_js += module_js_escaped + "\n\n"
+                js_embedded_count += 1
+
+        if js_embedded_count > 0:
+            print(f"   📦 Combined {js_embedded_count} interactive modules for unified loading")
+
+        return unified_js
+
     def build_single_file(self):
         """Build single HTML file with everything embedded"""
         # Collect slides for single file mode
@@ -87,8 +108,11 @@ class PresentationBuilder:
             json.dump(slides_content, f, indent=2, ensure_ascii=False)
         print(f"   📄 Debug: Saved slides data to {json_debug_path}")
 
+        # Create the unified JavaScript from all modules
+        unified_js = self._create_unified_js()
+
         # Create HTML with embedded everything
-        html_content = self._create_single_file_html(slides_content)
+        html_content = self._create_single_file_html(slides_content, unified_js)
 
         # Process images as base64 for single file
         for slide in slides_content:
@@ -139,9 +163,8 @@ class PresentationBuilder:
             shutil.copy2("styles.css", bundle_dir / "css" / "styles.css")
 
         # Copy interactive JavaScript modules
-        js_modules = ["vector-calculator.js", "timeseries-analyzer.js", "hue-drag-wheel.js"]
         js_count = 0
-        for module in js_modules:
+        for module in JS_MODULES:
             module_path = Path("js") / module
             if module_path.exists():
                 shutil.copy2(module_path, bundle_dir / "js" / module)
@@ -168,7 +191,7 @@ class PresentationBuilder:
         zip_size = zip_path.stat().st_size / (1024*1024)
         print(f"   📁 Bundle: {zip_size:.1f}MB")
     
-    def _create_single_file_html(self, slides_content):
+    def _create_single_file_html(self, slides_content, unified_js):
         """Create complete single-file HTML"""
         css_content = Path("styles.css").read_text() if Path("styles.css").exists() else ""
 
@@ -216,53 +239,41 @@ class PresentationBuilder:
             })
 
         slides_json = json.dumps(slides_js_data, ensure_ascii=False, separators=(',', ':'))
-        
-        # Create navigation JavaScript
+
+        # Get the main navigation logic
         nav_js = self._create_navigation_javascript()
-        
+
+        # Combine interactive modules with navigation
+        # This ensures functions like initVectorCalculator() are defined before nav_js might call them
+        combined_js = unified_js + nav_js
+
         # DEBUG: Save intermediate versions
         debug_html = SINGLE_FILE.replace('{{TITLE}}', self.config['presentation']['title']) \
                                 .replace('{{CSS_CONTENT}}', css_content) \
-                                .replace('{{INTERACTIVE_SCRIPTS}}', '<!-- Interactive scripts removed for debugging -->') \
                                 .replace('{{TOTAL_SLIDES}}', str(len(slides_content))) \
                                 .replace('{{JSON_EMBED_JS}}', json_embed_js) \
                                 .replace('{{SLIDES_JSON}}', slides_json) \
                                 .replace('{{NAVIGATION_JS}}', nav_js)
-        
+
         # Save debug versions (if enabled)
         if SAVE_DEBUG:
             debug_dir = self.build_dir / "debug"
             debug_dir.mkdir(exist_ok=True)
-            
+
             (debug_dir / "presentation_debug.html").write_text(debug_html, encoding='utf-8')
             (debug_dir / "json_embed.js").write_text(json_embed_js, encoding='utf-8')
             (debug_dir / "navigation.js").write_text(nav_js, encoding='utf-8')
             (debug_dir / "slides_data.json").write_text(slides_json, encoding='utf-8')
-            
-            print(f"   🐛 Debug files saved to {debug_dir}")
-        
-        # Embed interactive JavaScript modules for final version
-        interactive_scripts = ""
-        js_embedded_count = 0
-        js_modules = ["vector-calculator.js", "timeseries-analyzer.js", "hue-drag-wheel.js"]
-        for module in js_modules:
-            module_path = Path("js") / module
-            if module_path.exists():
-                module_js = module_path.read_text(encoding='utf-8')
-                module_js_escaped = module_js.replace('</', '<\\/')
-                interactive_scripts += f'<script>{module_js_escaped}</script>\n'
-                js_embedded_count += 1
+            (debug_dir / "combined.js").write_text(combined_js, encoding='utf-8')
 
-        if js_embedded_count > 0:
-            print(f"   📦 Embedded {js_embedded_count} interactive modules")
+            print(f"   🐛 Debug files saved to {debug_dir}")
 
         return SINGLE_FILE.replace('{{TITLE}}', self.config['presentation']['title']) \
                         .replace('{{CSS_CONTENT}}', css_content) \
-                        .replace('{{INTERACTIVE_SCRIPTS}}', interactive_scripts) \
                         .replace('{{TOTAL_SLIDES}}', str(len(slides_content))) \
                         .replace('{{JSON_EMBED_JS}}', json_embed_js) \
                         .replace('{{SLIDES_JSON}}', slides_json) \
-                        .replace('{{NAVIGATION_JS}}', nav_js)
+                        .replace('{{NAVIGATION_JS}}', combined_js)
     
     def _create_bundle_html(self):
         """Create index.html for bundle"""
