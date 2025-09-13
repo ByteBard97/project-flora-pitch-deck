@@ -19,11 +19,11 @@ print(f"Average: {average}°")  # 180° - COMPLETELY WRONG!</code></pre>
             <!-- Compass circle -->
             <circle cx="150" cy="150" r="120" fill="none" stroke="#333" stroke-width="2"/>
             
-            <!-- Compass labels -->
-            <text x="150" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107">N (0°)</text>
-            <text x="280" y="155" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107">E (90°)</text>
-            <text x="150" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107">S (180°)</text>
-            <text x="20" y="155" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107">W (270°)</text>
+            <!-- Compass labels with stroke for better readability -->
+            <text x="150" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107" paint-order="stroke" stroke="#0b0f14" stroke-width="3">N (0°)</text>
+            <text x="280" y="155" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107" paint-order="stroke" stroke="#0b0f14" stroke-width="3">E (90°)</text>
+            <text x="150" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107" paint-order="stroke" stroke="#0b0f14" stroke-width="3">S (180°)</text>
+            <text x="20" y="155" text-anchor="middle" font-size="16" font-weight="bold" fill="#FFC107" paint-order="stroke" stroke="#0b0f14" stroke-width="3">W (270°)</text>
             
             <!-- Heading 1: 350° -->
             <line x1="150" y1="150" x2="140" y2="30" stroke="#2196F3" stroke-width="4"/>
@@ -57,4 +57,24 @@ print(f"Average: {average}°")  # 180° - COMPLETELY WRONG!</code></pre>
         </ul>
     </div>
 </div>
+
+<script>
+// Fix SVG layout and labels when this slide is displayed
+console.log('🎯 Slide 02-the-bug script executing');
+setTimeout(() => {
+    console.log('🎯 Slide 02-the-bug timeout triggered');
+    const svg = document.querySelector('.visual-demo svg');
+    if (svg) {
+        console.log('   Found SVG in .visual-demo');
+        if (window.fixSVGLayoutAndLabels) {
+            console.log('   Calling fixSVGLayoutAndLabels from slide script');
+            window.fixSVGLayoutAndLabels(svg);
+        } else {
+            console.warn('   fixSVGLayoutAndLabels function not found on window');
+        }
+    } else {
+        console.warn('   No SVG found in .visual-demo');
+    }
+}, 100);
+</script>
 

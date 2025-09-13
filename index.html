@@ -10,8 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     
     <!-- Leaflet CSS for GIS demo -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+    <!-- D3 UMD (exposes window.d3) -->
+    <script src="https://d3js.org/d3.v7.min.js" defer></script>
+
+    <!-- D3FC UMD bundle (exposes window.fc, includes label-layout) -->
+    <script src="https://unpkg.com/d3fc@15" defer></script>
     
     <!-- Code block styling -->
     <style>
@@ -106,6 +112,216 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             hljs.highlightAll();
+
+            // Sanity check for D3 and fc libraries
+            console.log("✅ D3 loaded?", typeof d3);
+            console.log("✅ fc loaded?", typeof fc);
+
+            if (typeof d3 !== 'undefined' && typeof fc !== 'undefined') {
+                console.log("✅ D3 version:", d3.version);
+                console.log("✅ fc.layoutLabel exists?", typeof fc.layoutLabel);
+            } else {
+                console.error("❌ D3 or fc libraries failed to load!");
+            }
+        });
+
+        // Helper function to expand SVG viewBox to prevent text cutoff
+        function expandViewBox(svg, pad = 20) {
+            console.log("📐 expandViewBox called with padding:", pad);
+            const node = svg.node ? svg.node() : svg;
+            const box = node.getBBox();
+            const oldViewBox = node.getAttribute("viewBox");
+            const newViewBox = [
+                box.x - pad,
+                box.y - pad,
+                box.width + 2 * pad,
+                box.height + 2 * pad
+            ].join(" ");
+
+            console.log("   Old viewBox:", oldViewBox);
+            console.log("   New viewBox:", newViewBox);
+
+            if (svg.attr) {
+                svg.attr("viewBox", newViewBox);
+            } else {
+                node.setAttribute("viewBox", newViewBox);
+            }
+        }
+
+        // Helper function to wait for libraries to load
+        function waitForLibraries(callback, maxRetries = 20) {
+            let retries = 0;
+            const checkInterval = setInterval(() => {
+                retries++;
+                if (window.d3 && window.fc) {
+                    console.log("✅ D3 and fc libraries loaded");
+                    clearInterval(checkInterval);
+                    callback();
+                } else if (retries >= maxRetries) {
+                    console.warn("⚠️ Timeout waiting for D3/fc libraries after", retries, "attempts");
+                    clearInterval(checkInterval);
+                } else {
+                    console.log("⏳ Waiting for D3/fc libraries... attempt", retries);
+                }
+            }, 100);
+        }
+
+        // Helper function to fix SVG text layout and prevent overlap
+        function fixSVGLayout(svgElement) {
+            console.log("🔧 fixSVGLayout called for SVG element");
+
+            if (!window.d3 || !window.fc) {
+                console.warn("⚠️ D3 or fc libraries not loaded yet, will retry...");
+                waitForLibraries(() => {
+                    console.log("🔄 Retrying fixSVGLayout after libraries loaded");
+                    fixSVGLayout(svgElement);
+                });
+                return;
+            }
+
+            const svg = d3.select(svgElement);
+            console.log("   SVG selected with D3");
+
+            // Expand viewBox to prevent edge clipping
+            expandViewBox(svg, 25);
+
+            // Optional: Apply label layout if there are many text elements
+            const textElements = svg.selectAll("text");
+            console.log('   Found ' + textElements.size() + ' text elements');
+
+            if (textElements.size() > 4) {
+                console.log("   Applying d3fc label layout for", textElements.size(), "text elements");
+                // For complex layouts with many labels, use d3fc-label-layout
+                try {
+                    const labels = textElements.nodes();
+                    const layout = fc.layoutLabel()
+                        .size(d => {
+                            const box = d.getBBox();
+                            return [box.width, box.height];
+                        })
+                        .position(d => {
+                            const x = parseFloat(d.getAttribute("x") || 0);
+                            const y = parseFloat(d.getAttribute("y") || 0);
+                            return [x, y];
+                        });
+
+                    svg.datum(labels).call(layout);
+                    console.log("   ✅ Label layout applied successfully");
+                } catch (e) {
+                    console.warn("   ❌ Label layout failed:", e);
+                }
+            } else {
+                console.log("   Skipping label layout (not enough text elements)");
+            }
+        }
+
+        // Helper function to compute safe SVG bounds
+        function computeSvgBounds(svgNode) {
+            const svg = d3.select(svgNode);
+            const vbAttr = svg.attr("viewBox");
+            if (vbAttr) {
+                const nums = vbAttr.trim().split(/\s+/).map(Number);
+                if (nums.length === 4 && nums.every(Number.isFinite)) {
+                    const [vx, vy, vw, vh] = nums;
+                    if (vw > 0 && vh > 0) return { x: vx, y: vy, width: vw, height: vh };
+                }
+            }
+            // fallback: bbox + padding, and set a sane viewBox
+            const b = svgNode.getBBox();
+            const bounds = { x: b.x - 16, y: b.y - 16, width: b.width + 32, height: b.height + 32 };
+            svg.attr("viewBox", bounds.x + " " + bounds.y + " " + bounds.width + " " + bounds.height);
+            return bounds;
+        }
+
+        // Move existing <text> elements with d3fc (no new labels are created)
+        window.applyLabelLayout = function applyLabelLayout(svgNode, { anneal = false } = {}) {
+            if (!window.d3 || !window.fc) {
+                console.warn("applyLabelLayout: d3/fc not present");
+                return;
+            }
+
+            console.log('🏷️ Applying label layout (reuse existing labels)');
+            const svg = d3.select(svgNode);
+            const textsSel = svg.selectAll("text");
+            const textNodes = textsSel.nodes();
+
+            if (textNodes.length < 2) {
+                console.log('   Skipping layout (less than 2 text elements)');
+                return; // nothing to resolve
+            }
+
+            // normalize anchors to reduce surprises
+            textsSel
+                .attr("dominant-baseline", function () { return this.getAttribute("dominant-baseline") || "middle"; })
+                .attr("text-anchor", function () { return this.getAttribute("text-anchor") || "middle"; });
+
+            const bounds = computeSvgBounds(svgNode);
+            console.log('   Using bounds:', bounds);
+
+            // pick strategy
+            const base = anneal ? fc.layoutAnnealing() : fc.layoutGreedy();
+            const strategy = fc.layoutRemoveOverlaps(base.bounds(bounds));
+
+            // NO component: we don't want new nodes rendered
+            const noop = () => {};
+
+            // layout that measures & reads current positions off each datum (the SVGTextElement)
+            const layout = fc.layoutLabel(strategy)
+                .size(function (d) {
+                    const bb = d.getBBox();
+                    return [bb.width + 8, bb.height + 6];  // padding around label boxes
+                })
+                .position(function (d) {
+                    return [ +d.getAttribute("x") || 0, +d.getAttribute("y") || 0 ];
+                })
+                .component(noop);
+
+            // bind nodes as data and run layout
+            svg.datum(textNodes).call(layout);
+
+            // now bind those datums to the text selection
+            textsSel.data(textNodes);
+
+            // write solved positions back; keep old value as fallback
+            textsSel
+                .attr("x", function (d) { return (d && Number.isFinite(d.x)) ? d.x : +this.getAttribute("x"); })
+                .attr("y", function (d) { return (d && Number.isFinite(d.y)) ? d.y : +this.getAttribute("y"); });
+            console.log('   ✅ Label layout applied to', textNodes.length, 'existing text elements (no new nodes created)');
+        };
+
+        // One-stop function called after rendering each slide's SVG
+        window.fixSVGLayoutAndLabels = function fixSVGLayoutAndLabels(svgEl) {
+            console.log('🔧 fixSVGLayoutAndLabels called');
+            if (window.fixSVGLayout) {
+                window.fixSVGLayout(svgEl); // existing expandViewBox/padding
+            }
+            // use greedy first; flip to anneal: true for tighter but slower packing
+            window.applyLabelLayout(svgEl, { anneal: false });
+        };
+
+        // Auto-fix all SVGs when a slide is loaded
+        window.addEventListener("slideLoaded", () => {
+            console.log("📄 slideLoaded event received");
+            const svgs = document.querySelectorAll("#slide-content svg");
+            console.log('   Found ' + svgs.length + ' SVG(s) in slide content');
+
+            if (svgs.length > 0) {
+                // Wait for libraries to be ready before processing SVGs
+                if (!window.d3 || !window.fc) {
+                    console.log("⏳ Libraries not ready, waiting...");
+                    waitForLibraries(() => {
+                        svgs.forEach((svg, index) => {
+                            console.log('   Processing SVG ' + (index + 1) + '/' + svgs.length);
+                            fixSVGLayoutAndLabels(svg);
+                        });
+                    });
+                } else {
+                    svgs.forEach((svg, index) => {
+                        console.log('   Processing SVG ' + (index + 1) + '/' + svgs.length);
+                        fixSVGLayoutAndLabels(svg);
+                    });
+                }
+            }
         });
     </script>
     

@@ -115,7 +115,10 @@ async function loadSlide(index) {
         slideContent.style.animation = 'none';
         slideContent.offsetHeight; // Trigger reflow
         slideContent.style.animation = 'fadeIn 0.5s';
-        
+
+        // Dispatch custom event for SVG layout fixing
+        window.dispatchEvent(new CustomEvent('slideLoaded'));
+
     } catch (error) {
         console.error('Error loading slide:', error);
         document.getElementById('slide-content').innerHTML = `
@@ -188,20 +191,50 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Wait for libraries and initialize presentation
+function waitForLibrariesAndInit() {
+    let attempts = 0;
+    const maxAttempts = 50; // 5 seconds max
+
+    const checkLibraries = setInterval(() => {
+        attempts++;
+
+        // Check if D3 and fc are loaded
+        if (typeof window.d3 !== 'undefined' && typeof window.fc !== 'undefined') {
+            clearInterval(checkLibraries);
+            console.log('✅ D3 and fc libraries loaded successfully');
+            console.log('   D3 version:', d3.version);
+            console.log('   fc.layoutLabel available:', typeof fc.layoutLabel === 'function');
+
+            // Initialize presentation
+            loadSlide(0);
+            updateNavigation();
+            slidesLoaded = true;
+
+            // Add some helpful keyboard shortcuts info
+            console.log('Keyboard shortcuts:');
+            console.log('→ or Space: Next slide');
+            console.log('←: Previous slide');
+            console.log('1-9: Jump to slide');
+            console.log('Home: First slide');
+            console.log('End: Last slide');
+        } else if (attempts >= maxAttempts) {
+            clearInterval(checkLibraries);
+            console.warn('⚠️ D3/fc libraries failed to load after', attempts, 'attempts');
+            console.warn('   Continuing without SVG layout fixing...');
+
+            // Initialize presentation anyway
+            loadSlide(0);
+            updateNavigation();
+            slidesLoaded = true;
+        } else if (attempts % 10 === 0) {
+            console.log('⏳ Waiting for D3/fc libraries... attempt', attempts);
+        }
+    }, 100);
+}
+
 // Initialize presentation
-document.addEventListener('DOMContentLoaded', function() {
-    loadSlide(0);
-    updateNavigation();
-    slidesLoaded = true;
-    
-    // Add some helpful keyboard shortcuts info
-    console.log('Keyboard shortcuts:');
-    console.log('→ or Space: Next slide');
-    console.log('←: Previous slide'); 
-    console.log('1-9: Jump to slide');
-    console.log('Home: First slide');
-    console.log('End: Last slide');
-});
+document.addEventListener('DOMContentLoaded', waitForLibrariesAndInit);
 
 // Interactive demo functionality for slide 10
 function initInteractiveDemo() {
