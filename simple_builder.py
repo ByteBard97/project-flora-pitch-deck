@@ -30,11 +30,20 @@ class SimpleMathBuilder:
     def build_single_file(self):
         """Create a single HTML file with embedded CSS and slides"""
         print("📦 Building single file...")
-        
+
         # Read main files
         styles = Path("styles.css").read_text(encoding='utf-8')
         main_html = Path("index.html").read_text(encoding='utf-8')
         presentation_js = Path("presentation.js").read_text(encoding='utf-8')
+
+        # Process logo image if it exists
+        logo_base64 = ""
+        logo_path = Path("ceres-tech-logo.png")
+        if logo_path.exists():
+            import base64
+            logo_data = logo_path.read_bytes()
+            logo_base64 = f"data:image/png;base64,{base64.b64encode(logo_data).decode('utf-8')}"
+            print("   ✅ Embedded logo image as base64")
         
         # Read all slides
         slides_data = {}
@@ -81,7 +90,12 @@ class SimpleMathBuilder:
                         parts[part_idx] = re.sub(r'\n+', '\n', part)  # Normalize multiple newlines
                 
                 clean_content = ''.join(parts)
-                
+
+                # Replace logo image src with base64 if we have it
+                if logo_base64 and 'ceres-tech-logo.png' in clean_content:
+                    clean_content = clean_content.replace("src='ceres-tech-logo.png'", f"src='{logo_base64}'")
+                    clean_content = clean_content.replace('src="ceres-tech-logo.png"', f'src="{logo_base64}"')
+
                 # Convert double quotes to single quotes ONLY in HTML attributes, not in script blocks
                 # Split by script tags first to preserve JavaScript
                 script_parts = re.split(r'(<script[^>]*>.*?</script>)', clean_content, flags=re.DOTALL)
@@ -191,8 +205,14 @@ class SimpleMathBuilder:
         # Copy main files
         import shutil
         shutil.copy2("index.html", bundle_dir / "index.html")
-        shutil.copy2("styles.css", bundle_dir / "styles.css") 
+        shutil.copy2("styles.css", bundle_dir / "styles.css")
         shutil.copy2("presentation.js", bundle_dir / "presentation.js")
+
+        # Copy logo image if it exists
+        logo_path = Path("ceres-tech-logo.png")
+        if logo_path.exists():
+            shutil.copy2(logo_path, bundle_dir / "ceres-tech-logo.png")
+            print("   ✅ Copied logo image")
         
         # Copy JavaScript modules
         js_dir = bundle_dir / "js"

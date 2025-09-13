@@ -21,9 +21,9 @@ slides:
   - "09-takeaways.html"
   - "11-interactive-demo.html"
   - "12-gis-demo.html"
-  - "16-vector-calculator.html"
-  - "17-timeseries-analyzer.html"
-  - "10-questions.html"
+#  - "16-vector-calculator.html"
+#  - "17-timeseries-analyzer.html"
+#  - "10-questions.html"
 
 build:
   single_file: true # Create single HTML file for phone calls

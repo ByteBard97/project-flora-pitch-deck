@@ -1196,9 +1196,22 @@ function buildAtan2TwoSheets(R=1.4, NX=160, NY=160){
       k++;
     }
   }
+  // Skip triangles that cross large Z jumps to keep branch cut open
+  const ZJUMP = Math.PI * 1.5 * ZSCALE; // anything > ~π means we're at the step
+
+  function pushCellSafe(mesh, a,b,c,d, pos) {
+    const z = (p) => pos[p*3 + 2];
+    const jumps =
+      Math.abs(z(a)-z(b)) > ZJUMP || Math.abs(z(b)-z(c)) > ZJUMP ||
+      Math.abs(z(c)-z(d)) > ZJUMP || Math.abs(z(d)-z(a)) > ZJUMP;
+
+    if (!jumps) mesh.idx.push(a,b,d, b,c,d);
+  }
+
   for (let j=0;j<NY-1;j++) for (let i=0;i<NX-1;i++){
     const a=idx(i,j), b=idx(i+1,j), c=idx(i+1,j+1), d=idx(i,j+1);
-    up.idx.push(a,b,d, b,c,d);  lo.idx.push(a,b,d, b,c,d);
+    pushCellSafe(up, a,b,c,d, up.pos);
+    pushCellSafe(lo, a,b,c,d, lo.pos);
   }
 
   const mat = new THREE.MeshStandardMaterial({ vertexColors:true, side:THREE.DoubleSide, roughness:0.85, metalness:0.05 });
@@ -1247,7 +1260,12 @@ function initAtan2Surface(){
   scene.add(upper, lower);
 
   // Add grid lines over the surface
-  const gridMat = new THREE.LineBasicMaterial({ color:0x666666, transparent:true, opacity:0.4 });
+  const gridMat = new THREE.LineBasicMaterial({
+    color: 0x222831,        // darker
+    transparent: true,
+    opacity: 0.85,
+    depthTest: false        // draw on top of the surface
+  });
   const gridSpacing = 0.2; // spacing between grid lines
   const gridExtent = 1.4;  // how far the grid extends
   
@@ -1262,7 +1280,9 @@ function initAtan2Surface(){
       points.push(new THREE.Vector3(x, y, zAdjusted * ZSCALE));
     }
     const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-    scene.add(new THREE.Line(lineGeo, gridMat));
+    const gridLine = new THREE.Line(lineGeo, gridMat);
+    gridLine.renderOrder = 2;  // ensure lines render after the surface
+    scene.add(gridLine);
   }
   
   // Create grid lines in Y direction
@@ -1276,7 +1296,9 @@ function initAtan2Surface(){
       points.push(new THREE.Vector3(x, y, zAdjusted * ZSCALE));
     }
     const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-    scene.add(new THREE.Line(lineGeo, gridMat));
+    const gridLine = new THREE.Line(lineGeo, gridMat);
+    gridLine.renderOrder = 2;  // ensure lines render after the surface
+    scene.add(gridLine);
   }
 
   // dashed branch cut on negative x-axis

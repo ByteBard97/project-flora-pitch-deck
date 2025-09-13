@@ -1,12 +1,16 @@
 :root {
-  --bg: #0b0f14;
+  /* Updated with Ceres logo color palette */
+  --bg: #0a1a1f;
   --card: #10161d;
   --ink: #dbe2eb;
   --muted: #9fb0c6;
-  --accent: #70b5ff;
-  --accent2: #9bffb0;
+  --accent: #22d3ee; /* Cyan from logo */
+  --accent2: #4ade80; /* Green from logo */
   --accent3: #ff7b7b;
   --warning: #ffb86c;
+  --ceres-dark: #0a1a1f;
+  --ceres-green: #4ade80;
+  --ceres-cyan: #22d3ee;
 }
 
 * {
@@ -569,15 +573,42 @@ li {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--ceres-dark) 0%, #1a2f33 100%);
   color: white;
   padding: 2em;
+  position: relative;
+}
+
+.logo-container {
+  margin-bottom: 2em;
+  animation: fadeInScale 0.8s ease-out;
+}
+
+.title-logo {
+  width: 200px;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(34, 211, 238, 0.3));
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .main-title {
   font-size: 3.5em;
   margin-bottom: 0.2em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(90deg, var(--ceres-green), var(--ceres-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .visual-element {
