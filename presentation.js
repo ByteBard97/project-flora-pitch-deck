@@ -548,90 +548,110 @@ function initFlightVsNow() {
         let sfNowInstant = null; // UTC instant for SF "now"
         let sydFlightInstant = null; // UTC instant for Sydney flight
 
-        // Timezone helper functions
-        function getTimezoneOffset(date, timeZone) {
-            // Get offset in minutes for a specific date and timezone
-            const utc1 = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
-            const utc2 = new Date(utc1.toLocaleString("en-US", {timeZone}));
-            return (utc2.getTime() - utc1.getTime()) / 60000;
+        // Helper to get timezone offset in hours for a specific instant and timezone
+        function getTimezoneOffsetHours(epochMs, timeZone) {
+            const date = new Date(epochMs);
+            // Format in the target timezone to extract the offset
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'longOffset'
+            });
+
+            const formatted = formatter.format(date);
+            // Extract offset from format like "GMT+10:00" or "GMT-07:00"
+            const offsetMatch = formatted.match(/GMT([+-]\d{1,2}):?(\d{2})?/);
+            if (offsetMatch) {
+                const hours = parseInt(offsetMatch[1]);
+                const minutes = offsetMatch[2] ? parseInt(offsetMatch[2]) : 0;
+                return hours + (hours < 0 ? -minutes/60 : minutes/60);
+            }
+            return 0;
         }
 
-        function localToInstant(dateStr, timeStr, timeZone) {
-            // Convert local date/time in timezone to UTC instant
-            // Returns { instant: Date|null, status: 'valid'|'gap'|'fold', occurrences: Date[] }
+        // Convert local Sydney date/time to UTC instant
+        function localSydneyToInstant(dateStr, timeStr) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const [hour, minute] = timeStr.split(':').map(Number);
 
-            const targetDate = new Date(dateStr + 'T' + timeStr + ':00');
-            const year = targetDate.getFullYear();
-            const month = targetDate.getMonth();
-            const day = targetDate.getDate();
-            const hours = targetDate.getHours();
-            const minutes = targetDate.getMinutes();
+            // Search window: day before to day after in UTC
+            const searchStart = Date.UTC(year, month - 1, day - 1, 0, 0);
+            const searchEnd = Date.UTC(year, month - 1, day + 2, 0, 0);
+            const matches = [];
 
-            // Search for UTC instants that format to this local time
-            const occurrences = [];
-            const searchStart = new Date(Date.UTC(year, month, day - 1, 0, 0, 0));
-            const searchEnd = new Date(Date.UTC(year, month, day + 2, 0, 0, 0));
-
-            // Search in 15-minute increments for efficiency
-            for (let utc = searchStart.getTime(); utc <= searchEnd.getTime(); utc += 15 * 60 * 1000) {
-                const candidate = new Date(utc);
-                const formatted = candidate.toLocaleString('sv-SE', {
-                    timeZone,
+            // Search in 15-minute increments
+            for (let utc = searchStart; utc <= searchEnd; utc += 15 * 60 * 1000) {
+                const formatter = new Intl.DateTimeFormat('en-AU', {
+                    timeZone: 'Australia/Sydney',
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
                     hour: '2-digit',
-                    minute: '2-digit'
-                }).replace(' ', 'T');
+                    minute: '2-digit',
+                    hour12: false
+                });
 
-                const candidateLocal = formatted.split('T');
-                const candDate = candidateLocal[0];
-                const candTime = candidateLocal[1];
+                const parts = formatter.formatToParts(new Date(utc));
+                const formatted = {};
+                parts.forEach(p => formatted[p.type] = p.value);
 
-                if (candDate === dateStr && candTime === timeStr) {
-                    occurrences.push(candidate);
+                const formattedDate = `${formatted.year}-${formatted.month}-${formatted.day}`;
+                const formattedTime = `${formatted.hour}:${formatted.minute}`;
+
+                if (formattedDate === dateStr && formattedTime === timeStr) {
+                    matches.push(utc);
                 }
             }
 
-            if (occurrences.length === 0) {
-                // Gap - find next valid time
-                for (let utc = searchStart.getTime(); utc <= searchEnd.getTime(); utc += 15 * 60 * 1000) {
-                    const candidate = new Date(utc);
-                    const formatted = candidate.toLocaleString('sv-SE', {
-                        timeZone,
+            if (matches.length === 0) {
+                // Spring-forward gap - find next valid time
+                for (let utc = searchStart; utc <= searchEnd; utc += 15 * 60 * 1000) {
+                    const formatter = new Intl.DateTimeFormat('en-AU', {
+                        timeZone: 'Australia/Sydney',
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
                         hour: '2-digit',
-                        minute: '2-digit'
-                    }).replace(' ', 'T');
+                        minute: '2-digit',
+                        hour12: false
+                    });
 
-                    const candidateLocal = formatted.split('T');
-                    const candDate = candidateLocal[0];
+                    const parts = formatter.formatToParts(new Date(utc));
+                    const formatted = {};
+                    parts.forEach(p => formatted[p.type] = p.value);
 
-                    if (candDate === dateStr && formatted > (dateStr + 'T' + timeStr)) {
+                    const formattedDate = `${formatted.year}-${formatted.month}-${formatted.day}`;
+                    const formattedTime = `${formatted.hour}:${formatted.minute}`;
+
+                    if (formattedDate === dateStr && formattedTime > timeStr) {
                         return {
-                            instant: candidate,
+                            instant: utc,
                             status: 'gap',
-                            occurrences: [candidate],
-                            adjustedTime: candidateLocal[1]
+                            adjustedTime: formattedTime
                         };
                     }
                 }
-                return { instant: null, status: 'gap', occurrences: [] };
-            } else if (occurrences.length === 1) {
-                return { instant: occurrences[0], status: 'valid', occurrences };
+                return { instant: null, status: 'gap' };
+            } else if (matches.length === 1) {
+                return { instant: matches[0], status: 'valid' };
             } else {
-                // Fold - multiple occurrences
-                return { instant: occurrences[0], status: 'fold', occurrences };
+                // Fall-back: multiple matches, use earlier
+                return { instant: matches[0], status: 'fold' };
             }
         }
 
+        // Format duration nicely
         function formatDuration(milliseconds) {
-            const totalMinutes = Math.abs(milliseconds) / (1000 * 60);
-            const hours = Math.floor(totalMinutes / 60);
-            const minutes = Math.round(totalMinutes % 60);
-            const sign = milliseconds >= 0 ? '+' : '-';
+            const totalMinutes = Math.round(milliseconds / (1000 * 60));
+            const absMinutes = Math.abs(totalMinutes);
+            const hours = Math.floor(absMinutes / 60);
+            const minutes = absMinutes % 60;
+            const sign = totalMinutes >= 0 ? '+' : '-';
 
             if (hours === 0) {
                 return `${sign}${minutes}m`;
@@ -642,10 +662,12 @@ function initFlightVsNow() {
             }
         }
 
-        function formatLocalTime(instant, timeZone) {
-            if (!instant) return 'Invalid';
+        // Format local time with timezone info
+        function formatLocalTime(epochMs, timeZone) {
+            if (!epochMs) return 'Invalid';
 
-            const options = {
+            const date = new Date(epochMs);
+            const formatter = new Intl.DateTimeFormat('en-US', {
                 timeZone,
                 year: 'numeric',
                 month: '2-digit',
@@ -653,26 +675,49 @@ function initFlightVsNow() {
                 hour: '2-digit',
                 minute: '2-digit',
                 timeZoneName: 'short'
-            };
+            });
 
-            return instant.toLocaleString('en-US', options);
+            const formatted = formatter.format(date);
+            const offset = getTimezoneOffsetHours(epochMs, timeZone);
+            const offsetStr = offset >= 0 ? `+${offset}` : `${offset}`;
+
+            return `${formatted}, UTC${offsetStr}`;
         }
 
-        function calculateNaiveDelta(sydDateStr, sydTimeStr, sfInstant, sfTimeZone) {
-            // Calculate naive difference treating both as if in same timezone
-            const sydLocal = new Date(sydDateStr + 'T' + sydTimeStr + ':00');
-            const sfLocal = new Date(sfInstant.toLocaleString('sv-SE', {
-                timeZone: sfTimeZone
-            }).replace(' ', 'T'));
+        // Calculate naive delta (local wall-clock subtraction)
+        function calculateNaiveDelta(sydDateStr, sydTimeStr, sfEpochMs) {
+            // Get SF local date/time
+            const sfDate = new Date(sfEpochMs);
+            const sfFormatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'America/Los_Angeles',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const sfParts = sfFormatter.formatToParts(sfDate);
+            const sfFormatted = {};
+            sfParts.forEach(p => sfFormatted[p.type] = p.value);
+
+            // Parse both as if they were in the same timezone (ignoring offsets)
+            const sydLocal = new Date(`${sydDateStr}T${sydTimeStr}:00`);
+            const sfLocal = new Date(`${sfFormatted.year}-${sfFormatted.month}-${sfFormatted.day}T${sfFormatted.hour}:${sfFormatted.minute}:00`);
 
             return sfLocal.getTime() - sydLocal.getTime();
         }
 
+        // Draw the UTC timeline
         function drawTimeline(sydInstant, sfInstant) {
             if (!utcTimeline || !sydInstant || !sfInstant) return;
 
             // Clear existing content
             utcTimeline.innerHTML = '';
+
+            // Set explicit viewBox
+            utcTimeline.setAttribute('viewBox', '0 0 900 160');
 
             // Timeline parameters
             const width = 900;
@@ -681,9 +726,9 @@ function initFlightVsNow() {
             const timelineY = height / 2;
 
             // Calculate time range
-            const minTime = Math.min(sydInstant.getTime(), sfInstant.getTime());
-            const maxTime = Math.max(sydInstant.getTime(), sfInstant.getTime());
-            const padding = (maxTime - minTime) * 0.2; // 20% padding
+            const minTime = Math.min(sydInstant, sfInstant);
+            const maxTime = Math.max(sydInstant, sfInstant);
+            const padding = Math.max(3 * 60 * 60 * 1000, (maxTime - minTime) * 0.2); // At least 3 hours padding
             const startTime = minTime - padding;
             const endTime = maxTime + padding;
 
@@ -702,10 +747,18 @@ function initFlightVsNow() {
             timeline.setAttribute('stroke-width', '2');
             utcTimeline.appendChild(timeline);
 
-            // Draw time markers (every 4 hours)
+            // Draw time markers
             const timeSpan = endTime - startTime;
-            const fourHours = 4 * 60 * 60 * 1000;
-            const markerInterval = Math.max(fourHours, Math.ceil(timeSpan / 6 / fourHours) * fourHours);
+            const hourMs = 60 * 60 * 1000;
+            let markerInterval;
+
+            if (timeSpan < 12 * hourMs) {
+                markerInterval = hourMs; // Every hour for short spans
+            } else if (timeSpan < 48 * hourMs) {
+                markerInterval = 4 * hourMs; // Every 4 hours
+            } else {
+                markerInterval = 12 * hourMs; // Every 12 hours for long spans
+            }
 
             const firstMarker = Math.ceil(startTime / markerInterval) * markerInterval;
             for (let t = firstMarker; t <= endTime; t += markerInterval) {
@@ -728,20 +781,21 @@ function initFlightVsNow() {
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('fill', '#7d8590');
                 label.setAttribute('font-size', '10');
-                label.textContent = new Date(t).toISOString().substring(11, 16) + ' UTC';
+                const date = new Date(t);
+                label.textContent = date.toISOString().substring(11, 16) + ' UTC';
                 utcTimeline.appendChild(label);
             }
 
             // Draw event pins
-            function drawPin(instant, color, label, yOffset = 0) {
-                const x = timeToX(instant.getTime());
+            function drawPin(instant, color, label) {
+                const x = timeToX(instant);
 
                 // Pin line
                 const pin = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 pin.setAttribute('x1', x);
                 pin.setAttribute('x2', x);
-                pin.setAttribute('y1', timelineY - 25 + yOffset);
-                pin.setAttribute('y2', timelineY + 25 + yOffset);
+                pin.setAttribute('y1', timelineY - 25);
+                pin.setAttribute('y2', timelineY);
                 pin.setAttribute('stroke', color);
                 pin.setAttribute('stroke-width', '3');
                 utcTimeline.appendChild(pin);
@@ -749,7 +803,7 @@ function initFlightVsNow() {
                 // Pin circle
                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 circle.setAttribute('cx', x);
-                circle.setAttribute('cy', timelineY + yOffset);
+                circle.setAttribute('cy', timelineY);
                 circle.setAttribute('r', '6');
                 circle.setAttribute('fill', color);
                 utcTimeline.appendChild(circle);
@@ -757,7 +811,7 @@ function initFlightVsNow() {
                 // Label
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', x);
-                text.setAttribute('y', timelineY - 35 + yOffset);
+                text.setAttribute('y', timelineY - 35);
                 text.setAttribute('text-anchor', 'middle');
                 text.setAttribute('fill', color);
                 text.setAttribute('font-size', '12');
@@ -769,30 +823,31 @@ function initFlightVsNow() {
             drawPin(sydInstant, '#ff6b6b', 'Sydney Flight');
             drawPin(sfInstant, '#4ecdc4', 'SF Now');
 
-            // Draw naive connection (orange dashed line)
-            const sydX = timeToX(sydInstant.getTime());
-            const sfX = timeToX(sfInstant.getTime());
+            // Draw delta bracket (correct)
+            const sydX = timeToX(sydInstant);
+            const sfX = timeToX(sfInstant);
+            const leftX = Math.min(sydX, sfX);
+            const rightX = Math.max(sydX, sfX);
 
-            const naiveLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            naiveLine.setAttribute('x1', sydX);
-            naiveLine.setAttribute('x2', sfX);
-            naiveLine.setAttribute('y1', timelineY + 35);
-            naiveLine.setAttribute('y2', timelineY + 35);
-            naiveLine.setAttribute('stroke', '#FFA500');
-            naiveLine.setAttribute('stroke-width', '2');
-            naiveLine.setAttribute('stroke-dasharray', '5,5');
-            naiveLine.setAttribute('opacity', '0.7');
-            utcTimeline.appendChild(naiveLine);
+            if (rightX - leftX > 5) { // Only draw if there's enough space
+                const bracket = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const bracketY = timelineY + 35;
+                bracket.setAttribute('d', `M ${leftX} ${bracketY-5} L ${leftX} ${bracketY} L ${rightX} ${bracketY} L ${rightX} ${bracketY-5}`);
+                bracket.setAttribute('stroke', '#3fb950');
+                bracket.setAttribute('stroke-width', '2');
+                bracket.setAttribute('fill', 'none');
+                utcTimeline.appendChild(bracket);
 
-            // Naive line label
-            const naiveLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            naiveLabel.setAttribute('x', (sydX + sfX) / 2);
-            naiveLabel.setAttribute('y', timelineY + 50);
-            naiveLabel.setAttribute('text-anchor', 'middle');
-            naiveLabel.setAttribute('fill', '#FFA500');
-            naiveLabel.setAttribute('font-size', '10');
-            naiveLabel.textContent = 'naive (wall-clock) subtraction';
-            utcTimeline.appendChild(naiveLabel);
+                // Delta label
+                const deltaLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                deltaLabel.setAttribute('x', (leftX + rightX) / 2);
+                deltaLabel.setAttribute('y', bracketY + 15);
+                deltaLabel.setAttribute('text-anchor', 'middle');
+                deltaLabel.setAttribute('fill', '#3fb950');
+                deltaLabel.setAttribute('font-size', '10');
+                deltaLabel.textContent = 'Δt (correct)';
+                utcTimeline.appendChild(deltaLabel);
+            }
         }
 
         function updateCalculations() {
@@ -809,22 +864,26 @@ function initFlightVsNow() {
             }
 
             // Convert Sydney local time to UTC instant
-            const sydResult = localToInstant(sydDateStr, sydTimeStr, 'Australia/Sydney');
+            const sydResult = localSydneyToInstant(sydDateStr, sydTimeStr);
 
-            // Handle DST transitions (simplified for engineers)
+            // Handle DST transitions
             if (sydResult.status === 'gap') {
-                dstControls.classList.add('show');
-                dstMessage.textContent = `Time ${sydTimeStr} doesn't exist on ${sydDateStr} due to DST spring-forward.`;
-                if (sydResult.adjustedTime) {
-                    dstMessage.textContent += ` Auto-adjusted to ${sydResult.adjustedTime}.`;
+                if (dstControls) dstControls.classList.add('show');
+                if (dstMessage) {
+                    dstMessage.textContent = `Time ${sydTimeStr} doesn't exist on ${sydDateStr} due to DST spring-forward.`;
+                    if (sydResult.adjustedTime) {
+                        dstMessage.textContent += ` Auto-adjusted to ${sydResult.adjustedTime}.`;
+                    }
                 }
                 sydFlightInstant = sydResult.instant;
-            } else if (sydResult.status === 'fold' && sydResult.occurrences.length === 2) {
-                dstControls.classList.add('show');
-                dstMessage.textContent = `Time ${sydTimeStr} occurs twice on ${sydDateStr} due to DST fall-back. Using earlier occurrence.`;
-                sydFlightInstant = sydResult.occurrences[0]; // Always use earlier occurrence
+            } else if (sydResult.status === 'fold') {
+                if (dstControls) dstControls.classList.add('show');
+                if (dstMessage) {
+                    dstMessage.textContent = `Time ${sydTimeStr} occurs twice on ${sydDateStr} due to DST fall-back. Using earlier occurrence.`;
+                }
+                sydFlightInstant = sydResult.instant;
             } else {
-                dstControls.classList.remove('show');
+                if (dstControls) dstControls.classList.remove('show');
                 sydFlightInstant = sydResult.instant;
             }
 
@@ -835,18 +894,23 @@ function initFlightVsNow() {
             }
 
             // Calculate correct delta (UTC instant subtraction)
-            const correctDeltaMs = sfNowInstant.getTime() - sydFlightInstant.getTime();
+            const correctDeltaMs = sfNowInstant - sydFlightInstant;
             dtCorrect.textContent = formatDuration(correctDeltaMs);
 
-            // Calculate naive delta (local wall-clock subtraction)
-            const naiveDeltaMs = calculateNaiveDelta(sydDateStr, sydTimeStr, sfNowInstant, 'America/Los_Angeles');
+            // Calculate naive delta
+            const naiveDeltaMs = calculateNaiveDelta(sydDateStr, sydTimeStr, sfNowInstant);
             dtNaive.textContent = formatDuration(naiveDeltaMs);
 
             // Calculate offset difference
-            const sydOffset = getTimezoneOffset(sydFlightInstant, 'Australia/Sydney') / 60; // Convert to hours
-            const sfOffset = getTimezoneOffset(sfNowInstant, 'America/Los_Angeles') / 60;
+            const sydOffset = getTimezoneOffsetHours(sydFlightInstant, 'Australia/Sydney');
+            const sfOffset = getTimezoneOffsetHours(sfNowInstant, 'America/Los_Angeles');
             const offsetDifference = sfOffset - sydOffset;
-            offsetDiff.textContent = `(${sfOffset >= 0 ? '+' : ''}${sfOffset}h) − (${sydOffset >= 0 ? '+' : ''}${sydOffset}h) = ${offsetDifference >= 0 ? '+' : ''}${offsetDifference}h`;
+
+            const sfOffsetStr = sfOffset >= 0 ? `+${sfOffset}` : `${sfOffset}`;
+            const sydOffsetStr = sydOffset >= 0 ? `+${sydOffset}` : `${sydOffset}`;
+            const diffStr = offsetDifference >= 0 ? `+${offsetDifference}` : `${offsetDifference}`;
+
+            offsetDiff.textContent = `(${sfOffsetStr}h) − (${sydOffsetStr}h) = ${diffStr}h`;
 
             // Update local readouts
             sydReadout.textContent = `Sydney: ${formatLocalTime(sydFlightInstant, 'Australia/Sydney')}`;
@@ -858,12 +922,20 @@ function initFlightVsNow() {
 
         // Event handlers
         sfNowBtn.addEventListener('click', () => {
-            sfNowInstant = new Date();
-            sfNowReadout.textContent = formatLocalTime(sfNowInstant, 'America/Los_Angeles');
+            sfNowInstant = Date.now(); // Store as epoch milliseconds
+            sfNowReadout.textContent = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'America/Los_Angeles',
+                month: '2-digit',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            }).format(new Date(sfNowInstant));
             updateCalculations();
         });
 
-        // DST demo button - shows spring-forward gap
+        // DST demo button
         if (dstDemoBtn) {
             dstDemoBtn.addEventListener('click', () => {
                 sydDate.value = '2025-10-05';
@@ -875,10 +947,9 @@ function initFlightVsNow() {
         sydDate.addEventListener('change', updateCalculations);
         sydTime.addEventListener('change', updateCalculations);
 
-        // Initialize with current SF time
-        sfNowInstant = new Date();
-        sfNowReadout.textContent = formatLocalTime(sfNowInstant, 'America/Los_Angeles');
-        updateCalculations();
+        // Set default Sydney time
+        if (!sydDate.value) sydDate.value = '2025-09-15';
+        if (!sydTime.value) sydTime.value = '08:10';
 
         console.log('Flight vs Now timezone demo initialized');
     } catch (error) {
