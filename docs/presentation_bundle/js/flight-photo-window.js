@@ -30,6 +30,14 @@ function initFlightPhotoWindow() {
     const distanceArc = document.getElementById("distance-arc");
     const distanceLabel = document.getElementById("distance-label");
 
+    // Time toggle button and labels
+    const timeToggle = document.getElementById("time-toggle");
+    const labelNorth = document.getElementById("label-north");
+    const labelEast = document.getElementById("label-east");
+    const labelSouth = document.getElementById("label-south");
+    const labelWest = document.getElementById("label-west");
+    let isMilitaryTime = true;
+
     const naiveDistance = document.getElementById("naive-distance");
     const vectorDistance = document.getElementById("vector-distance");
     const morningDistance = document.getElementById("morning-distance");
@@ -149,9 +157,9 @@ function initFlightPhotoWindow() {
       const morningPath = describeArc(100, 100, 80, morningStart, morningEnd);
       morningArc.setAttribute("d", morningPath);
       morningArc.setAttribute("fill", "none");
-      morningArc.setAttribute("stroke", "#4CAF50");
+      morningArc.setAttribute("stroke", "#FF9800");
       morningArc.setAttribute("stroke-width", "8");
-      morningArc.setAttribute("opacity", "0.3");
+      morningArc.setAttribute("opacity", "0.4");
       windows.appendChild(morningArc);
 
       // Afternoon window arc
@@ -170,9 +178,9 @@ function initFlightPhotoWindow() {
       );
       afternoonArc.setAttribute("d", afternoonPath);
       afternoonArc.setAttribute("fill", "none");
-      afternoonArc.setAttribute("stroke", "#4CAF50");
+      afternoonArc.setAttribute("stroke", "#2196F3");
       afternoonArc.setAttribute("stroke-width", "8");
-      afternoonArc.setAttribute("opacity", "0.3");
+      afternoonArc.setAttribute("opacity", "0.4");
       windows.appendChild(afternoonArc);
     }
 
@@ -206,6 +214,10 @@ function initFlightPhotoWindow() {
 
     // Draw vector space visualization
     function drawVectorSpace() {
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+
       // Draw photo window sectors in vector space
       const morningStartVec = embedTimeAsVector(MORNING_START);
       const morningEndVec = embedTimeAsVector(MORNING_END);
@@ -213,19 +225,19 @@ function initFlightPhotoWindow() {
 
       const morningPath = [
         "M",
-        200,
-        120,
+        centerX,
+        centerY,
         "L",
-        200 + morningStartVec.x * 80,
-        120 - morningStartVec.y * 80,
+        centerX + morningStartVec.x * radius,
+        centerY - morningStartVec.y * radius,
         "A",
-        80,
-        80,
+        radius,
+        radius,
         0,
         0,
         0,
-        200 + morningEndVec.x * 80,
-        120 - morningEndVec.y * 80,
+        centerX + morningEndVec.x * radius,
+        centerY - morningEndVec.y * radius,
         "Z",
       ].join(" ");
       morningArc.setAttribute("d", morningPath);
@@ -236,22 +248,43 @@ function initFlightPhotoWindow() {
 
       const afternoonPath = [
         "M",
-        200,
-        120,
+        centerX,
+        centerY,
         "L",
-        200 + afternoonStartVec.x * 80,
-        120 - afternoonStartVec.y * 80,
+        centerX + afternoonStartVec.x * radius,
+        centerY - afternoonStartVec.y * radius,
         "A",
-        80,
-        80,
+        radius,
+        radius,
         0,
         0,
         0,
-        200 + afternoonEndVec.x * 80,
-        120 - afternoonEndVec.y * 80,
+        centerX + afternoonEndVec.x * radius,
+        centerY - afternoonEndVec.y * radius,
         "Z",
       ].join(" ");
       afternoonArc.setAttribute("d", afternoonPath);
+
+      // Position labels at the center of each pie slice
+      const morningCenter = (MORNING_START + MORNING_END) / 2;
+      const afternoonCenter = (AFTERNOON_START + AFTERNOON_END) / 2;
+
+      const morningCenterVec = embedTimeAsVector(morningCenter);
+      const afternoonCenterVec = embedTimeAsVector(afternoonCenter);
+
+      // Position labels at 100px radius from center (closer than the 150px arc)
+      const morningLabel = document.getElementById("morning-label");
+      const afternoonLabel = document.getElementById("afternoon-label");
+
+      if (morningLabel) {
+        morningLabel.setAttribute("x", centerX + morningCenterVec.x * 100);
+        morningLabel.setAttribute("y", centerY - morningCenterVec.y * 100 + 4); // +4 for text baseline
+      }
+
+      if (afternoonLabel) {
+        afternoonLabel.setAttribute("x", centerX + afternoonCenterVec.x * 100);
+        afternoonLabel.setAttribute("y", centerY - afternoonCenterVec.y * 100 + 4); // +4 for text baseline
+      }
     }
 
     // Update visualization
@@ -304,11 +337,15 @@ function initFlightPhotoWindow() {
       const depVec = embedTimeAsVector(departureHours);
       const arrVec = embedTimeAsVector(arrivalHours);
 
-      // Update vector visualization
-      const depX = 200 + depVec.x * 80;
-      const depY = 120 - depVec.y * 80;
-      const arrX = 200 + arrVec.x * 80;
-      const arrY = 120 - arrVec.y * 80;
+      // Update vector visualization with new dimensions
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+
+      const depX = centerX + depVec.x * radius;
+      const depY = centerY - depVec.y * radius;
+      const arrX = centerX + arrVec.x * radius;
+      const arrY = centerY - arrVec.y * radius;
 
       depVector.setAttribute("x2", depX);
       depVector.setAttribute("y2", depY);
@@ -328,16 +365,19 @@ function initFlightPhotoWindow() {
       const crossProduct = depVec.x * arrVec.y - depVec.y * arrVec.x;
       const largeArcFlag = crossProduct > 0 ? 0 : 1;
 
+      // Invert the sweep flag to make the arc follow the circle's curvature
+      const sweepFlag = crossProduct > 0 ? 0 : 1;
+
       const arcPath = [
         "M",
         depX,
         depY,
         "A",
-        80,
-        80,
+        radius,
+        radius,
         0,
         largeArcFlag,
-        crossProduct > 0 ? 1 : 0,
+        sweepFlag,
         arrX,
         arrY,
       ].join(" ");
@@ -443,11 +483,13 @@ function initFlightPhotoWindow() {
       }`;
       photoReady.className = `result-card ${qualityClass}`;
 
-      // Update distance label
+      // Update distance label (now in HTML outside the SVG)
       const flightTime = circularDistance(departureHours, arrivalHours);
-      distanceLabel.textContent = `Flight spans: ${flightTime.toFixed(
-        1
-      )}h on clock`;
+      if (distanceLabel) {
+        distanceLabel.textContent = `Flight spans: ${flightTime.toFixed(
+          1
+        )}h on clock`;
+      }
     }
 
     // Initialize photo windows
@@ -459,6 +501,27 @@ function initFlightPhotoWindow() {
     departureSlider.addEventListener("input", update);
     durationSlider.addEventListener("input", update);
     timezonesSlider.addEventListener("input", update);
+
+    // Toggle button for time display format
+    if (timeToggle) {
+      timeToggle.addEventListener("click", () => {
+        isMilitaryTime = !isMilitaryTime;
+        timeToggle.textContent = isMilitaryTime ? "24h" : "12h";
+
+        // Update labels based on the time format
+        if (isMilitaryTime) {
+          if (labelNorth) labelNorth.textContent = "00:00";
+          if (labelEast) labelEast.textContent = "06:00";
+          if (labelSouth) labelSouth.textContent = "12:00";
+          if (labelWest) labelWest.textContent = "18:00";
+        } else {
+          if (labelNorth) labelNorth.textContent = "12 AM";
+          if (labelEast) labelEast.textContent = "6 AM";
+          if (labelSouth) labelSouth.textContent = "12 PM";
+          if (labelWest) labelWest.textContent = "6 PM";
+        }
+      });
+    }
 
     // Hint button toggle
     if (hintButton) {

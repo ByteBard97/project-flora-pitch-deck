@@ -17,34 +17,43 @@
       font-size: clamp(24px, 3.5vw, 42px);
     }
 
-    .hint-box {
-      background: rgba(255, 193, 7, 0.1);
-      border: 1px solid rgba(255, 193, 7, 0.3);
-      border-radius: 8px;
-      padding: 1vh 1.5vw;
-      margin-bottom: 1vh;
+    .bottom-hint {
+      margin-top: 2vh;
+      text-align: center;
     }
 
     .hint-button {
-      background: #ffc107;
-      color: #0d1117;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: bold;
+      background: rgba(255, 255, 255, 0.06);
+      color: #f0f6fc;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 0.9em;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      opacity: 0.7;
     }
 
     .hint-button:hover {
-      background: #ffb300;
-      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+      opacity: 1;
     }
 
     .hint-content {
       margin-top: 1vh;
+      padding: 1vh 1.5vw;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
       color: #f0f6fc;
       line-height: 1.5;
+      font-size: 0.85em;
+      text-align: left;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hint-content ul {
@@ -98,6 +107,7 @@
       display: flex;
       flex-direction: column;
       gap: 1.5vh;
+      position: relative;
     }
 
     .panel h3 {
@@ -169,11 +179,41 @@
       justify-content: center;
       align-items: center;
       flex: 1;
+      min-height: 300px;
     }
 
     .vector-viz svg {
       width: 100%;
-      height: 240px;
+      height: 100%;
+      min-height: 350px;
+      max-height: 450px;
+    }
+
+    .time-toggle {
+      position: absolute;
+      top: 2vh;
+      right: 2vw;
+      background: rgba(255, 255, 255, 0.06);
+      color: #f0f6fc;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .time-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .flight-span-label {
+      text-align: center;
+      font-size: 0.9em;
+      color: #FFC107;
+      font-weight: bold;
+      margin-top: -1vh;
     }
 
     .results {
@@ -233,26 +273,6 @@
   </style>
 
   <h2>🛩️ Aerial Photography: Finding Optimal Light Windows</h2>
-
-  <!-- Teaching hint box -->
-  <div class="hint-box" id="hint-box">
-    <button class="hint-button" id="hint-button">
-      💡 How to Break Naive Calculation
-    </button>
-    <div class="hint-content" id="hint-content" style="display: none">
-      <p><strong>Try this scenario:</strong></p>
-      <ul>
-        <li>Set Departure to <strong>17:00-19:00</strong> (evening)</li>
-        <li>Set Flight Duration to <strong>3-5 hours</strong></li>
-        <li>Set Timezones to <strong>-2 or -3</strong> (westward)</li>
-      </ul>
-      <p>
-        This arrives around <strong>7-11 PM</strong>. The naive method says
-        "wait 10+ hours for morning" but vector embedding knows morning is
-        actually <strong>closer</strong> going backwards on the clock!
-      </p>
-    </div>
-  </div>
 
   <div class="main-grid">
     <div class="panel">
@@ -426,34 +446,28 @@
       </div>
 
       <div class="explanation">
-        <strong>Photo Windows:</strong> Morning golden hour (9-11 AM) and
-        afternoon window (2-4 PM) shown as green arcs.
+        <strong>Photo Windows:</strong> <span style="color: #FF9800;">Morning golden hour (9-11 AM)</span> and
+        <span style="color: #2196F3;">afternoon window (2-4 PM)</span> shown as colored arcs.
         <span id="explanation-text"
           >Drag sliders to see how each method chooses a photo window.</span
         >
-      </div>
-
-      <!-- Dynamic explanation that appears when methods disagree -->
-      <div
-        class="method-difference"
-        id="method-difference"
-        style="display: none"
-      >
-        <h4>🚨 Methods Disagree! Here's Why:</h4>
-        <p id="difference-explanation"></p>
       </div>
     </div>
 
     <div class="panel">
       <h3>Vector Embedding Space</h3>
 
+      <button class="time-toggle" id="time-toggle">
+        24h
+      </button>
+
       <div class="vector-viz">
-        <svg id="vector-space" viewBox="0 0 400 240">
+        <svg id="vector-space" viewBox="0 0 400 400">
           <!-- Unit circle -->
           <circle
             cx="200"
-            cy="120"
-            r="80"
+            cy="200"
+            r="150"
             fill="none"
             stroke="#333"
             stroke-width="1"
@@ -463,40 +477,48 @@
 
           <!-- Axes -->
           <line
-            x1="100"
-            y1="120"
-            x2="300"
-            y2="120"
+            x1="50"
+            y1="200"
+            x2="350"
+            y2="200"
             stroke="#333"
             stroke-width="1"
             opacity="0.3"
           />
           <line
             x1="200"
-            y1="20"
+            y1="50"
             x2="200"
-            y2="220"
+            y2="350"
             stroke="#333"
             stroke-width="1"
             opacity="0.3"
           />
 
+          <!-- Time labels -->
+          <text id="label-north" x="200" y="35" text-anchor="middle" fill="#7d8590" font-size="14">00:00</text>
+          <text id="label-east" x="365" y="205" text-anchor="middle" fill="#7d8590" font-size="14">06:00</text>
+          <text id="label-south" x="200" y="370" text-anchor="middle" fill="#7d8590" font-size="14">12:00</text>
+          <text id="label-west" x="35" y="205" text-anchor="middle" fill="#7d8590" font-size="14">18:00</text>
+
           <!-- Photo window vectors (morning) -->
           <g id="morning-window">
             <path
               id="morning-arc"
-              fill="rgba(76, 175, 80, 0.2)"
-              stroke="#4CAF50"
+              fill="rgba(255, 152, 0, 0.2)"
+              stroke="#FF9800"
               stroke-width="2"
             />
             <text
-              x="200"
-              y="35"
+              id="morning-label"
+              x="240"
+              y="60"
               text-anchor="middle"
-              fill="#4CAF50"
+              fill="#FF9800"
               font-size="11"
+              font-weight="bold"
             >
-              Morning Window
+              Morning
             </text>
           </g>
 
@@ -504,16 +526,18 @@
           <g id="afternoon-window">
             <path
               id="afternoon-arc"
-              fill="rgba(76, 175, 80, 0.2)"
-              stroke="#4CAF50"
+              fill="rgba(33, 150, 243, 0.2)"
+              stroke="#2196F3"
               stroke-width="2"
             />
             <text
-              x="280"
-              y="120"
-              text-anchor="start"
-              fill="#4CAF50"
+              id="afternoon-label"
+              x="240"
+              y="180"
+              text-anchor="middle"
+              fill="#2196F3"
               font-size="11"
+              font-weight="bold"
             >
               Afternoon
             </text>
@@ -523,17 +547,17 @@
           <line
             id="dep-vector"
             x1="200"
-            y1="120"
+            y1="200"
             x2="280"
-            y2="120"
+            y2="200"
             stroke="#2196F3"
             stroke-width="3"
           />
-          <circle id="dep-point" cx="280" cy="120" r="5" fill="#2196F3" />
+          <circle id="dep-point" cx="280" cy="200" r="5" fill="#2196F3" />
           <text
             id="dep-label"
             x="280"
-            y="110"
+            y="190"
             text-anchor="middle"
             fill="#2196F3"
             font-size="11"
@@ -545,17 +569,17 @@
           <line
             id="arr-vector"
             x1="200"
-            y1="120"
+            y1="200"
             x2="280"
-            y2="120"
+            y2="200"
             stroke="#4CAF50"
             stroke-width="3"
           />
-          <circle id="arr-point" cx="280" cy="120" r="5" fill="#4CAF50" />
+          <circle id="arr-point" cx="280" cy="200" r="5" fill="#4CAF50" />
           <text
             id="arr-label"
             x="280"
-            y="110"
+            y="190"
             text-anchor="middle"
             fill="#4CAF50"
             font-size="11"
@@ -572,16 +596,11 @@
             stroke-dasharray="3,3"
             opacity="0.8"
           />
-          <text
-            id="distance-label"
-            x="200"
-            y="200"
-            text-anchor="middle"
-            fill="#FFC107"
-            font-size="12"
-            font-weight="bold"
-          ></text>
         </svg>
+      </div>
+
+      <div class="flight-span-label">
+        <span id="distance-label"></span>
       </div>
 
       <div class="results">
@@ -605,6 +624,36 @@
           <div class="result-value" id="photo-quality">-</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Dynamic explanation that appears when methods disagree -->
+  <div
+    class="method-difference"
+    id="method-difference"
+    style="display: none"
+  >
+    <h4>🚨 Methods Disagree! Here's Why:</h4>
+    <p id="difference-explanation"></p>
+  </div>
+
+  <!-- Teaching hint at bottom -->
+  <div class="bottom-hint">
+    <button class="hint-button" id="hint-button">
+      💡 Hint: How to break naive calculation
+    </button>
+    <div class="hint-content" id="hint-content" style="display: none">
+      <p><strong>Try this scenario:</strong></p>
+      <ul>
+        <li>Set Departure to <strong>17:00-19:00</strong> (evening)</li>
+        <li>Set Flight Duration to <strong>3-5 hours</strong></li>
+        <li>Set Timezones to <strong>-2 or -3</strong> (westward)</li>
+      </ul>
+      <p>
+        This arrives around <strong>7-11 PM</strong>. The naive method says
+        "wait 10+ hours for morning" but vector embedding knows morning is
+        actually <strong>closer</strong> going backwards on the clock!
+      </p>
     </div>
   </div>
 </div>
