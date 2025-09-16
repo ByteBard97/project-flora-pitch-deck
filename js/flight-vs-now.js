@@ -308,6 +308,23 @@ function initFlightVsNow() {
     sydDate.addEventListener("change", updateCalculations);
     sydTime.addEventListener("change", updateCalculations);
 
+    // Initialize with default values to show the timeline immediately
+    if (!sfNowInstant) {
+      sfNowInstant = Date.now(); // Set current time as SF "now"
+      sfNowReadout.textContent = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Los_Angeles",
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }).format(new Date(sfNowInstant));
+    }
+
+    // Trigger initial calculation to draw the timeline
+    updateCalculations();
+
     console.log("Flight vs Now timezone demo initialized");
   } catch (error) {
     console.error("Error initializing Flight vs Now demo:", error);
