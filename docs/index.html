@@ -1655,11 +1655,21 @@ function initFlightPhotoWindow() {
       arrLabel.setAttribute("y", arrY - 10);
 
       // Draw arc between vectors
-      const crossProduct = depVec.x * arrVec.y - depVec.y * arrVec.x;
-      const largeArcFlag = crossProduct > 0 ? 0 : 1;
+      // Calculate the angular difference to determine the shorter path
+      let angularDiff = arrivalHours - departureHours;
 
-      // Invert the sweep flag to make the arc follow the circle's curvature
-      const sweepFlag = crossProduct > 0 ? 0 : 1;
+      // Normalize to [-12, 12] range to find shorter path
+      if (angularDiff > 12) {
+        angularDiff -= 24;
+      } else if (angularDiff < -12) {
+        angularDiff += 24;
+      }
+
+      // For the arc to follow the circle:
+      // - largeArcFlag: 0 if angular distance < 12 hours (180°), 1 if >= 12 hours
+      // - sweepFlag: 1 if going clockwise (positive angular difference), 0 if counter-clockwise
+      const largeArcFlag = Math.abs(angularDiff) >= 12 ? 1 : 0;
+      const sweepFlag = angularDiff >= 0 ? 1 : 0;
 
       const arcPath = [
         "M",
