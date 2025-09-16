@@ -194,10 +194,11 @@
     <div class="left panel">
       <h3>Times & Timezones</h3>
 
-      <label>Flight ended in Sydney (Australia/Sydney)</label>
+      <label>Flight ended in Sydney today at:</label>
       <div class="row">
-        <input id="syd-date" type="date" value="2025-09-15">
+        <input id="syd-date" type="date" value="2025-09-15" style="display: none;">
         <input id="syd-time" type="time" step="900" value="08:10">
+        <span class="muted">Sydney time (Australia/Sydney)</span>
       </div>
 
       <div id="dst-controls" class="dst-controls">
@@ -205,15 +206,9 @@
         <div id="dst-message"></div>
       </div>
 
-      <label>Compare with San Francisco (America/Los_Angeles)</label>
-      <div class="row">
-        <button id="sf-now">Use Now</button>
-        <span id="sf-now-readout" class="muted">Click to set current time</span>
-      </div>
-
-      <div class="row" style="margin-top: 1vh;">
-        <button id="dst-demo" style="background: #ff9500; font-size: 0.85em;">DST Demo (Oct 5)</button>
-        <span class="muted" style="font-size: 0.8em;">Shows spring-forward gap</span>
+      <label>Compared with current time in San Francisco</label>
+      <div class="muted" style="margin-left: 1vw;">
+        <span id="sf-now-readout">Automatically set to current time</span>
       </div>
 
       <div class="notes">
@@ -232,8 +227,9 @@
     </div>
 
     <div class="right panel">
-      <svg id="utc-timeline" viewBox="0 0 900 160" aria-label="UTC timeline">
-        <!-- Timeline will be drawn by JavaScript -->
+      <h3>Timeline Comparison</h3>
+      <svg id="utc-timeline" viewBox="0 0 900 320" aria-label="Dual timeline comparison" style="width: 100%; height: auto; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+        <!-- Dual timelines will be drawn here by JavaScript -->
       </svg>
 
       <div class="outputs">
@@ -244,37 +240,10 @@
 
       <div class="local-readouts muted">
         <div><strong>Local readouts:</strong></div>
-        <div id="syd-readout">Sydney: Set date/time above</div>
-        <div id="sf-readout">San Francisco: Click "Use Now"</div>
+        <div id="syd-readout">Sydney: Set time above</div>
+        <div id="sf-readout">San Francisco: Current time</div>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-// Initialize the Flight vs Now interactive demo when this slide is displayed
-console.log('🛩️ Flight vs Now slide script executing');
-
-// Wait for the slide to be fully loaded, then initialize the interactive demo
-setTimeout(() => {
-    console.log('🛩️ Flight vs Now timeout triggered');
-
-    // Check if the initFlightVsNow function is available
-    if (typeof initFlightVsNow === 'function') {
-        console.log('   Calling initFlightVsNow from slide script');
-        initFlightVsNow();
-    } else {
-        console.warn('   initFlightVsNow function not found - may not be loaded yet');
-
-        // Try again after a short delay in case the JS is still loading
-        setTimeout(() => {
-            if (typeof initFlightVsNow === 'function') {
-                console.log('   Retrying initFlightVsNow call');
-                initFlightVsNow();
-            } else {
-                console.error('   initFlightVsNow function still not available');
-            }
-        }, 500);
-    }
-}, 100);
-</script>

@@ -25,8 +25,12 @@ from json_embedder import JSONDataEmbedder
 from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, BUNDLE_PRESENTATION
 
 
-JS_MODULES = ["hue-drag-wheel.js", "flight-vs-now.js"]
-#"vector-calculator.js", "timeseries-analyzer.js", 
+JS_MODULES = [
+    "hue-drag-wheel.js",
+    "flight-vs-now.js",
+    "interactive-demo.js",
+    "gis-demo.js"
+] 
 
 class PresentationBuilder:
     """Main builder orchestrating the presentation build process"""
@@ -66,6 +70,9 @@ class PresentationBuilder:
             shutil.rmtree(self.build_dir)
         self.build_dir.mkdir()
 
+        # Copy static assets to docs root for GitHub Pages
+        self._copy_static_assets()
+
         # Build outputs
         if self.config['build']['single_file']:
             self.build_single_file()
@@ -78,7 +85,25 @@ class PresentationBuilder:
 
         print(f"✅ Build complete! Output in {self.build_dir}")
         self._print_build_summary()
-    
+
+    def _copy_static_assets(self):
+        """Copy static assets to docs root for GitHub Pages"""
+        static_assets = [
+            "ceres-tech-logo.png",
+            # Add other static files here as needed
+        ]
+
+        copied_count = 0
+        for asset in static_assets:
+            asset_path = Path(asset)
+            if asset_path.exists():
+                shutil.copy2(asset_path, self.build_dir / asset_path.name)
+                copied_count += 1
+                print(f"   📋 Copied {asset} to docs root for GitHub Pages")
+
+        if copied_count > 0:
+            print(f"   ✅ Copied {copied_count} static assets for GitHub Pages")
+
     def _create_unified_js(self):
         """Reads and combines all interactive JavaScript modules."""
         unified_js = ""
@@ -306,13 +331,9 @@ class PresentationBuilder:
     
     def _create_navigation_javascript(self):
         """Create reusable navigation JavaScript"""
-        # Use the actual presentation.js file instead of the template
-        presentation_js_path = Path("presentation.js")
-        if presentation_js_path.exists():
-            return presentation_js_path.read_text(encoding='utf-8')
-        else:
-            # Fallback to template if presentation.js doesn't exist
-            return NAVIGATION
+        # Always use the template to ensure YAML ordering is respected
+        # The old presentation.js file has hardcoded slide ordering that conflicts with YAML
+        return NAVIGATION
     
     def _create_manifest(self):
         """Create asset manifest"""

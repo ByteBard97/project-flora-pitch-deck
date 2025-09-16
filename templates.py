@@ -533,8 +533,22 @@ function showSlide(index) {
         initTimeseriesAnalyzer();
     }
 
-    // Check for flight vs now timezone demo
-    if (document.getElementById('syd-date') && typeof initFlightVsNow === 'function') {
+    // Check for interactive angle demo
+    if (document.getElementById('angle1') && typeof initInteractiveDemo === 'function') {
+        console.log('🎮 Initializing interactive angle demo for slide', index + 1);
+        initInteractiveDemo();
+    }
+
+    // Check for GIS demo
+    if (document.getElementById('map') && typeof initGISDemo === 'function') {
+        console.log('🗺️ Initializing GIS demo for slide', index + 1);
+        initGISDemo();
+    }
+
+    // Check for flight vs now timezone demo (more specific check)
+    if (document.getElementById('syd-date') &&
+        document.getElementById('utc-timeline') &&
+        typeof initFlightVsNow === 'function') {
         console.log('🛩️ Initializing flight vs now timezone demo for slide', index + 1);
         initFlightVsNow();
     }
@@ -552,6 +566,10 @@ function nextSlide() {
 function previousSlide() {
     if (currentSlide > 0) {
         currentSlide--;
+        showSlide(currentSlide);
+    } else {
+        // Wrap to the last slide
+        currentSlide = slidesData.length - 1;
         showSlide(currentSlide);
     }
 }
