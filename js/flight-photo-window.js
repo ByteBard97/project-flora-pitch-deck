@@ -65,7 +65,10 @@ function initFlightPhotoWindow() {
 
     // THE KEY FUNCTION: Embed time-of-day as 2D vector
     function embedTimeAsVector(hours) {
-      const theta = (2 * Math.PI * hours) / 24;
+      // Convert to clock position:
+      // - 0 hours (midnight) should be at top (angle = -π/2 in standard coords)
+      // - Hours increase clockwise
+      const theta = (2 * Math.PI * hours) / 24 - Math.PI / 2;
       return {
         x: Math.cos(theta),
         y: Math.sin(theta),
@@ -229,15 +232,15 @@ function initFlightPhotoWindow() {
         centerY,
         "L",
         centerX + morningStartVec.x * radius,
-        centerY - morningStartVec.y * radius,
+        centerY + morningStartVec.y * radius,
         "A",
         radius,
         radius,
         0,
         0,
-        0,
+        1,  // Changed sweep-flag from 0 to 1 for clockwise
         centerX + morningEndVec.x * radius,
-        centerY - morningEndVec.y * radius,
+        centerY + morningEndVec.y * radius,
         "Z",
       ].join(" ");
       morningArc.setAttribute("d", morningPath);
@@ -252,15 +255,15 @@ function initFlightPhotoWindow() {
         centerY,
         "L",
         centerX + afternoonStartVec.x * radius,
-        centerY - afternoonStartVec.y * radius,
+        centerY + afternoonStartVec.y * radius,
         "A",
         radius,
         radius,
         0,
         0,
-        0,
+        1,  // Changed sweep-flag from 0 to 1 for clockwise
         centerX + afternoonEndVec.x * radius,
-        centerY - afternoonEndVec.y * radius,
+        centerY + afternoonEndVec.y * radius,
         "Z",
       ].join(" ");
       afternoonArc.setAttribute("d", afternoonPath);
@@ -278,12 +281,12 @@ function initFlightPhotoWindow() {
 
       if (morningLabel) {
         morningLabel.setAttribute("x", centerX + morningCenterVec.x * 100);
-        morningLabel.setAttribute("y", centerY - morningCenterVec.y * 100 + 4); // +4 for text baseline
+        morningLabel.setAttribute("y", centerY + morningCenterVec.y * 100 + 4); // +4 for text baseline
       }
 
       if (afternoonLabel) {
         afternoonLabel.setAttribute("x", centerX + afternoonCenterVec.x * 100);
-        afternoonLabel.setAttribute("y", centerY - afternoonCenterVec.y * 100 + 4); // +4 for text baseline
+        afternoonLabel.setAttribute("y", centerY + afternoonCenterVec.y * 100 + 4); // +4 for text baseline
       }
     }
 
@@ -343,9 +346,9 @@ function initFlightPhotoWindow() {
       const radius = 150;
 
       const depX = centerX + depVec.x * radius;
-      const depY = centerY - depVec.y * radius;
+      const depY = centerY + depVec.y * radius;
       const arrX = centerX + arrVec.x * radius;
-      const arrY = centerY - arrVec.y * radius;
+      const arrY = centerY + arrVec.y * radius;
 
       depVector.setAttribute("x2", depX);
       depVector.setAttribute("y2", depY);
