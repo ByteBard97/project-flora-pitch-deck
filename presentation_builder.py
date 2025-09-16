@@ -25,7 +25,7 @@ from json_embedder import JSONDataEmbedder
 from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, BUNDLE_PRESENTATION
 
 
-JS_MODULES = ["hue-drag-wheel.js"]
+JS_MODULES = ["hue-drag-wheel.js", "flight-vs-now.js"]
 #"vector-calculator.js", "timeseries-analyzer.js", 
 
 class PresentationBuilder:
@@ -167,8 +167,11 @@ class PresentationBuilder:
         for module in JS_MODULES:
             module_path = Path("js") / module
             if module_path.exists():
+                print(f"   📄 Copying {module_path} to {bundle_dir / 'js' / module}")
                 shutil.copy2(module_path, bundle_dir / "js" / module)
                 js_count += 1
+            else:
+                print(f"   ⚠️ Module {module_path} not found")
 
         if js_count > 0:
             print(f"   🎮 Copied {js_count} interactive modules")

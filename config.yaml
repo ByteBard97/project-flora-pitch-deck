@@ -6,25 +6,38 @@ presentation:
   venue: "CeresTalk"
 
 slides:
+  # Part 1: The Hook (Problem)
   - "01-title.html"
-  - "02-the-bug.html"
-  - "03-midnight-bug.html"
-  - "04-the-solution.html"
-  - "13-circular-statistics.html"
-  - "14-discrete-calculus.html"
-  - "15-other-circular-quantities.html"
-  - "16-arbitrary-wrap-points.html"
-  - "05-robot-heading.html"
-  - "06-color-interpolation.html"
-  - "07-general-pattern.html"
-  - "08-mathematical-insight.html"
+  - "02-the-bug.html"           # 350° + 10° = 180° wrong!
+  - "03-midnight-bug.html"      # 23:45 to 00:15 = -23.5 hours
+
+  # Part 2: The Payoff (Immediate Solution)
+  - "11-interactive-demo.html"  # Let them fix the first bug themselves!
+  - "05-robot-heading.html"     # Solve a critical real-world problem
+  - "06-color-interpolation.html" # Visual, intuitive example
+
+  # Part 3: The Revelation (This Is Everywhere)
+  - "15-other-circular-quantities.html" # Hidden rings everywhere
+  - "12-gis-demo.html"          # High-stakes GIS example
+  - "16-arbitrary-wrap-points.html" # Works for any wrap domain
+
+  # Part 4: The System (General Solution)
+  - "07-general-pattern.html"   # Universal CircularQuantity class
+  - "08-mathematical-insight.html" # Why this works
+
+  # Part 5: The Power-Ups (Advanced Capabilities)
+  - "04-the-solution.html"      # All the operations now available
+  - "13-circular-statistics.html" # Stats that actually work
+  - "14-discrete-calculus.html" # Data-driven derivatives
+
+  # Part 6: Conclusion
+  - "18-flight-vs-now.html"
   - "09-takeaways.html"
-  - "11-interactive-demo.html"
-  - "12-gis-demo.html"
+  - "10-questions.html"
+
+  # Commented out interactive tools (can be enabled if needed)
   #- "16-vector-calculator.html"
   #- "17-timeseries-analyzer.html"
-  - "18-flight-vs-now.html"
-  - "10-questions.html"
 
 build:
   single_file: true # Create single HTML file for phone calls

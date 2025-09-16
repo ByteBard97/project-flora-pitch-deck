@@ -452,9 +452,8 @@ BUNDLE_INDEX = '''<!DOCTYPE html>
     </div>
 
     <!-- Interactive demo modules -->
-    <script src="js/vector-calculator.js"></script>
-    <script src="js/timeseries-analyzer.js"></script>
     <script src="js/hue-drag-wheel.js"></script>
+    <script src="js/flight-vs-now.js"></script>
     <script src="js/presentation.js"></script>
 </body>
 </html>
@@ -532,6 +531,12 @@ function showSlide(index) {
     if (document.getElementById('timeseries-demo') && typeof initTimeseriesAnalyzer === 'function') {
         console.log('📈 Initializing timeseries analyzer for slide', index + 1);
         initTimeseriesAnalyzer();
+    }
+
+    // Check for flight vs now timezone demo
+    if (document.getElementById('syd-date') && typeof initFlightVsNow === 'function') {
+        console.log('🛩️ Initializing flight vs now timezone demo for slide', index + 1);
+        initFlightVsNow();
     }
 
     currentSlide = index;

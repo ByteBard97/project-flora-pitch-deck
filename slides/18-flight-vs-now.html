@@ -250,3 +250,31 @@
     </div>
   </div>
 </div>
+
+<script>
+// Initialize the Flight vs Now interactive demo when this slide is displayed
+console.log('🛩️ Flight vs Now slide script executing');
+
+// Wait for the slide to be fully loaded, then initialize the interactive demo
+setTimeout(() => {
+    console.log('🛩️ Flight vs Now timeout triggered');
+
+    // Check if the initFlightVsNow function is available
+    if (typeof initFlightVsNow === 'function') {
+        console.log('   Calling initFlightVsNow from slide script');
+        initFlightVsNow();
+    } else {
+        console.warn('   initFlightVsNow function not found - may not be loaded yet');
+
+        // Try again after a short delay in case the JS is still loading
+        setTimeout(() => {
+            if (typeof initFlightVsNow === 'function') {
+                console.log('   Retrying initFlightVsNow call');
+                initFlightVsNow();
+            } else {
+                console.error('   initFlightVsNow function still not available');
+            }
+        }, 500);
+    }
+}, 100);
+</script>
