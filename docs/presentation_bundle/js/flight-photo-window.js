@@ -113,26 +113,39 @@ function initFlightPhotoWindow() {
 
       let bestWindow = null;
       let shortestWait = 24;
+
+      // Naive approach - find the CHRONOLOGICALLY NEXT window
       let naiveChoice = null;
       let naiveWait = 24;
 
+      // First, try to find a window later today
       for (const window of windows) {
         const windowCenter = (window.start + window.end) / 2;
 
-        // Vector embedding approach - finds TRUE shortest distance
-        const vectorDist = circularDistance(arrivalTime, windowCenter);
+        if (windowCenter > arrivalTime) {
+          const waitTime = windowCenter - arrivalTime;
+          if (waitTime < naiveWait) {
+            naiveWait = waitTime;
+            naiveChoice = window;
+          }
+        }
+      }
 
-        // Naive approach - just looks for "next" window
-        const naiveDist = naiveTimeDistance(arrivalTime, windowCenter);
+      // If no window found later today, pick the earliest tomorrow
+      if (!naiveChoice) {
+        // Morning comes first tomorrow
+        naiveChoice = windows[0]; // Morning window
+        naiveWait = (MORNING_START + MORNING_END) / 2 + 24 - arrivalTime;
+      }
+
+      // Vector embedding approach - finds TRUE shortest distance in either direction
+      for (const window of windows) {
+        const windowCenter = (window.start + window.end) / 2;
+        const vectorDist = circularDistance(arrivalTime, windowCenter);
 
         if (vectorDist < shortestWait) {
           shortestWait = vectorDist;
           bestWindow = window;
-        }
-
-        if (naiveDist < naiveWait) {
-          naiveWait = naiveDist;
-          naiveChoice = window;
         }
       }
 
