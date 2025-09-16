@@ -25,16 +25,11 @@ from json_embedder import JSONDataEmbedder
 from templates import SINGLE_FILE, BUNDLE_INDEX, NAVIGATION, BUNDLE_PRESENTATION
 
 
-JS_MODULES = [
-    "hue-drag-wheel.js",
-    "flight-vs-now.js",
-    "interactive-demo.js",
-    "gis-demo.js"
-] 
+# JS_MODULES will be auto-discovered from js/ directory 
 
 class PresentationBuilder:
     """Main builder orchestrating the presentation build process"""
-    
+
     def __init__(self, config_path="config.yaml"):
         self.config = self._load_config(config_path)
         self.build_dir = Path("docs")
@@ -86,6 +81,21 @@ class PresentationBuilder:
         print(f"✅ Build complete! Output in {self.build_dir}")
         self._print_build_summary()
 
+    def _get_js_modules(self):
+        """Auto-discover JavaScript modules in the js/ directory"""
+        js_dir = Path("js")
+        if not js_dir.exists():
+            return []
+
+        # Find all .js files in the js directory
+        js_files = list(js_dir.glob("*.js"))
+        js_modules = [f.name for f in js_files]
+
+        # Sort for consistent ordering
+        js_modules.sort()
+
+        return js_modules
+
     def _copy_static_assets(self):
         """Copy static assets to docs root for GitHub Pages"""
         static_assets = [
@@ -108,7 +118,8 @@ class PresentationBuilder:
         """Reads and combines all interactive JavaScript modules."""
         unified_js = ""
         js_embedded_count = 0
-        for module in JS_MODULES:
+        js_modules = self._get_js_modules()
+        for module in js_modules:
             module_path = Path("js") / module
             if module_path.exists():
                 module_js = module_path.read_text(encoding='utf-8')
@@ -189,7 +200,8 @@ class PresentationBuilder:
 
         # Copy interactive JavaScript modules
         js_count = 0
-        for module in JS_MODULES:
+        js_modules = self._get_js_modules()
+        for module in js_modules:
             module_path = Path("js") / module
             if module_path.exists():
                 print(f"   📄 Copying {module_path} to {bundle_dir / 'js' / module}")
@@ -305,7 +317,17 @@ class PresentationBuilder:
     
     def _create_bundle_html(self):
         """Create index.html for bundle"""
-        return BUNDLE_INDEX.replace('{{TITLE}}', self.config['presentation']['title'])
+        # Generate script tags for all JS modules
+        js_modules = self._get_js_modules()
+        script_tags = []
+        for module in js_modules:
+            script_tags.append(f'    <script src="js/{module}"></script>')
+        script_tags.append('    <script src="js/presentation.js"></script>')
+
+        js_script_tags = '\n'.join(script_tags)
+
+        return BUNDLE_INDEX.replace('{{TITLE}}', self.config['presentation']['title']) \
+                          .replace('{{JS_SCRIPT_TAGS}}', js_script_tags)
     
     def _create_bundle_javascript(self, slides_content):
         """Create presentation.js for bundle with embedded slides"""

@@ -23,7 +23,7 @@ python build.py config_stroke_pipeline.yaml
 
 ### Core Components
 
-- **`simple_builder.py`** - Main presentation builder class (`SimpleMathBuilder`)
+- **`presentation_builder.py`** - Main presentation builder class (`PresentationBuilder`)
 - **`build.py`** - Entry point that instantiates the builder
 - **`config.yaml`** - Presentation configuration (title, slides, build settings)
 - **`index.html`** - Main HTML template
@@ -78,8 +78,8 @@ presentation/
 ├── slides/              # HTML slide files (processed in config.yaml order)
 ├── js/                  # Interactive JavaScript modules
 ├── templates/           # Build templates
-├── dist/               # Generated output
+├── docs/               # Generated output (GitHub Pages)
 ├── config.yaml         # Main configuration
 ├── build.py           # Build entry point
-└── simple_builder.py  # Core build logic
+└── presentation_builder.py  # Core build logic
 ```

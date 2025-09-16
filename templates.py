@@ -103,7 +103,7 @@ SINGLE_FILE = '''<!DOCTYPE html>
 
     <!-- Navigation -->
     <div class="navigation">
-        <button class="nav-button" onclick="previousSlide()">◀ Previous</button>
+        <button class="nav-button" onclick="console.log('Previous button clicked!'); previousSlide()">◀ Previous</button>
         <button class="nav-button" onclick="nextSlide()">Next ▶</button>
     </div>
 
@@ -443,7 +443,7 @@ BUNDLE_INDEX = '''<!DOCTYPE html>
     </div>
 
     <div class="navigation">
-        <button class="nav-button" onclick="previousSlide()">◀ Previous</button>
+        <button class="nav-button" onclick="console.log('Previous button clicked!'); previousSlide()">◀ Previous</button>
         <button class="nav-button" onclick="nextSlide()">Next ▶</button>
     </div>
 
@@ -451,10 +451,8 @@ BUNDLE_INDEX = '''<!DOCTYPE html>
         <span id="current-slide">1</span> / <span id="total-slides">0</span>
     </div>
 
-    <!-- Interactive demo modules -->
-    <script src="js/hue-drag-wheel.js"></script>
-    <script src="js/flight-vs-now.js"></script>
-    <script src="js/presentation.js"></script>
+    <!-- Interactive demo modules (auto-generated) -->
+{{JS_SCRIPT_TAGS}}
 </body>
 </html>
 '''
@@ -477,12 +475,9 @@ function showSlide(index) {
     document.getElementById('current-slide').textContent = index + 1;
     document.getElementById('total-slides').textContent = slidesData.length;
     
-    // Update navigation buttons
+    // Update navigation buttons (allow wrap-around, so no disabling)
     const prevButton = document.querySelector('.nav-button');
     const nextButton = document.querySelector('.nav-button:last-child');
-    
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === slidesData.length - 1;
     
     // Add fade in animation
     slideContent.style.animation = 'none';
@@ -545,6 +540,12 @@ function showSlide(index) {
         initGISDemo();
     }
 
+    // Check for flight photo window demo
+    if (document.getElementById('departure-time') && typeof initFlightPhotoWindow === 'function') {
+        console.log('📸 Initializing flight photo window demo for slide', index + 1);
+        initFlightPhotoWindow();
+    }
+
     // Check for flight vs now timezone demo (more specific check)
     if (document.getElementById('syd-date') &&
         document.getElementById('utc-timeline') &&
@@ -560,16 +561,24 @@ function nextSlide() {
     if (currentSlide < slidesData.length - 1) {
         currentSlide++;
         showSlide(currentSlide);
+    } else {
+        // Wrap to the first slide
+        currentSlide = 0;
+        showSlide(currentSlide);
     }
 }
 
 function previousSlide() {
+    console.log('🔄 previousSlide() called - currentSlide:', currentSlide, 'totalSlides:', slidesData.length);
+
     if (currentSlide > 0) {
         currentSlide--;
+        console.log('   Moving to previous slide:', currentSlide);
         showSlide(currentSlide);
     } else {
         // Wrap to the last slide
         currentSlide = slidesData.length - 1;
+        console.log('   Wrapping to last slide:', currentSlide);
         showSlide(currentSlide);
     }
 }
