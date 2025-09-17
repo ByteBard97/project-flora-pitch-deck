@@ -1,5 +1,15 @@
 <div class="slide flight-now">
   <style>
+        /* Centralized color classes for inline replacements */
+        .bb-bg-primary { background: var(--bb-bg-primary) !important; }
+        .bb-bg-secondary { background: var(--bb-bg-secondary) !important; }
+        .bb-text-cream { color: var(--bb-cream) !important; }
+        .bb-text-gold { color: var(--bb-gold) !important; }
+        .bb-fill-cream { fill: var(--bb-cream) !important; }
+        .bb-fill-gold { fill: var(--bb-gold) !important; }
+        .bb-stroke-gold { stroke: var(--bb-gold) !important; }
+        .bb-stroke-red { stroke: var(--bb-red) !important; }
+        
     .flight-now {
       padding: 3vh 4vw;
       display: flex;
@@ -10,7 +20,7 @@
     .flight-now h2 {
       text-align: center;
       margin-bottom: 1vh;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      background: linear-gradient(135deg, var(--bb-red), var(--bb-gold));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -24,10 +34,10 @@
     }
 
     .panel {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--bb-white-5);
       border-radius: 12px;
       padding: 2vh 2vw;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--bb-white-15);
     }
 
     .left.panel {
@@ -38,7 +48,7 @@
 
     .left.panel h3 {
       margin: 0 0 1vh 0;
-      color: #4ecdc4;
+      color: var(--bb-gold);
       font-size: 1.4em;
     }
 
@@ -50,7 +60,7 @@
 
     .row input, .row button, .row select {
       padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--bb-white-15);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 6px;
       color: #c9d1d9;
@@ -59,12 +69,12 @@
 
     .row input:focus, .row button:focus, .row select:focus {
       outline: none;
-      border-color: #4ecdc4;
+      border-color: var(--bb-gold);
       box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
     }
 
     .row button {
-      background: #4ecdc4;
+      background: var(--bb-gold);
       color: #0d1117;
       cursor: pointer;
       font-weight: 600;
@@ -89,9 +99,9 @@
 
     .notes {
       padding: 1vh;
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bb-white-5);
       border-radius: 6px;
-      border-left: 3px solid #4ecdc4;
+      border-left: 3px solid var(--bb-gold);
     }
 
     .g { color: #3fb950; }
@@ -105,9 +115,9 @@
     }
 
     #utc-timeline {
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bb-white-5);
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--bb-white-15);
     }
 
     .outputs {
@@ -143,7 +153,7 @@
 
     .local-readouts {
       padding: 1vh;
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bb-white-5);
       border-radius: 6px;
       text-align: center;
       font-size: 0.85em;
@@ -172,7 +182,7 @@
 
     .ring-explainer h4 {
       margin: 0 0 1vh 0;
-      color: #4ecdc4;
+      color: var(--bb-gold);
       font-size: 1em;
     }
 

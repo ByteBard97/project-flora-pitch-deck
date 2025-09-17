@@ -1,5 +1,15 @@
 <div class="slide color-interpolation">
   <style>
+        /* Centralized color classes for inline replacements */
+        .bb-bg-primary { background: var(--bb-bg-primary) !important; }
+        .bb-bg-secondary { background: var(--bb-bg-secondary) !important; }
+        .bb-text-cream { color: var(--bb-cream) !important; }
+        .bb-text-gold { color: var(--bb-gold) !important; }
+        .bb-fill-cream { fill: var(--bb-cream) !important; }
+        .bb-fill-gold { fill: var(--bb-gold) !important; }
+        .bb-stroke-gold { stroke: var(--bb-gold) !important; }
+        .bb-stroke-red { stroke: var(--bb-red) !important; }
+        
     /* Scoped styles for color interpolation slide */
     .color-interpolation {
       padding: 2vh 3vw;
@@ -12,14 +22,14 @@
       font-size: clamp(24px, 3vw, 40px);
       margin: 0 0 1vh 0;
       text-align: center;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      background: linear-gradient(135deg, var(--bb-red), var(--bb-gold));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
     .color-interpolation .card {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--bb-white-10);
       border: 1px solid rgba(255, 255, 255, 0.09);
       border-radius: 14px;
       padding: 14px 16px;
@@ -70,7 +80,7 @@
       inset: 42px;
       background: #0b1117;
       border-radius: 50%;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px var(--bb-white-15);
       pointer-events: none;
     }
 
@@ -99,9 +109,9 @@
       align-items: center;
       gap: 8px;
       padding: 6px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--bb-white-15);
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bb-white-5);
     }
 
     .color-interpolation .dot {
@@ -125,7 +135,7 @@
 
     .color-interpolation .midbars .bar {
       height: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--bb-white-15);
       border-radius: 10px;
     }
   </style>

@@ -1,0 +1,41 @@
+:root {
+  /* Byte Bard Color System */
+  --bb-navy-dark: #0A3D82;
+  --bb-navy-medium: #1B4A8C;
+  --bb-cream: #F5F0E6;
+  --bb-red: #E53935;
+  --bb-gold: #FFC107;
+  --bb-bg-primary: #0A3D82;
+  --bb-bg-secondary: #1B4A8C;
+  --bb-text-primary: #F5F0E6;
+  --bb-text-secondary: #B8C5D6;
+  --bb-text-muted: #8A9BAE;
+  --bb-card-bg: rgba(10, 61, 130, 0.1);
+  --bb-card-border: #FFC107;
+  --bb-code-bg: rgba(0, 0, 0, 0.5);
+  --bb-code-text: #F5F0E6;
+  --bb-success: #FFC107;
+  --bb-warning: #FF6B35;
+  --bb-error: #E53935;
+  --bb-info: #B8C5D6;
+  --bb-white-5: rgba(245, 240, 230, 0.05);
+  --bb-white-10: rgba(245, 240, 230, 0.1);
+  --bb-white-15: rgba(245, 240, 230, 0.15);
+  --bb-navy-10: rgba(10, 61, 130, 0.1);
+  --bb-navy-20: rgba(10, 61, 130, 0.2);
+  --bb-gold-20: rgba(255, 193, 7, 0.2);
+  --bb-red-20: rgba(229, 57, 53, 0.2);
+
+  /* Legacy variable mappings for compatibility */
+  --bg: var(--bb-bg-primary);
+  --card: var(--bb-bg-secondary);
+  --ink: var(--bb-text-primary);
+  --muted: var(--bb-text-muted);
+  --accent: var(--bb-red);
+  --accent2: var(--bb-gold);
+  --accent3: var(--bb-cream);
+  --bytebard-navy: var(--bb-navy-dark);
+  --bytebard-red: var(--bb-red);
+  --bytebard-gold: var(--bb-gold);
+  --bytebard-cream: var(--bb-cream);
+}

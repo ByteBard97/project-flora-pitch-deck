@@ -112,25 +112,41 @@ class AssetManager:
             # Convert to WebP with optimization
             try:
                 with Image.open(original_path) as img:
-                    # Convert RGBA to RGB if necessary
-                    if img.mode in ('RGBA', 'LA', 'P'):
-                        background = Image.new('RGB', img.size, (255, 255, 255))
-                        if img.mode == 'P':
-                            img = img.convert('RGBA')
-                        background.paste(img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
-                        img = background
+                    # Preserve transparency for WebP
+                    if img.mode in ('RGBA', 'LA'):
+                        # Keep RGBA mode for transparency
+                        pass
+                    elif img.mode == 'P':
+                        # Convert palette mode to RGBA to preserve transparency
+                        img = img.convert('RGBA')
                     elif img.mode != 'RGB':
                         img = img.convert('RGB')
                     
-                    # Resize if too large
+                    # Smart resize logic: only resize if both large dimensions AND large file size
                     max_width = self.config['build']['max_image_width']
-                    if img.width > max_width:
+                    original_size_mb = original_path.stat().st_size / (1024 * 1024)
+                    max_size_mb = 2.0  # Don't resize if under 2MB
+
+                    should_resize = (
+                        img.width > max_width and
+                        original_size_mb > max_size_mb
+                    )
+
+                    if should_resize:
                         height = int((max_width / img.width) * img.height)
                         img = img.resize((max_width, height), Image.Resampling.LANCZOS)
-                        print(f"   🔄 Resized {original_path.name}: {img.width}x{img.height}")
+                        print(f"   🔄 Resized {original_path.name}: {img.width}x{img.height} (was {original_size_mb:.1f}MB)")
+                    elif img.width > max_width:
+                        print(f"   ⏭️  Skipped resize for {original_path.name}: {original_size_mb:.1f}MB is reasonable")
+                    else:
+                        print(f"   ✅ Keeping original size for {original_path.name}: {img.width}x{img.height} ({original_size_mb:.1f}MB)")
                     
-                    # Save as WebP
-                    img.save(output_path, 'WebP', quality=self.config['build']['webp_quality'], optimize=True)
+                    # Save as WebP with lossless transparency if needed
+                    if img.mode in ('RGBA', 'LA'):
+                        img.save(output_path, 'WebP', quality=self.config['build']['webp_quality'],
+                                optimize=True, lossless=False, method=6)
+                    else:
+                        img.save(output_path, 'WebP', quality=self.config['build']['webp_quality'], optimize=True)
                     
                     # Calculate compression ratio
                     original_size = original_path.stat().st_size

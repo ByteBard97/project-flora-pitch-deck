@@ -199,9 +199,16 @@ class PresentationBuilder:
         (bundle_dir / "js").mkdir(exist_ok=True)
         (bundle_dir / "assets").mkdir(exist_ok=True)
 
-        # Copy CSS
+        # Copy CSS files
+        if Path("byte_bard_colors.css").exists():
+            shutil.copy2("byte_bard_colors.css", bundle_dir / "css" / "byte_bard_colors.css")
         if Path("styles.css").exists():
             shutil.copy2("styles.css", bundle_dir / "css" / "styles.css")
+
+        # Copy centralized colors JS
+        if Path("js/byte_bard_colors.js").exists():
+            shutil.copy2("js/byte_bard_colors.js", bundle_dir / "js" / "byte_bard_colors.js")
+            print("   🎨 Copied centralized color system")
 
         # Copy interactive JavaScript modules
         js_count = 0
@@ -238,7 +245,10 @@ class PresentationBuilder:
     
     def _create_single_file_html(self, slides_content, unified_js):
         """Create complete single-file HTML"""
-        css_content = Path("styles.css").read_text() if Path("styles.css").exists() else ""
+        # Load centralized colors first
+        color_css = Path("byte_bard_colors.css").read_text() if Path("byte_bard_colors.css").exists() else ""
+        styles_css = Path("styles.css").read_text() if Path("styles.css").exists() else ""
+        css_content = color_css + "\n" + styles_css
 
         # Get embedded JSON data
         json_embed_js = self.json_embedder.load_and_embed_json_data()

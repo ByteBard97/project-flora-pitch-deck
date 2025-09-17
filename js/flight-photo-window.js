@@ -173,7 +173,7 @@ function initFlightPhotoWindow() {
       const morningPath = describeArc(100, 100, 80, morningStart, morningEnd);
       morningArc.setAttribute("d", morningPath);
       morningArc.setAttribute("fill", "none");
-      morningArc.setAttribute("stroke", "#FF9800");
+      morningArc.setAttribute("stroke", "var(--bb-gold)");
       morningArc.setAttribute("stroke-width", "8");
       morningArc.setAttribute("opacity", "0.4");
       windows.appendChild(morningArc);
@@ -194,7 +194,7 @@ function initFlightPhotoWindow() {
       );
       afternoonArc.setAttribute("d", afternoonPath);
       afternoonArc.setAttribute("fill", "none");
-      afternoonArc.setAttribute("stroke", "#2196F3");
+      afternoonArc.setAttribute("stroke", "var(--bb-info)");
       afternoonArc.setAttribute("stroke-width", "8");
       afternoonArc.setAttribute("opacity", "0.4");
       windows.appendChild(afternoonArc);
