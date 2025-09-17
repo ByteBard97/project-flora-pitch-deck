@@ -6,7 +6,8 @@
       "Bash(python:*)",
       "Bash(./build.sh)",
       "Bash(/dev/null)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(rsync:*)"
     ],
     "deny": [],
     "ask": []
