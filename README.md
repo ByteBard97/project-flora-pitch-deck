@@ -1,3 +1,5 @@
+![Byte Bard Logo](bytebard-logo.webp)
+
 # 🎯 Interactive Presentation Build System
 
 **Stop wrestling with PowerPoint. Build presentations like code.**
