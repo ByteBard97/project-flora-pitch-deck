@@ -1,7 +1,7 @@
-<div class="slide">
-    <h1>Interactive Demo</h1>
-    
-    <div class="demo-container">
+<div class="slide" style="display: flex; flex-direction: column; height: 100%; border: 3px solid red;">
+    <h1 style="border: 2px solid yellow; margin: 0;">Interactive Demo</h1>
+
+    <div class="demo-container" style="flex: 1; height: auto; border: 3px solid lime;">
         <div class="demo-section">
             <h3>🎮 Try It Yourself: Angle Averaging</h3>
             
@@ -89,4 +89,42 @@
     </div>
 </div>
 
+<script>
+// Debug layout dimensions
+window.addEventListener('load', function() {
+    console.log('=== LAYOUT DEBUG INFO ===');
+
+    const slide = document.querySelector('.slide');
+    const h1 = document.querySelector('h1');
+    const demoContainer = document.querySelector('.demo-container');
+    const demoSection = document.querySelector('.demo-section');
+    const codeSection = document.querySelector('.code-section');
+
+    function logElement(name, element) {
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            const computed = window.getComputedStyle(element);
+            console.log(`${name}:`, {
+                position: { x: rect.x, y: rect.y },
+                size: { width: rect.width, height: rect.height },
+                right: rect.right,
+                bottom: rect.bottom,
+                computedHeight: computed.height,
+                computedWidth: computed.width,
+                display: computed.display,
+                flex: computed.flex
+            });
+        }
+    }
+
+    logElement('Slide', slide);
+    logElement('H1', h1);
+    logElement('Demo Container', demoContainer);
+    logElement('Demo Section', demoSection);
+    logElement('Code Section', codeSection);
+
+    console.log('Viewport:', { width: window.innerWidth, height: window.innerHeight });
+    console.log('Document body:', document.body.getBoundingClientRect());
+});
+</script>
 

@@ -706,12 +706,12 @@ li {
 
 /* Enhanced Interactive Demo Styles */
 .demo-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 30px;
-  margin: 2em 0;
+  align-items: stretch;
 }
 
 .demo-section {
@@ -722,6 +722,9 @@ li {
   padding: 30px;
   box-shadow: 0 0 40px rgba(255, 193, 7, 0.3),
               inset 0 0 80px rgba(10, 61, 130, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .code-section {
@@ -730,6 +733,9 @@ li {
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 0 40px rgba(255, 193, 7, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Enhanced Slider Styles */
@@ -866,6 +872,8 @@ li {
 .demo-visual {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex: 1;
   margin: 30px 0;
   background: rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 193, 7, 0.3);

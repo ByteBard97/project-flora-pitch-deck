@@ -22,8 +22,17 @@
                 <circle cx="135" cy="25" r="6" fill="#4CAF50"/>
                 <text x="175" y="15" font-size="12" fill="#FFC107">Target: 10°</text>
                 
-                <!-- Wrong rotation path -->
-                <path d="M 115 25 A 100 100 0 1 1 135 25" fill="none" stroke="#FF5722" stroke-width="3" stroke-dasharray="5,5"/>
+                <!-- Wrong rotation path (counter-clockwise the long way) -->
+                <path d="M 115 25 A 100 100 0 1 0 135 25" fill="none" stroke="#FF5722" stroke-width="5" stroke-dasharray="10,5"/>
+
+                <!-- Simple direction indicator for counter-clockwise motion -->
+                <text x="60" y="60" font-size="20" fill="#FF5722">↺</text>
+                <text x="35" y="75" font-size="9" fill="#FF5722">340°</text>
+
+                <!-- Label showing this is the wrong way -->
+                <text x="25" y="125" font-size="18" fill="#FF5722">↺</text>
+                <text x="10" y="140" font-size="9" fill="#FF5722" font-weight="bold">340° CCW</text>
+                <text x="5" y="150" font-size="9" fill="#FF5722">WRONG WAY</text>
                 <text x="125" y="200" text-anchor="middle" font-size="14" fill="#FF5722" font-weight="bold">
                     Error: -340°
                 </text>
@@ -53,8 +62,17 @@ error = 10 - 350 = -340°
                 <circle cx="135" cy="25" r="6" fill="#4CAF50"/>
                 <text x="175" y="15" font-size="12" fill="#FFC107">Target: 10°</text>
                 
-                <!-- Correct rotation path -->
-                <path d="M 115 25 A 100 100 0 0 1 135 25" fill="none" stroke="#4CAF50" stroke-width="3"/>
+                <!-- Correct rotation path (short clockwise way) -->
+                <path d="M 115 25 A 100 100 0 0 1 135 25" fill="none" stroke="#4CAF50" stroke-width="6"/>
+
+                <!-- Simple direction indicator for clockwise motion -->
+                <text x="170" y="60" font-size="20" fill="#4CAF50">↻</text>
+                <text x="180" y="75" font-size="9" fill="#4CAF50">20°</text>
+
+                <!-- Label showing this is the right way -->
+                <text x="225" y="125" font-size="18" fill="#4CAF50">↻</text>
+                <text x="215" y="140" font-size="9" fill="#4CAF50" font-weight="bold">20° CW</text>
+                <text x="210" y="150" font-size="9" fill="#4CAF50">RIGHT WAY</text>
                 <text x="125" y="200" text-anchor="middle" font-size="14" fill="#4CAF50" font-weight="bold">
                     Error: +20°
                 </text>
