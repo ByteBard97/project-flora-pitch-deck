@@ -1,0 +1,253 @@
+<div class="slide">
+  <div class="qa-content">
+    <h1>Discussion & Questions</h1>
+
+    <div class="logo-section">
+      <div class="logo-container">
+        <div class="project-logo">
+          <div class="logo-icon">🌿</div>
+          <div class="logo-text">Project Flora</div>
+        </div>
+        <div class="tagline">Seeding the Future of Landscape Design</div>
+      </div>
+    </div>
+
+    <div class="discussion-prompt">
+      <p>Let's discuss how we can bring this vision to life together.</p>
+    </div>
+
+    <div class="background-visual">
+      <!-- Subtle native landscape background -->
+      <div class="landscape-illustration">
+        <div class="plant-silhouette plant-1"></div>
+        <div class="plant-silhouette plant-2"></div>
+        <div class="plant-silhouette plant-3"></div>
+        <div class="plant-silhouette plant-4"></div>
+        <div class="plant-silhouette plant-5"></div>
+        <div class="horizon-line"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.qa-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  width: 100%;
+}
+
+.slide h1 {
+  font-size: 3rem;
+  color: var(--text-primary);
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, var(--gold), #4CAF50);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.logo-section {
+  margin-bottom: 3rem;
+}
+
+.logo-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.project-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.logo-icon {
+  font-size: 4rem;
+  background: linear-gradient(135deg, #4CAF50, var(--gold));
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
+}
+
+.logo-text {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.discussion-prompt {
+  background: var(--white_5);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.discussion-prompt p {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.background-visual {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.landscape-illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+}
+
+.horizon-line {
+  position: absolute;
+  bottom: 30%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.plant-silhouette {
+  position: absolute;
+  bottom: 30%;
+  background: #4CAF50;
+  border-radius: 50% 10% 50% 50%;
+  opacity: 0.6;
+}
+
+.plant-1 {
+  left: 10%;
+  width: 40px;
+  height: 60px;
+  animation: sway 4s ease-in-out infinite;
+}
+
+.plant-2 {
+  left: 25%;
+  width: 30px;
+  height: 50px;
+  animation: sway 4s ease-in-out infinite 0.5s;
+}
+
+.plant-3 {
+  left: 45%;
+  width: 50px;
+  height: 80px;
+  animation: sway 4s ease-in-out infinite 1s;
+}
+
+.plant-4 {
+  left: 70%;
+  width: 35px;
+  height: 55px;
+  animation: sway 4s ease-in-out infinite 1.5s;
+}
+
+.plant-5 {
+  left: 85%;
+  width: 25px;
+  height: 40px;
+  animation: sway 4s ease-in-out infinite 2s;
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+}
+
+/* Add some floating particles for ambiance */
+.landscape-illustration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(76, 175, 80, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 70% 40%, rgba(255, 193, 7, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(76, 175, 80, 0.1) 1px, transparent 1px);
+  background-size: 100px 100px, 150px 150px, 120px 120px;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .slide h1 {
+    font-size: 2.2rem;
+  }
+
+  .project-logo {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .logo-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 3rem;
+  }
+
+  .logo-text {
+    font-size: 2rem;
+  }
+
+  .logo-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .discussion-prompt p {
+    font-size: 1.1rem;
+  }
+}
+</style>

@@ -1,0 +1,285 @@
+<div class="slide">
+  <h1>The "Franken-Stack": Our Industry's Inefficient Reality</h1>
+  <p class="subtitle">We're Wasting Time and Money on a Disconnected Workflow</p>
+
+  <div class="workflow-chaos">
+    <div class="software-node" data-software="autocad">
+      <div class="logo-placeholder">AutoCAD</div>
+      <div class="cost">$1,600/year</div>
+    </div>
+
+    <div class="connection-arrow error-prone">
+      <span class="risk-label">Manual Data Entry</span>
+      <div class="arrow">→</div>
+    </div>
+
+    <div class="software-node" data-software="illustrator">
+      <div class="logo-placeholder">Illustrator</div>
+      <div class="cost">$240/year</div>
+    </div>
+
+    <div class="connection-arrow error-prone">
+      <span class="risk-label">Risk of Error</span>
+      <div class="arrow">→</div>
+    </div>
+
+    <div class="software-node" data-software="excel">
+      <div class="logo-placeholder">Excel</div>
+      <div class="cost">$70/year</div>
+    </div>
+
+    <div class="connection-arrow error-prone">
+      <span class="risk-label">Wasted Hours</span>
+      <div class="arrow">→</div>
+    </div>
+
+    <div class="software-node" data-software="web">
+      <div class="logo-placeholder">NWF Website</div>
+      <div class="cost">Free but slow</div>
+    </div>
+  </div>
+
+  <div class="cost-analysis">
+    <div class="pain-points">
+      <h3>💸 The Hidden Costs</h3>
+      <div class="pain-grid">
+        <div class="pain-item">
+          <div class="icon">🔄</div>
+          <h4>Data Loss & Risk</h4>
+          <p>Every import/export between programs risks data corruption and requires manual cleanup</p>
+        </div>
+
+        <div class="pain-item">
+          <div class="icon">⏱️</div>
+          <h4>Time Sink</h4>
+          <p>Manual takeoffs are "time-consuming and prone to human error," which can "make or break success" on razor-thin margins</p>
+        </div>
+
+        <div class="pain-item">
+          <div class="icon">💳</div>
+          <h4>Financial Drain</h4>
+          <p>Multiple expensive subscriptions to build a complete, yet inefficient, toolbox</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-cost">
+      <h3>Annual Software Cost</h3>
+      <div class="cost-breakdown">
+        <div class="cost-item">AutoCAD: $1,600</div>
+        <div class="cost-item">Adobe Suite: $600</div>
+        <div class="cost-item">Plugins: $500</div>
+        <div class="cost-item">Other Tools: $300</div>
+      </div>
+      <div class="total">
+        <strong>Total: $3,000+/year</strong>
+      </div>
+      <div class="efficiency-loss">
+        <strong style="color: var(--red);">+ Countless lost hours</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slide h1 {
+  font-size: 2.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.workflow-chaos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--white_5);
+  border-radius: 16px;
+  flex-wrap: wrap;
+}
+
+.software-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  min-width: 120px;
+  position: relative;
+}
+
+.software-node[data-software="autocad"] {
+  border-color: #0696D7;
+}
+
+.software-node[data-software="illustrator"] {
+  border-color: #FF9A00;
+}
+
+.software-node[data-software="excel"] {
+  border-color: #217346;
+}
+
+.software-node[data-software="web"] {
+  border-color: #4CAF50;
+}
+
+.logo-placeholder {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.cost {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.connection-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.risk-label {
+  font-size: 0.8rem;
+  color: var(--red);
+  font-weight: 600;
+  background: var(--red_20);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: var(--red);
+  font-weight: bold;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.cost-analysis {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.pain-points h3 {
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.pain-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pain-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border-left: 4px solid var(--red);
+}
+
+.pain-item .icon {
+  font-size: 1.5rem;
+}
+
+.pain-item h4 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  grid-column: 2;
+}
+
+.pain-item p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+  grid-column: 2;
+}
+
+.total-cost {
+  background: var(--navy_10);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.total-cost h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.cost-breakdown {
+  margin-bottom: 1rem;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.total {
+  border-top: 2px solid var(--gold);
+  padding-top: 0.8rem;
+  margin-top: 0.8rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.efficiency-loss {
+  text-align: center;
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .workflow-chaos {
+    flex-direction: column;
+  }
+
+  .connection-arrow .arrow {
+    transform: rotate(90deg);
+  }
+
+  .cost-analysis {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+</style>

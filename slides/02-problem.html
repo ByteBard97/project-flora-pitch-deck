@@ -1,0 +1,226 @@
+<div class="slide">
+  <h1>The Landscape Software Ecosystem is Broken</h1>
+  <p class="subtitle">A Tale of Two Frustrations</p>
+
+  <div class="split-layout">
+    <div class="frustration-column">
+      <h3>👩‍💼 For Annie (The Professional)</h3>
+      <div class="pain-point">
+        <h4>Professional tools are powerful, but...</h4>
+        <ul>
+          <li><strong>Clunky & Archaic:</strong> "archaic" interfaces (DynaSCAPE)</li>
+          <li><strong>Expensive:</strong> The "plugin tax" (Land F/X + AutoCAD)</li>
+          <li><strong>Ecologically Blind:</strong> Plants are just generic objects</li>
+          <li><strong>Disconnected Workflow:</strong> Juggling AutoCAD, Adobe, spreadsheets, and external native plant websites</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="frustration-column">
+      <h3>🏠 For Jake (The Prosumer)</h3>
+      <div class="pain-point">
+        <h4>Consumer apps are easy, but...</h4>
+        <ul>
+          <li><strong>Simplistic:</strong> Hit an "aesthetic ceiling" quickly</li>
+          <li><strong>Aesthetically Driven:</strong> Form over function</li>
+          <li><strong>Ecologically Ignorant:</strong> Non-regional plant libraries</li>
+          <li><strong>Hack Together Solutions:</strong> PowerPoint or even <em>The Sims</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="visual-metaphor">
+    <div class="spectrum">
+      <div class="left-side">
+        <div class="software-icon complex">
+          <div class="cad-interface"></div>
+        </div>
+        <span class="label">Overly Complex</span>
+      </div>
+
+      <div class="center-frustration">
+        <div class="question-mark">?</div>
+        <div class="arrow">You Are Here</div>
+      </div>
+
+      <div class="right-side">
+        <div class="software-icon simple">
+          <div class="mobile-interface"></div>
+        </div>
+        <span class="label">Overly Simple</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slide h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.frustration-column h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--gold);
+}
+
+.pain-point {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.pain-point h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.pain-point ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pain-point li {
+  margin-bottom: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.pain-point li strong {
+  color: var(--text-primary);
+}
+
+.visual-metaphor {
+  margin-top: 2rem;
+}
+
+.spectrum {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  background: var(--white_5);
+  border-radius: 16px;
+}
+
+.left-side, .right-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.software-icon {
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.complex {
+  background: #2196F3;
+}
+
+.simple {
+  background: #FF9800;
+}
+
+.cad-interface {
+  width: 60px;
+  height: 40px;
+  background:
+    linear-gradient(90deg, transparent 0%, #fff 2%, transparent 4%),
+    linear-gradient(0deg, transparent 0%, #fff 2%, transparent 4%),
+    linear-gradient(45deg, transparent 0%, #fff 1%, transparent 3%);
+  background-size: 8px 8px, 8px 8px, 12px 12px;
+  opacity: 0.7;
+}
+
+.mobile-interface {
+  width: 40px;
+  height: 50px;
+  background: #fff;
+  border-radius: 8px;
+  position: relative;
+}
+
+.mobile-interface::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 12px;
+  background: #4CAF50;
+  border-radius: 4px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.center-frustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.question-mark {
+  width: 60px;
+  height: 60px;
+  background: var(--red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.question-mark::after {
+  content: '?';
+}
+
+.arrow {
+  font-size: 0.8rem;
+  color: var(--red);
+  font-weight: 600;
+  position: relative;
+}
+
+.arrow::before {
+  content: '↑';
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+}
+</style>

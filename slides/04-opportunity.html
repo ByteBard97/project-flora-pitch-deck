@@ -1,0 +1,289 @@
+<div class="slide">
+  <h1>This Frustration Represents a Multi-Billion Dollar Opportunity</h1>
+  <p class="subtitle">A Massive, Growing, and Underserved Market</p>
+
+  <div class="market-overview">
+    <div class="market-size-chart">
+      <h3>📈 Global Landscape Software Market</h3>
+      <div class="chart-container">
+        <div class="year-bar" data-year="2024">
+          <div class="bar" style="--value: 54%; --color: var(--gold);">
+            <span class="value">$2.95B</span>
+          </div>
+          <div class="year-label">2024</div>
+        </div>
+        <div class="year-bar" data-year="2030">
+          <div class="bar" style="--value: 100%; --color: var(--success);">
+            <span class="value">$5.45B</span>
+          </div>
+          <div class="year-label">2030</div>
+        </div>
+      </div>
+      <div class="growth-rate">
+        <strong>10.8% CAGR</strong>
+      </div>
+    </div>
+
+    <div class="market-insights">
+      <div class="insight-card foundation">
+        <div class="icon">🏗️</div>
+        <h4>Parent Industry Foundation</h4>
+        <div class="big-number">$264.7B</div>
+        <p>Global landscaping services market provides massive foundation</p>
+      </div>
+
+      <div class="insight-card adoption">
+        <div class="icon">💻</div>
+        <h4>High Digital Adoption</h4>
+        <div class="big-number">93%</div>
+        <p>of landscape businesses already use software</p>
+      </div>
+
+      <div class="insight-card opportunity">
+        <div class="icon">🎯</div>
+        <h4>The Real Opportunity</h4>
+        <p class="key-insight">The question isn't <em>if</em> they'll use software, but <strong>which</strong> integrated platform will finally solve their workflow</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="market-validation">
+    <div class="validation-box">
+      <h3>Market Readiness Signals</h3>
+      <div class="signal-grid">
+        <div class="signal">
+          <div class="signal-icon ready">✅</div>
+          <span>Market is mature and ready</span>
+        </div>
+        <div class="signal">
+          <div class="signal-icon ready">✅</div>
+          <span>Users already paying for software</span>
+        </div>
+        <div class="signal">
+          <div class="signal-icon ready">✅</div>
+          <span>Pain points are well-documented</span>
+        </div>
+        <div class="signal">
+          <div class="signal-icon opportunity">🔥</div>
+          <span>No integrated solution exists</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slide h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.market-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.market-size-chart h3 {
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.chart-container {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 2rem;
+  height: 200px;
+  margin-bottom: 1rem;
+}
+
+.year-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar {
+  width: 80px;
+  height: calc(var(--value) * 1.5);
+  background: var(--color);
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  padding-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  transition: height 2s ease-out;
+}
+
+.value {
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.year-label {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.growth-rate {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--success);
+  padding: 0.8rem;
+  background: var(--white_5);
+  border-radius: 8px;
+}
+
+.market-insights {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.insight-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.insight-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.insight-card h4 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+}
+
+.big-number {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.insight-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.opportunity {
+  border-left: 4px solid var(--gold);
+}
+
+.key-insight {
+  font-size: 1rem !important;
+  color: var(--text-primary) !important;
+  line-height: 1.5 !important;
+  text-align: left;
+}
+
+.key-insight em {
+  color: var(--text-secondary);
+}
+
+.key-insight strong {
+  color: var(--gold);
+}
+
+.market-validation {
+  background: var(--white_5);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.validation-box h3 {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.signal {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.signal-icon {
+  font-size: 1.2rem;
+  min-width: 24px;
+}
+
+.ready {
+  color: var(--success);
+}
+
+.opportunity {
+  color: #FF6B35;
+}
+
+@media (max-width: 768px) {
+  .market-overview {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .signal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    height: 150px;
+  }
+}
+
+/* Animation for bars */
+@keyframes growBar {
+  from { height: 0; }
+  to { height: calc(var(--value) * 1.5); }
+}
+
+.bar {
+  animation: growBar 2s ease-out 0.5s both;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Trigger bar animation when slide becomes visible
+  const bars = document.querySelectorAll('.bar');
+  bars.forEach((bar, index) => {
+    bar.style.animationDelay = `${0.5 + index * 0.3}s`;
+  });
+});
+</script>

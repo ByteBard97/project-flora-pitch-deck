@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flora Color Palette</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F5F3EE;
+        }
+        .palette-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2C7A5A;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .color-section {
+            margin-bottom: 2rem;
+        }
+        .color-section h2 {
+            color: #1D1D1D;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .color-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 150px;
+        }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            border: 2px solid #1D1D1D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .color-info {
+            text-align: center;
+        }
+        .color-name {
+            font-weight: 600;
+            color: #1D1D1D;
+        }
+        .color-hex {
+            font-family: 'Courier New', monospace;
+            color: #6B6B6B;
+            font-size: 0.9rem;
+        }
+        .color-usage {
+            font-size: 0.8rem;
+            color: #6B6B6B;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="palette-container">
+        <h1>🌿 Flora Color Palette</h1>
+
+        <div class="color-section">
+            <h2>Primary Colors</h2>
+            <div class="color-row">
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #2C7A5A;">Flora</div>
+                    <div class="color-info">
+                        <div class="color-name">Flora Green</div>
+                        <div class="color-hex">#2C7A5A</div>
+                        <div class="color-usage">Deep natural green</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #2BA6A0;">Digital</div>
+                    <div class="color-info">
+                        <div class="color-name">Digital Teal</div>
+                        <div class="color-hex">#2BA6A0</div>
+                        <div class="color-usage">Tech, modern, fresh</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="color-section">
+            <h2>Secondary Colors</h2>
+            <div class="color-row">
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #7CC576;">Leaf</div>
+                    <div class="color-info">
+                        <div class="color-name">Leaf Green</div>
+                        <div class="color-hex">#7CC576</div>
+                        <div class="color-usage">Bright organic highlight</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #8ED1C6;">Aqua</div>
+                    <div class="color-info">
+                        <div class="color-name">Soft Aqua</div>
+                        <div class="color-hex">#8ED1C6</div>
+                        <div class="color-usage">Calm, approachable</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="color-section">
+            <h2>Neutral Colors</h2>
+            <div class="color-row">
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #F5F3EE; color: #1D1D1D;">Light</div>
+                    <div class="color-info">
+                        <div class="color-name">Parchment</div>
+                        <div class="color-hex">#F5F3EE</div>
+                        <div class="color-usage">Warm, natural background</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #1D1D1D;">Dark</div>
+                    <div class="color-info">
+                        <div class="color-name">Charcoal</div>
+                        <div class="color-hex">#1D1D1D</div>
+                        <div class="color-usage">Tech sophistication</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="color-section">
+            <h2>Typography</h2>
+            <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #2BA6A0;">
+                <div style="font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #2C7A5A; margin-bottom: 0.5rem;">
+                    Inter Bold - Headings
+                </div>
+                <div style="font-family: 'Lora', serif; font-size: 1.2rem; color: #1D1D1D; line-height: 1.6;">
+                    Lora Regular - Body text that feels organic and approachable while maintaining excellent readability for longer content sections.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<div class="slide">
+  <h1>Our Three-Layer Moat</h1>
+  <p class="subtitle">Why We Will Win</p>
+
+  <div class="moat-visualization">
+    <div class="moat-layers">
+      <div class="layer layer-core">
+        <div class="layer-content">
+          <h3>1. The Data Asset</h3>
+          <p>Proprietary, relational native plant database</p>
+        </div>
+      </div>
+      <div class="layer layer-middle">
+        <div class="layer-content">
+          <h3>2. The Accessible UX</h3>
+          <p>Smarter, fundamentally better tool</p>
+        </div>
+      </div>
+      <div class="layer layer-outer">
+        <div class="layer-content">
+          <h3>3. The Community Flywheel</h3>
+          <p>Network effect that's impossible to replicate</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="moat-details">
+    <div class="detail-card">
+      <div class="card-icon">🗄️</div>
+      <h4>The Data Asset</h4>
+      <p>Building and curating our proprietary, relational native plant database is a <strong>massive undertaking</strong>. Generalist competitors are strategically disincentivized from making this deep, niche investment. This is our foundation.</p>
+      <div class="competitive-advantage">Defensible: High barrier to entry</div>
+    </div>
+
+    <div class="detail-card">
+      <div class="card-icon">✨</div>
+      <h4>The Accessible UX</h4>
+      <p>Like Canva, we are not building a "dumber" version of CAD. We are building a <strong>smarter</strong>, fundamentally <strong>better</strong> tool for a different "job to be done"—empowering confident, ecological decision-making.</p>
+      <div class="competitive-advantage">Sustainable: Different approach entirely</div>
+    </div>
+
+    <div class="detail-card">
+      <div class="card-icon">🔄</div>
+      <h4>The Community Flywheel</h4>
+      <p>This is our most powerful, long-term advantage. We're using the <strong>AllTrails playbook</strong>. Every user who shares a photo or a plant review makes the platform more valuable for the next user, creating a network effect that's nearly impossible for a competitor to replicate from scratch.</p>
+      <div class="competitive-advantage">Exponential: Network effects</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slide h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.moat-visualization {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.moat-layers {
+  position: relative;
+  width: 400px;
+  height: 400px;
+}
+
+.layer {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.layer-core {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--gold), #FF8F00);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.layer-middle {
+  width: 240px;
+  height: 240px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.7), rgba(56, 142, 60, 0.7));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.layer-outer {
+  width: 360px;
+  height: 360px;
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.5), rgba(21, 101, 192, 0.5));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.layer-content {
+  color: white;
+  padding: 1rem;
+}
+
+.layer-content h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.layer-content p {
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.layer-core .layer-content h3 {
+  font-size: 0.9rem;
+}
+
+.layer-core .layer-content p {
+  font-size: 0.7rem;
+}
+
+.moat-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.detail-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-4px);
+}
+
+.detail-card:nth-child(1) {
+  border-left: 4px solid var(--gold);
+}
+
+.detail-card:nth-child(2) {
+  border-left: 4px solid #4CAF50;
+}
+
+.detail-card:nth-child(3) {
+  border-left: 4px solid #2196F3;
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.detail-card h4 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.detail-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.detail-card strong {
+  color: var(--text-primary);
+}
+
+.competitive-advantage {
+  background: var(--white_10);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .moat-details {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .moat-layers {
+    width: 300px;
+    height: 300px;
+  }
+
+  .layer-core {
+    width: 100px;
+    height: 100px;
+  }
+
+  .layer-middle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .layer-outer {
+    width: 260px;
+    height: 260px;
+  }
+}
+</style>
