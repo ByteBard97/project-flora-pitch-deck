@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
 :root {
-  /* Neutral darks */
-  --bg-0: #0f1614;      /* page background */
-  --bg-1: #121a18;      /* deck background */
-  --surface-1: #16221e; /* cards / slide content */
-  --surface-2: #1b2a25; /* elevated cards */
-  --overlay: rgba(12,18,16,0.7);
+  /* Flora logo exact colors */
+  --bg-0: #001f1e;      /* darker than logo background */
+  --bg-1: #002a29;      /* exact logo background */
+  --surface-1: #003330; /* lighter than logo background */
+  --surface-2: #004440; /* elevated cards */
+  --overlay: rgba(0,42,41,0.7);
 
   /* Lines & shadows */
   --line-1: #20342d;                    /* subtle 1px borders */
@@ -18,10 +18,16 @@
   --text:    #d8e7e1;   /* body */
   --muted:   #97b2a8;
 
-  /* Accent (modern jade) */
-  --accent:  #3bd1b3;
-  --accent-600: #2bb59b;
-  --accent-300: #8fe4d4;
+  /* Flora brand colors (exact from logo) */
+  --flora-leaf: #67c471;     /* exact leaf green */
+  --flora-trunk: #00997e;    /* exact tree/trunk teal */
+  --flora-root: #007866;     /* darker version of tree color */
+  --flora-circuit: #4dd4c8;  /* circuit node highlights */
+
+  /* Accent system using Flora brand colors */
+  --accent: var(--flora-leaf);
+  --accent-600: var(--flora-trunk);
+  --accent-300: var(--flora-circuit);
 
   /* Legacy aliases so existing rules keep working (no literals elsewhere) */
   --flora-bg-primary: var(--bg-1);
@@ -231,13 +237,13 @@ li {
   text-align: center;
   padding: 16px;
   border-radius: 14px;
-  background: var(--bb-navy-10);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
 }
 
 .kpi .label {
   font-size: 14px;
-  color: var(--bytebard-cream);
+  color: var(--text);
   margin-top: 4px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -263,8 +269,8 @@ li {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, var(--ceres-dark) 0%, var(--bb-navy-medium) 100%);
-  color: white;
+  background: var(--bg-1);
+  color: var(--text);
   padding: 2em;
   position: relative;
 }
@@ -300,13 +306,12 @@ li {
 }
 
 .demo-section {
-  background: rgba(10, 61, 130, 0.2);
+  background: var(--surface-2);
   backdrop-filter: blur(10px);
-  border: 3px solid var(--bytebard-gold);
-  border-radius: 20px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--radius);
   padding: 30px;
-  box-shadow: 0 0 40px rgba(255, 193, 7, 0.3),
-              inset 0 0 80px rgba(10, 61, 130, 0.2);
+  box-shadow: 0 10px 30px var(--shadow-1);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -314,10 +319,10 @@ li {
 
 .code-section {
   background: rgba(0, 0, 0, 0.5);
-  border: 3px solid var(--bytebard-gold);
-  border-radius: 20px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--radius);
   padding: 30px;
-  box-shadow: 0 0 40px rgba(255, 193, 7, 0.3);
+  box-shadow: 0 10px 30px var(--shadow-1);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -380,11 +385,9 @@ li {
   appearance: none;
   height: 10px;
   border-radius: 5px;
-  background: linear-gradient(90deg,
-    var(--bytebard-navy) 0%,
-    var(--bytebard-navy-light) 100%);
+  background: var(--surface-1);
   outline: none;
-  border: 2px solid rgba(255, 193, 7, 0.5);
+  border: 1px solid var(--line-1);
   position: relative;
 }
 
@@ -393,50 +396,34 @@ li {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: radial-gradient(circle,
-    var(--bytebard-red) 0%,
-    #C62828 100%);
-  border: 3px solid var(--bytebard-gold);
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.5),
-              0 4px 8px rgba(0, 0, 0, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--accent);
+  border: 2px solid var(--accent-600);
+  box-shadow: 0 4px 8px var(--shadow-2);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .angle-inputs input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.15) translateY(-2px);
-  background: radial-gradient(circle,
-    var(--bytebard-gold) 0%,
-    #F9A825 100%);
-  box-shadow: 0 0 20px rgba(255, 193, 7, 0.7),
-              0 6px 12px rgba(0, 0, 0, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--accent-600);
+  box-shadow: 0 6px 12px var(--shadow-2);
 }
 
 .angle-inputs input[type="range"]::-moz-range-thumb {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: radial-gradient(circle,
-    var(--bytebard-red) 0%,
-    #C62828 100%);
-  border: 3px solid var(--bytebard-gold);
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.5),
-              0 4px 8px rgba(0, 0, 0, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--accent);
+  border: 2px solid var(--accent-600);
+  box-shadow: 0 4px 8px var(--shadow-2);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .angle-inputs input[type="range"]::-moz-range-thumb:hover {
   transform: scale(1.15) translateY(-2px);
-  background: radial-gradient(circle,
-    var(--bytebard-gold) 0%,
-    #F9A825 100%);
-  box-shadow: 0 0 20px rgba(255, 193, 7, 0.7),
-              0 6px 12px rgba(0, 0, 0, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--accent-600);
+  box-shadow: 0 6px 12px var(--shadow-2);
 }
 
 .angle-value {
@@ -485,14 +472,14 @@ li {
 }
 
 .wrong-result {
-  border: 2px solid var(--bytebard-orange);
-  border-left: 6px solid var(--bytebard-orange);
+  border: 2px solid var(--accent-600);
+  border-left: 6px solid var(--accent-600);
 }
 
 .correct-result {
-  border: 2px solid var(--bytebard-gold);
-  border-left: 6px solid var(--bytebard-gold);
-  box-shadow: 0 0 20px rgba(255, 193, 7, 0.2);
+  border: 2px solid var(--accent);
+  border-left: 6px solid var(--accent);
+  box-shadow: 0 10px 30px var(--shadow-1);
 }
 
 .correct-result::after {
@@ -515,7 +502,7 @@ li {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--bytebard-cream);
+  color: var(--text);
 }
 
 .result p {
@@ -526,14 +513,13 @@ li {
 }
 
 .wrong-result p {
-  color: var(--bytebard-orange);
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  color: var(--accent-600);
+  text-shadow: none;
 }
 
 .correct-result p {
-  color: var(--bytebard-gold);
-  text-shadow: 2px 2px 0px var(--bytebard-red),
-               3px 3px 0px rgba(0, 0, 0, 0.5);
+  color: var(--accent);
+  text-shadow: none;
 }
 
 @media print{
@@ -554,4 +540,122 @@ h1,
 .visual-comparison svg {
   margin: 0 auto;
   display: block;
+}
+
+/* === Title slide modernization === */
+.title-slide {
+  background: var(--bg-1) !important;
+  color: var(--text) !important;
+}
+
+/* Wordmark: no gradient fill, no glossy highlight */
+.flora-wordmark {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  color: var(--text-hi) !important;
+  text-shadow: none !important;
+}
+.flora-wordmark::after { content: none !important; }
+
+/* Tagline + subtitle: simple, high-contrast */
+.main-tagline { color: var(--muted) !important; }
+.subtitle-line {
+  color: var(--text-hi) !important;
+  border-left: 6px solid var(--accent) !important;
+  padding-left: 20px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  text-shadow: none;
+}
+
+/* Presentation meta card: dark surface, subtle border */
+.presentation-meta {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--line-1) !important;
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px var(--shadow-1);
+  backdrop-filter: none !important;
+}
+
+/* Kill any remaining text glows on headings */
+h1, h2, h3, .title, .logo-wordmark { text-shadow: none !important; }
+
+/* Navigation controls */
+.navigation {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 16px;
+}
+
+.nav-button {
+  background: linear-gradient(135deg, var(--flora-leaf), var(--flora-trunk));
+  color: var(--bg-1);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 50px;
+  padding: 0.7em 1.6em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(124, 197, 118, 0.25);
+  backdrop-filter: blur(6px);
+  min-width: 120px;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--flora-trunk), var(--flora-root));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(43, 166, 160, 0.35);
+}
+
+.nav-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px var(--shadow-1);
+}
+
+.nav-button:disabled {
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px var(--shadow-1);
+  opacity: 0.6;
+}
+
+.nav-button:focus {
+  outline: 2px solid var(--flora-circuit);
+  outline-offset: 3px;
+}
+
+/* Slide counter */
+.slide-counter {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.6em 1.2em;
+  border-radius: 50px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--line-1);
+  box-shadow: 0 6px 18px var(--shadow-1);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  letter-spacing: 0.02em;
+}
+
+/* Print mode should also use dark variables (no literals) */
+@media print {
+  body { background: var(--bg-0) !important; color: var(--text) !important; }
+  h1, h2, h3, p, li { color: var(--text) !important; }
+  .navigation, .slide-counter { display: none !important; }
 }

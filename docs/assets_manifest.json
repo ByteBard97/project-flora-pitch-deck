@@ -1,11 +1,27 @@
 {
   "build_info": {
     "title": "Project Flora: Seeding the Future of Landscape Design",
-    "build_time": "2025-09-20T18:42:52.998733",
-    "total_assets": 2,
+    "build_time": "2025-09-20T19:00:48.264912",
+    "total_assets": 4,
     "webp_quality": 90
   },
   "assets": [
+    {
+      "local": "_project-flora-pitch-deck_flora-tree.webp",
+      "original": "/home/geoff/projects/project-flora-pitch-deck/flora-tree.webp",
+      "type": "image",
+      "used_in_slide": "01-title.html",
+      "size_bytes": 37476,
+      "size_human": "36.6KB"
+    },
+    {
+      "local": "_project-flora-pitch-deck_flora-tree.webp",
+      "original": "/home/geoff/projects/project-flora-pitch-deck/flora-tree.webp",
+      "type": "image",
+      "used_in_slide": "01-title.html",
+      "size_bytes": 37476,
+      "size_human": "36.6KB"
+    },
     {
       "local": "_project-flora-pitch-deck_flora-tree.webp",
       "original": "/home/geoff/projects/project-flora-pitch-deck/flora-tree.webp",

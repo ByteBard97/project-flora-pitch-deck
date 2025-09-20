@@ -42,6 +42,15 @@
       text-align: center;
     }
 
+    /* Flora logo */
+    .flora-logo {
+      width: clamp(200px, 25vw, 350px);
+      height: clamp(200px, 25vw, 350px);
+      margin: 0 auto 2rem auto;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+    }
+
     /* Main Flora wordmark */
     .flora-wordmark {
       font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -53,24 +62,7 @@
       display: inline-block;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
-
-      /* Flora gradient */
-      background: linear-gradient(180deg, var(--leaf-green), var(--digital-teal) 55%, var(--flora-green));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
       position: relative;
-    }
-
-    /* Glossy highlight effect */
-    .flora-wordmark::after {
-      content: "";
-      position: absolute;
-      inset: 0 0 55% 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%);
-      -webkit-mask-image: linear-gradient(90deg, transparent 0 6%, #000 20% 80%, transparent 94% 100%);
-      mask-image: linear-gradient(90deg, transparent 0 6%, #000 20% 80%, transparent 94% 100%);
-      pointer-events: none;
     }
 
     /* Main tagline */
@@ -96,11 +88,7 @@
 
     /* Presentation meta info */
     .presentation-meta {
-      background: rgba(245, 243, 238, 0.8);
-      border: 2px solid var(--digital-teal);
-      border-radius: 20px;
       padding: 2rem 3rem;
-      backdrop-filter: blur(10px);
       display: grid;
       gap: 1rem;
       justify-items: center;
@@ -178,6 +166,7 @@
 
   <div class="title-content">
     <div>
+      <img src="../flora-tree.webp" alt="Flora Logo" class="flora-logo">
       <h1 class="flora-wordmark">Flora</h1>
       <p class="main-tagline">Landscape design software • tech + nature</p>
     </div>
