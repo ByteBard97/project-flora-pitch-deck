@@ -3,14 +3,8 @@
     /* Import Google Fonts for Flora branding */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
-    /* Flora theme tokens */
+    /* Flora theme tokens - Use centralized colors instead of defining here */
     .title-slide {
-      --flora-green: #2C7A5A;
-      --digital-teal: #2BA6A0;
-      --leaf-green: #7CC576;
-      --soft-aqua: #8ED1C6;
-      --parchment: #F5F3EE;
-      --charcoal: #1D1D1D;
 
       min-height: 100vh;
       display: grid;
@@ -20,18 +14,21 @@
       overflow: hidden;
     }
 
-    /* Background tree image */
-    .title-slide::before {
-      content: '';
+    /* Background tree image using img element instead of CSS background */
+    .title-slide {
+      position: relative;
+    }
+
+    .title-slide .bg-image {
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
       width: 50%;
-      background: url('../flora-tree.webp') no-repeat center right;
-      background-size: cover;
       opacity: 0.15;
-      z-index: 1;
+      z-index: -1;
+      object-fit: cover;
+      object-position: center right;
     }
 
     .title-content {
@@ -176,6 +173,8 @@
       }
     }
   </style>
+
+  <img src="../flora-tree.webp" alt="" class="bg-image">
 
   <div class="title-content">
     <div>

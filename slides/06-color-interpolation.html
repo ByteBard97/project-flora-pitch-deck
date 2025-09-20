@@ -72,7 +72,7 @@
         hsl(300, 100%, 50%),
         hsl(360, 100%, 50%)
       );
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 26px var(--charcoal);
     }
 
     /* Concentric inner mask to make a neat ring (no offset) */
@@ -94,10 +94,10 @@
     .color-interpolation .legend2 {
       display: grid;
       gap: 12px;
-      color: #cfe0f1;
+      color: var(--soft-aqua);
       font-size: 16px;
       padding: 20px;
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--charcoal);
       border-radius: 16px;
       border: 2px solid rgba(255, 193, 7, 0.3);
       max-width: 380px;
@@ -125,7 +125,7 @@
       height: 12px;
       border-radius: 50%;
       display: inline-block;
-      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35) inset;
+      box-shadow: 0 0 0 2px var(--charcoal) inset;
     }
 
     .color-interpolation .mono {
@@ -181,7 +181,7 @@
           cy="200"
           r="179"
           fill="none"
-          stroke="rgba(255,255,255,.22)"
+          stroke="var(--parchment)"
           stroke-width="1"
         />
         <!-- arc between A and B (shortest arc) -->
@@ -189,7 +189,7 @@
           id="dwArc"
           d=""
           fill="none"
-          stroke="#FFD180"
+          stroke="var(--leaf-green)"
           stroke-width="5"
           stroke-linecap="round"
           stroke-dasharray="6,7"
@@ -203,7 +203,7 @@
             y1="200"
             x2="200"
             y2="42"
-            stroke="#fff"
+            stroke="var(--parchment)"
             stroke-width="7"
           />
           <circle
@@ -211,8 +211,8 @@
             cx="200"
             cy="42"
             r="9"
-            fill="#fff"
-            stroke="rgba(0,0,0,.5)"
+            fill="var(--parchment)"
+            stroke="var(--charcoal)"
             stroke-width="2"
           />
           <text
@@ -220,7 +220,7 @@
             x="200"
             y="28"
             text-anchor="middle"
-            fill="#e6eef9"
+            fill="var(--soft-aqua)"
             font-size="13"
           >
             A
@@ -233,7 +233,7 @@
             y1="200"
             x2="200"
             y2="42"
-            stroke="#fff"
+            stroke="var(--parchment)"
             stroke-width="7"
           />
           <circle
@@ -241,8 +241,8 @@
             cx="200"
             cy="42"
             r="9"
-            fill="#fff"
-            stroke="rgba(0,0,0,.5)"
+            fill="var(--parchment)"
+            stroke="var(--charcoal)"
             stroke-width="2"
           />
           <text
@@ -250,7 +250,7 @@
             x="200"
             y="28"
             text-anchor="middle"
-            fill="#e6eef9"
+            fill="var(--soft-aqua)"
             font-size="13"
           >
             B
@@ -264,7 +264,7 @@
             y1="200"
             x2="200"
             y2="42"
-            stroke="#fff"
+            stroke="var(--parchment)"
             stroke-width="7"
           />
           <circle
@@ -272,8 +272,8 @@
             cx="200"
             cy="42"
             r="9"
-            fill="#fff"
-            stroke="rgba(0,0,0,.5)"
+            fill="var(--parchment)"
+            stroke="var(--charcoal)"
             stroke-width="2"
           />
           <text
@@ -281,7 +281,7 @@
             x="200"
             y="28"
             text-anchor="middle"
-            fill="#e6eef9"
+            fill="var(--soft-aqua)"
             font-size="13"
           >
             circular mid
@@ -295,7 +295,7 @@
             y1="200"
             x2="200"
             y2="42"
-            stroke="#fff"
+            stroke="var(--parchment)"
             stroke-width="5"
             stroke-dasharray="4,6"
           />
@@ -304,8 +304,8 @@
             cx="200"
             cy="42"
             r="7"
-            fill="#fff"
-            stroke="rgba(0,0,0,.5)"
+            fill="var(--parchment)"
+            stroke="var(--charcoal)"
             stroke-width="2"
           />
           <text
@@ -313,7 +313,7 @@
             x="200"
             y="28"
             text-anchor="middle"
-            fill="#e6eef9"
+            fill="var(--soft-aqua)"
             font-size="12"
           >
             naive mid

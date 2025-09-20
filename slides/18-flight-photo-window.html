@@ -92,7 +92,7 @@
 
     .method-difference h4 {
       margin: 0 0 0.5vh 0;
-      color: #ff5722;
+      color: var(--flora-green);
       font-size: 1.1em;
     }
 
@@ -168,7 +168,7 @@
         #C62828 100%);
       border: 2px solid var(--bytebard-gold);
       box-shadow: 0 0 8px rgba(229, 57, 53, 0.5),
-                  0 3px 6px rgba(0, 0, 0, 0.3),
+                  0 3px 6px var(--charcoal),
                   inset 0 -1px 2px rgba(0, 0, 0, 0.2);
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -180,7 +180,7 @@
         var(--bytebard-gold) 0%,
         #F9A825 100%);
       box-shadow: 0 0 15px rgba(255, 193, 7, 0.7),
-                  0 4px 8px rgba(0, 0, 0, 0.3),
+                  0 4px 8px var(--charcoal),
                   inset 0 -1px 2px rgba(0, 0, 0, 0.2);
     }
 
@@ -193,7 +193,7 @@
         #C62828 100%);
       border: 2px solid var(--bytebard-gold);
       box-shadow: 0 0 8px rgba(229, 57, 53, 0.5),
-                  0 3px 6px rgba(0, 0, 0, 0.3),
+                  0 3px 6px var(--charcoal),
                   inset 0 -1px 2px rgba(0, 0, 0, 0.2);
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -205,7 +205,7 @@
         var(--bytebard-gold) 0%,
         #F9A825 100%);
       box-shadow: 0 0 15px rgba(255, 193, 7, 0.7),
-                  0 4px 8px rgba(0, 0, 0, 0.3),
+                  0 4px 8px var(--charcoal),
                   inset 0 -1px 2px rgba(0, 0, 0, 0.2);
     }
 
@@ -278,7 +278,7 @@
     .flight-span-label {
       text-align: center;
       font-size: 0.9em;
-      color: #FFC107;
+      color: var(--digital-teal);
       font-weight: bold;
       margin-top: -1vh;
     }
@@ -298,12 +298,12 @@
     }
 
     .result-card.good {
-      border-color: #4caf50;
-      background: rgba(76, 175, 80, 0.1);
+      border-color: var(--flora-green);
+      background: var(--flora-green-10);
     }
 
     .result-card.bad {
-      border-color: #ff5722;
+      border-color: var(--flora-green);
       background: rgba(255, 87, 34, 0.1);
     }
 
@@ -394,7 +394,7 @@
               cy="100"
               r="80"
               fill="none"
-              stroke="#333"
+              stroke="var(--charcoal)"
               stroke-width="2"
             />
             <g class="photo-windows"></g>
@@ -404,11 +404,11 @@
               y1="100"
               x2="100"
               y2="30"
-              stroke="#2196F3"
+              stroke="var(--digital-teal)"
               stroke-width="4"
               stroke-linecap="round"
             />
-            <circle cx="100" cy="100" r="5" fill="#fff" />
+            <circle cx="100" cy="100" r="5" fill="var(--parchment)" />
             <text
               x="100"
               y="10"
@@ -456,7 +456,7 @@
               cy="100"
               r="80"
               fill="none"
-              stroke="#333"
+              stroke="var(--charcoal)"
               stroke-width="2"
             />
             <g class="photo-windows"></g>
@@ -466,11 +466,11 @@
               y1="100"
               x2="100"
               y2="30"
-              stroke="#4CAF50"
+              stroke="var(--flora-green)"
               stroke-width="4"
               stroke-linecap="round"
             />
-            <circle cx="100" cy="100" r="5" fill="#fff" />
+            <circle cx="100" cy="100" r="5" fill="var(--parchment)" />
             <text
               x="100"
               y="10"
@@ -513,8 +513,8 @@
       </div>
 
       <div class="explanation">
-        <strong>Photo Windows:</strong> <span style="color: #FF9800;">Morning golden hour (9-11 AM)</span> and
-        <span style="color: #2196F3;">afternoon window (2-4 PM)</span> shown as colored arcs.
+        <strong>Photo Windows:</strong> <span style="color: var(--digital-teal);">Morning golden hour (9-11 AM)</span> and
+        <span style="color: var(--digital-teal);">afternoon window (2-4 PM)</span> shown as colored arcs.
         <span id="explanation-text"
           >Drag sliders to see how each method chooses a photo window.</span
         >
@@ -536,7 +536,7 @@
             cy="200"
             r="150"
             fill="none"
-            stroke="#333"
+            stroke="var(--charcoal)"
             stroke-width="1"
             stroke-dasharray="2,2"
             opacity="0.5"
@@ -548,7 +548,7 @@
             y1="200"
             x2="350"
             y2="200"
-            stroke="#333"
+            stroke="var(--charcoal)"
             stroke-width="1"
             opacity="0.3"
           />
@@ -557,7 +557,7 @@
             y1="50"
             x2="200"
             y2="350"
-            stroke="#333"
+            stroke="var(--charcoal)"
             stroke-width="1"
             opacity="0.3"
           />
@@ -573,7 +573,7 @@
             <path
               id="morning-arc"
               fill="rgba(255, 152, 0, 0.2)"
-              stroke="#FF9800"
+              stroke="var(--digital-teal)"
               stroke-width="2"
             />
             <text
@@ -581,7 +581,7 @@
               x="240"
               y="60"
               text-anchor="middle"
-              fill="#FF9800"
+              fill="var(--digital-teal)"
               font-size="11"
               font-weight="bold"
             >
@@ -593,8 +593,8 @@
           <g id="afternoon-window">
             <path
               id="afternoon-arc"
-              fill="rgba(33, 150, 243, 0.2)"
-              stroke="#2196F3"
+              fill="var(--flora-teal-20)"
+              stroke="var(--digital-teal)"
               stroke-width="2"
             />
             <text
@@ -602,7 +602,7 @@
               x="240"
               y="180"
               text-anchor="middle"
-              fill="#2196F3"
+              fill="var(--digital-teal)"
               font-size="11"
               font-weight="bold"
             >
@@ -617,16 +617,16 @@
             y1="200"
             x2="280"
             y2="200"
-            stroke="#2196F3"
+            stroke="var(--digital-teal)"
             stroke-width="3"
           />
-          <circle id="dep-point" cx="280" cy="200" r="5" fill="#2196F3" />
+          <circle id="dep-point" cx="280" cy="200" r="5" fill="var(--digital-teal)" />
           <text
             id="dep-label"
             x="280"
             y="190"
             text-anchor="middle"
-            fill="#2196F3"
+            fill="var(--digital-teal)"
             font-size="11"
           >
             Departure
@@ -639,16 +639,16 @@
             y1="200"
             x2="280"
             y2="200"
-            stroke="#4CAF50"
+            stroke="var(--flora-green)"
             stroke-width="3"
           />
-          <circle id="arr-point" cx="280" cy="200" r="5" fill="#4CAF50" />
+          <circle id="arr-point" cx="280" cy="200" r="5" fill="var(--flora-green)" />
           <text
             id="arr-label"
             x="280"
             y="190"
             text-anchor="middle"
-            fill="#4CAF50"
+            fill="var(--flora-green)"
             font-size="11"
           >
             Arrival
@@ -658,7 +658,7 @@
           <path
             id="distance-arc"
             fill="none"
-            stroke="#FFC107"
+            stroke="var(--digital-teal)"
             stroke-width="2"
             stroke-dasharray="3,3"
             opacity="0.8"

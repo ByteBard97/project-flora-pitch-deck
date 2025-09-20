@@ -52,7 +52,7 @@
   font-size: 3rem;
   color: var(--text-primary);
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, var(--gold), #4CAF50);
+  background: linear-gradient(135deg, var(--gold), var(--flora-green));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -80,7 +80,7 @@
 
 .logo-icon {
   font-size: 4rem;
-  background: linear-gradient(135deg, #4CAF50, var(--gold));
+  background: linear-gradient(135deg, var(--flora-green), var(--gold));
   border-radius: 50%;
   width: 80px;
   height: 80px;
@@ -145,7 +145,7 @@
 .plant-silhouette {
   position: absolute;
   bottom: 30%;
-  background: #4CAF50;
+  background: var(--flora-green);
   border-radius: 50% 10% 50% 50%;
   opacity: 0.6;
 }
@@ -206,9 +206,9 @@
   right: 0;
   bottom: 0;
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(76, 175, 80, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 70% 40%, rgba(255, 193, 7, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 40% 80%, rgba(76, 175, 80, 0.1) 1px, transparent 1px);
+    radial-gradient(circle at 20% 20%, var(--flora-green-10) 1px, transparent 1px),
+    radial-gradient(circle at 70% 40%, var(--flora-teal-10) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, var(--flora-green-10) 1px, transparent 1px);
   background-size: 100px 100px, 150px 150px, 120px 120px;
   animation: float 20s ease-in-out infinite;
 }

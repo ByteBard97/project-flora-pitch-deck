@@ -419,37 +419,37 @@ li {
 }
 
 .nav-button {
-  background: var(--bytebard-red);
+  background: var(--flora-green);
   color: white;
-  border: 3px solid var(--bytebard-navy);
-  border-radius: 50px;
+  border: 2px solid var(--digital-teal);
+  border-radius: 25px;
   padding: 12px 24px;
   cursor: pointer;
-  font-weight: 800;
-  font-size: 1.1em;
-  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1em;
+  font-family: "Inter", sans-serif;
   transition: all 0.3s;
-  box-shadow: 3px 3px 0px var(--bytebard-navy);
+  box-shadow: 2px 2px 8px rgba(44, 122, 90, 0.3);
 }
 
 .nav-button:hover {
-  background: var(--bytebard-gold);
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0px var(--bytebard-navy);
+  background: var(--digital-teal);
+  transform: translateY(-1px);
+  box-shadow: 2px 4px 12px rgba(43, 166, 160, 0.4);
 }
 
 .nav-button:disabled {
-  background: var(--bb-text-muted);
-  color: var(--bb-text-muted);
+  background: var(--charcoal);
+  color: rgba(255, 255, 255, 0.5);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-  border-color: var(--bb-text-secondary);
+  border-color: rgba(44, 122, 90, 0.3);
 }
 
 .nav-button:focus {
-  outline: 3px solid var(--bytebard-gold);
-  outline-offset: 3px;
+  outline: 2px solid var(--leaf-green);
+  outline-offset: 2px;
 }
 
 .slide-counter {

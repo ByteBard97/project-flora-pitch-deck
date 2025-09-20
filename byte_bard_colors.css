@@ -1,41 +1,64 @@
 :root {
-  /* Byte Bard Color System */
-  --bb-navy-dark: #0A3D82;
-  --bb-navy-medium: #1B4A8C;
-  --bb-cream: #F5F0E6;
-  --bb-red: #E53935;
-  --bb-gold: #FFC107;
-  --bb-bg-primary: #0A3D82;
-  --bb-bg-secondary: #1B4A8C;
-  --bb-text-primary: #F5F0E6;
-  --bb-text-secondary: #B8C5D6;
-  --bb-text-muted: #8A9BAE;
-  --bb-card-bg: rgba(10, 61, 130, 0.1);
-  --bb-card-border: #FFC107;
-  --bb-code-bg: rgba(0, 0, 0, 0.5);
-  --bb-code-text: #F5F0E6;
-  --bb-success: #FFC107;
-  --bb-warning: #FF6B35;
-  --bb-error: #E53935;
-  --bb-info: #B8C5D6;
-  --bb-white-5: rgba(245, 240, 230, 0.05);
-  --bb-white-10: rgba(245, 240, 230, 0.1);
-  --bb-white-15: rgba(245, 240, 230, 0.15);
-  --bb-navy-10: rgba(10, 61, 130, 0.1);
-  --bb-navy-20: rgba(10, 61, 130, 0.2);
-  --bb-gold-20: rgba(255, 193, 7, 0.2);
-  --bb-red-20: rgba(229, 57, 53, 0.2);
+  /* Flora Color System */
+  --flora-green: #2C7A5A;      /* Primary: Deep natural green */
+  --digital-teal: #2BA6A0;     /* Primary: Tech, modern, fresh */
+  --leaf-green: #7CC576;       /* Secondary: Bright organic highlight */
+  --soft-aqua: #8ED1C6;        /* Secondary: Calm, approachable */
+  --parchment: #F5F3EE;        /* Neutral: Warm, natural background */
+  --charcoal: #1D1D1D;         /* Neutral: Tech sophistication */
+
+  /* Flora semantic colors */
+  --flora-bg-primary: var(--parchment);
+  --flora-bg-secondary: var(--soft-aqua);
+  --flora-text-primary: var(--charcoal);
+  --flora-text-secondary: var(--flora-green);
+  --flora-text-muted: rgba(29, 29, 29, 0.6);
+  --flora-card-bg: rgba(245, 243, 238, 0.8);
+  --flora-card-border: var(--digital-teal);
+  --flora-code-bg: rgba(44, 122, 90, 0.1);
+  --flora-code-text: var(--flora-green);
+  --flora-success: var(--leaf-green);
+  --flora-warning: #FF8A65;
+  --flora-error: #E57373;
+  --flora-info: var(--digital-teal);
+
+  /* Opacity variants */
+  --flora-green-10: rgba(44, 122, 90, 0.1);
+  --flora-green-20: rgba(44, 122, 90, 0.2);
+  --flora-teal-10: rgba(43, 166, 160, 0.1);
+  --flora-teal-20: rgba(43, 166, 160, 0.2);
+  --flora-leaf-20: rgba(124, 197, 118, 0.2);
 
   /* Legacy variable mappings for compatibility */
-  --bg: var(--bb-bg-primary);
-  --card: var(--bb-bg-secondary);
-  --ink: var(--bb-text-primary);
-  --muted: var(--bb-text-muted);
-  --accent: var(--bb-red);
-  --accent2: var(--bb-gold);
-  --accent3: var(--bb-cream);
-  --bytebard-navy: var(--bb-navy-dark);
-  --bytebard-red: var(--bb-red);
-  --bytebard-gold: var(--bb-gold);
-  --bytebard-cream: var(--bb-cream);
+  --bg: var(--flora-bg-primary);
+  --card: var(--flora-bg-secondary);
+  --ink: var(--flora-text-primary);
+  --muted: var(--flora-text-muted);
+  --accent: var(--flora-green);
+  --accent2: var(--digital-teal);
+  --accent3: var(--leaf-green);
+  --bytebard-navy: var(--flora-green);
+  --bytebard-red: var(--flora-green);
+  --bytebard-gold: var(--digital-teal);
+  --bytebard-cream: var(--parchment);
+
+  /* ByteBard compatibility mappings */
+  --bb-navy-dark: var(--flora-green);
+  --bb-navy-medium: var(--digital-teal);
+  --bb-cream: var(--parchment);
+  --bb-red: var(--flora-green);
+  --bb-gold: var(--digital-teal);
+  --bb-bg-primary: var(--flora-bg-primary);
+  --bb-bg-secondary: var(--flora-bg-secondary);
+  --bb-text-primary: var(--flora-text-primary);
+  --bb-text-secondary: var(--flora-text-secondary);
+  --bb-text-muted: var(--flora-text-muted);
+  --bb-card-bg: var(--flora-card-bg);
+  --bb-card-border: var(--flora-card-border);
+  --bb-code-bg: var(--flora-code-bg);
+  --bb-code-text: var(--flora-code-text);
+  --bb-success: var(--flora-success);
+  --bb-warning: var(--flora-warning);
+  --bb-error: var(--flora-error);
+  --bb-info: var(--flora-info);
 }
