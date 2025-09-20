@@ -7,7 +7,9 @@
       "Bash(./build.sh)",
       "Bash(/dev/null)",
       "Bash(find:*)",
-      "Bash(rsync:*)"
+      "Bash(rsync:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
