@@ -1,0 +1,51 @@
+Original CSS: 22,979 chars
+Pruned CSS:   11,557 chars
+Removed blocks: 80
+
+First 40 removed headers:
+*
+a,
+.emphasis,
+.accent
+a:hover
+.button, .cta
+.button:hover, .cta:hover
+.tech-accent
+.flora-card
+.flora-card:hover
+.flora-accent-border
+.teal-accent-border
+.leaf-accent-border
+.flora-divider
+.flora-divider::before
+.flora-gradient-primary
+.flora-gradient-secondary
+.flora-gradient-subtle
+.slideshow-container
+#slide-content
+.two-column
+.two-column-equal
+.two-column-equal img
+.three-column
+.card,
+.highlight-box,
+.success-box,
+.warning-box,
+.info-box
+.highlight-box
+.success-box
+.success-box::after
+.warning-box
+.info-box
+.code-block
+.navigation
+.nav-button
+.nav-button:hover
+.nav-button:disabled
+.nav-button:focus
+.slide-counter
+.status-grid
+.status-item
+.status-item.completed
+.status-item.in-progress
+.status-item.critical

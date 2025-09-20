@@ -24,39 +24,5 @@ build:
   webp_quality: 90
   max_image_width: 1920
   compress_json: true
-colors:
-  # Flora Style Guide Colors
-  flora_green: '#2C7A5A'      # Primary: Deep natural green
-  digital_teal: '#2BA6A0'     # Primary: Tech, modern, fresh
-  leaf_green: '#7CC576'       # Secondary: Bright organic highlight
-  soft_aqua: '#8ED1C6'        # Secondary: Calm, approachable
-  parchment: '#F5F3EE'        # Neutral: Warm, natural background
-  charcoal: '#1D1D1D'         # Neutral: Tech sophistication
-
-  # Mapped to existing variable names for compatibility
-  navy_dark: '#2C7A5A'        # Flora Green
-  navy_medium: '#2BA6A0'      # Digital Teal
-  cream: '#F5F3EE'            # Parchment
-  red: '#E53935'              # Keep for error states
-  gold: '#7CC576'             # Leaf Green (was gold, now organic highlight)
-  bg_primary: '#F5F3EE'       # Parchment background
-  bg_secondary: '#2BA6A0'     # Digital Teal
-  text_primary: '#1D1D1D'     # Charcoal for readability
-  text_secondary: '#2C7A5A'   # Flora Green
-  text_muted: '#6B6B6B'       # Muted charcoal
-  card_bg: rgba(44, 122, 90, 0.05)    # Soft Flora Green tint
-  card_border: '#2BA6A0'      # Digital Teal
-  code_bg: rgba(29, 29, 29, 0.9)      # Charcoal
-  code_text: '#F5F3EE'        # Parchment
-  success: '#7CC576'          # Leaf Green
-  warning: '#FF6B35'          # Keep existing
-  error: '#E53935'            # Keep existing
-  info: '#8ED1C6'             # Soft Aqua
-  white_5: rgba(245, 243, 238, 0.05)  # Parchment variations
-  white_10: rgba(245, 243, 238, 0.1)
-  white_15: rgba(245, 243, 238, 0.15)
-  flora_10: rgba(44, 122, 90, 0.1)    # Flora Green variations
-  flora_20: rgba(44, 122, 90, 0.2)
-  teal_10: rgba(43, 166, 160, 0.1)    # Digital Teal variations
-  teal_20: rgba(43, 166, 160, 0.2)
-  leaf_20: rgba(124, 197, 118, 0.2)   # Leaf Green variations
+# Colors are now centrally defined in styles.css and byte_bard_colors.css
+# No color definitions should exist in this YAML file!
