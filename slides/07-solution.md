@@ -27,32 +27,7 @@ _Introducing Project Flora_
 
 ---
 
-## Built on Three Foundational Pillars
-
-<div class="grid-3 gap-6">
-
-<div class="card text-center" style="border-left:4px solid var(--flora-green)">
-  <div style="font-size:2rem">🌿</div>
-  <h4>A Deep, Curated Native Plant Database</h4>
-  <p class="pillar-subtitle">The Data Moat</p>
-  <p>Comprehensive, regional plant data with ecological relationships, soil preferences, and companion planting information.</p>
-</div>
-
-<div class="card text-center" style="border-left:4px solid var(--gold)">
-  <div style="font-size:2rem">✨</div>
-  <h4>An Intuitive, Beginner-Focused Design Experience</h4>
-  <p class="pillar-subtitle">The Accessibility Moat</p>
-  <p>Powerful design tools that feel as simple as sketching on paper, with intelligent guidance every step of the way.</p>
-</div>
-
-<div class="card text-center" style="border-left:4px solid var(--digital-teal)">
-  <div style="font-size:2rem">🤝</div>
-  <h4>A Community-Driven Knowledge Platform</h4>
-  <p class="pillar-subtitle">The Network Effect Moat</p>
-  <p>Real user experiences, photos, and reviews create an ever-growing knowledge base that benefits everyone.</p>
-</div>
-
-</div>
+<ThreePillars />
 
 ---
 

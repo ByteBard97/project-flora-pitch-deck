@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Landscape Software Ecosystem is Broken</title>
+    <link rel="stylesheet" href="../presentation_bundle/css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--bg-1);
+            color: var(--text);
+            font-family: var(--font-body);
+        }
+
+        .slide {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+  <h1>The Landscape Software Ecosystem is Broken</h1>
+  <p class="subtitle">A Tale of Two Frustrations</p>
+
+  <div class="split-layout">
+    <div class="frustration-column">
+      <h3>👩‍💼 For Annie (The Professional)</h3>
+      <div class="panel">
+        <h4>Professional tools are powerful, but...</h4>
+        <ul>
+          <li><strong>Clunky & Archaic:</strong> "archaic" interfaces (DynaSCAPE)</li>
+          <li><strong>Expensive:</strong> The "plugin tax" (Land F/X + AutoCAD)</li>
+          <li><strong>Ecologically Blind:</strong> Plants are just generic objects</li>
+          <li><strong>Disconnected Workflow:</strong> Juggling AutoCAD, Adobe, spreadsheets, and external native plant websites</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="frustration-column">
+      <h3>🏠 For Jake (The Prosumer)</h3>
+      <div class="panel">
+        <h4>Consumer apps are easy, but...</h4>
+        <ul>
+          <li><strong>Simplistic:</strong> Hit an "aesthetic ceiling" quickly</li>
+          <li><strong>Aesthetically Driven:</strong> Form over function</li>
+          <li><strong>Ecologically Ignorant:</strong> Non-regional plant libraries</li>
+          <li><strong>Hack Together Solutions:</strong> PowerPoint or even <em>The Sims</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="visual-metaphor">
+    <div class="spectrum-title">
+      <h3>The Software Complexity Spectrum</h3>
+    </div>
+
+    <div class="container-panel">
+      <!-- The line with arrows -->
+      <div class="spectrum-line-wrapper">
+        <div class="spectrum-arrow-line"></div>
+      </div>
+
+      <!-- The markers positioned on the line -->
+      <div class="spectrum-markers">
+        <div class="marker">
+          <div class="marker-box">
+            <img src="assets/_project-flora-pitch-deck_complexity-signifier.webp" alt="Complex Math" class="spectrum-image">
+          </div>
+          <span class="marker-label">Overly Complex</span>
+        </div>
+
+        <div class="marker">
+          <div class="question-mark">?</div>
+          <span class="marker-label">You Are Here</span>
+        </div>
+
+        <div class="marker">
+          <div class="marker-box">
+            <img src="assets/_project-flora-pitch-deck_overly-simple.webp" alt="Simple Math" class="spectrum-image">
+          </div>
+          <span class="marker-label">Overly Simple</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Speaker Notes Section -->
+  <div class="speaker-notes" id="speaker-notes">
+    <div class="speaker-notes-header">
+      <h4>Speaker Notes</h4>
+      <button class="close-notes" onclick="toggleSpeakerNotes()">×</button>
+    </div>
+    <div class="speaker-notes-content">
+      <p><strong>Opening:</strong> "The landscape design software ecosystem is broken, and it's broken in two very different ways."</p>
+
+      <p><strong>Professional Side:</strong> On one side, professionals are stuck with powerful but punishing tools. Platforms like AutoCAD with Land F/X or Vectorworks Landmark are technically capable — but they come with annual costs well over $1,500 and require extensive training. They treat plants as generic CAD objects, ignoring ecological reality, and force small design firms into inefficient workarounds.</p>
+
+      <p><strong>The "Franken-stack":</strong> The result is a fragmented workflow: CAD for drafting, Illustrator for presentation, spreadsheets for takeoffs, and external websites for plant research. This "Franken-stack" drains time and money while increasing the risk of error.</p>
+
+      <p><strong>Consumer Side:</strong> On the other side, consumers and DIY designers rely on mobile-first apps like iScape or visualization tools like SketchUp. These are easy to pick up, but they're shallow — plants are treated as decorative clip art, and there's no ecological intelligence built in. Users quickly hit an "aesthetic ceiling."</p>
+
+      <p><strong>The Deeper Questions:</strong> They may be able to visualize a patio or a garden bed, but they can't answer the deeper questions: Will this survive in my soil? Will it support pollinators? Will it thrive in this climate? Many end up hacking together designs in PowerPoint or even video games just to get the look they want.</p>
+
+      <p><strong>Core Tension:</strong> This is the core tension: today's tools are either overly complex and expensive, or overly simplistic and ecologically blind. And in between those extremes lies a massive unmet need.</p>
+    </div>
+  </div>
+
+  <!-- Speaker Notes Toggle Button -->
+  <button class="speaker-notes-toggle" onclick="toggleSpeakerNotes()" title="Toggle Speaker Notes">
+    📝 Notes
+  </button>
+</div>
+
+<style>
+.slide h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-hi);
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.frustration-column h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.pain-point {
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.pain-point h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-hi);
+}
+
+.pain-point ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pain-point li {
+  margin-bottom: 0.8rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.pain-point li strong {
+  color: var(--text-hi);
+}
+
+.visual-metaphor {
+  margin-top: 2rem;
+}
+
+.spectrum-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.spectrum-title h3 {
+  font-size: 1.2rem;
+  color: var(--text-hi);
+  margin: 0;
+}
+
+.spectrum-container {
+  background: var(--surface-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  padding: 4rem 2rem;
+  position: relative;
+  min-height: 200px;
+}
+
+/* The line with arrows */
+.spectrum-line-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 6px;
+  transform: translateY(-50%);
+}
+
+.spectrum-arrow-line {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 6px;
+  background: linear-gradient(90deg,
+    var(--accent-600) 0%,
+    var(--accent) 50%,
+    var(--accent-600) 100%);
+  border-radius: 3px;
+}
+
+.spectrum-arrow-line::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 16px solid var(--accent-600);
+}
+
+.spectrum-arrow-line::after {
+  content: '';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 16px solid var(--accent-600);
+}
+
+/* The markers positioned on the line */
+.spectrum-markers {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 60px;
+  z-index: 10;
+}
+
+.marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.marker-box {
+  width: 120px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  position: relative;
+  top: -10px;
+}
+
+.complexity-symbols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  width: 80px;
+  height: 60px;
+  place-items: center;
+}
+
+.math-symbol, .integral, .formula {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.math-symbol {
+  font-size: 1.2rem;
+}
+
+.integral {
+  font-size: 1.8rem;
+}
+
+.formula {
+  grid-column: span 2;
+  font-size: 1.2rem;
+}
+
+.spectrum-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.question-mark {
+  width: 80px;
+  height: 80px;
+  background: var(--accent-600);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-hi);
+  position: relative;
+  top: -10px;
+}
+
+.question-mark::after {
+  content: '?';
+}
+
+.marker-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+  white-space: nowrap;
+}
+
+/* Speaker Notes Styles */
+.speaker-notes {
+  position: fixed;
+  top: 50%;
+  right: -400px;
+  width: 380px;
+  max-height: 80vh;
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%);
+  transition: right 0.3s ease-out;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.speaker-notes.visible {
+  right: 20px;
+}
+
+.speaker-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--line-1);
+}
+
+.speaker-notes-header h4 {
+  margin: 0;
+  color: var(--text-hi);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.close-notes {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-notes:hover {
+  background: var(--surface-2);
+  color: var(--text-hi);
+}
+
+.speaker-notes-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(80vh - 60px);
+}
+
+.speaker-notes-content p {
+  margin-bottom: 1rem;
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.speaker-notes-content p:last-child {
+  margin-bottom: 0;
+}
+
+.speaker-notes-content strong {
+  color: var(--text-hi);
+  font-weight: 600;
+}
+
+/* Speaker Notes Toggle Button */
+.speaker-notes-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.speaker-notes-toggle:hover {
+  background: var(--accent);
+  color: var(--text-hi);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .spectrum-line {
+    left: 120px;
+    right: 120px;
+  }
+
+  .speaker-notes {
+    width: 90vw;
+    right: -95vw;
+  }
+
+  .speaker-notes.visible {
+    right: 5vw;
+  }
+}
+</style>
+
+<script>
+function toggleSpeakerNotes() {
+  const notes = document.getElementById('speaker-notes');
+  notes.classList.toggle('visible');
+}
+
+// Hide speaker notes when clicking outside
+document.addEventListener('click', function(event) {
+  const notes = document.getElementById('speaker-notes');
+  const toggle = document.querySelector('.speaker-notes-toggle');
+
+  if (notes.classList.contains('visible') &&
+      !notes.contains(event.target) &&
+      !toggle.contains(event.target)) {
+    notes.classList.remove('visible');
+  }
+});
+
+// Keyboard shortcut: Press 'N' to toggle notes
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'n' || event.key === 'N') {
+    toggleSpeakerNotes();
+  }
+});
+</script>
+
+    <!-- Include any interactive scripts -->
+    <script src="../presentation_bundle/js/interactive-demo.js"></script>
+    <script>
+        // Initialize any slide-specific functionality
+        if (typeof initializeSlide === 'function') {
+            initializeSlide();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+/* Flora Design System - Safe utility classes */
+
+:root {
+  /* Flora brand colors (exact from logo) */
+  --flora-bg: #002a29;       /* deep background */
+  --flora-leaf: #67c471;     /* exact leaf green */
+  --flora-tree: #00997e;     /* exact tree/trunk teal */
+  --flora-root: #007866;     /* darker version of tree color */
+  --flora-circuit: #8fdab7;  /* lighter tint */
+
+  /* Surface colors */
+  --bg-0: #001f1e;
+  --bg-1: #002a29;
+  --surface-1: #003330;
+  --surface-2: #004440;
+
+  /* Text colors */
+  --text-hi: #eef6f3;
+  --text: #d8e7e1;
+  --muted: #97b2a8;
+
+  /* Utilities */
+  --line-1: #20342d;
+  --shadow-1: rgba(0, 0, 0, 0.25);
+}
+
+/* Safe utility classes - opt-in only */
+.flora-card {
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px var(--shadow-1);
+}
+
+.flora-text-green { color: var(--flora-leaf); }
+.flora-text-teal { color: var(--flora-tree); }
+.flora-text-muted { color: var(--muted); }
+
+.flora-bg-dark { background-color: var(--bg-1); }
+.flora-bg-surface { background-color: var(--surface-1); }
+
+/* Card from slides - force override Slidev defaults */
+.card {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line-1) !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ensure cards show up in two-cols layout */
+.slidev-layout.two-cols .card {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--line-1) !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+/* Grid utilities */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.mt-8 { margin-top: 2rem; }
+.text-center { text-align: center; }

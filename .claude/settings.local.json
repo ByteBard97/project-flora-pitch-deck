@@ -21,9 +21,22 @@
       "Bash(npm install)",
       "Bash(npm run dev:*)",
       "Bash(chmod:*)",
-      "Bash(/home/geoff/projects/project-flora-pitch-deck/list-structure.sh:*)"
+      "Bash(/home/geoff/projects/project-flora-pitch-deck/list-structure.sh:*)",
+      "Bash(node:*)",
+      "mcp__ide__getDiagnostics",
+      "Read(//proc/401939/**)",
+      "mcp__puppeteer__puppeteer_connect_active_tab",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_click",
+      "Read(//tmp/**)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "code-graph-mcp"
+  ]
 }

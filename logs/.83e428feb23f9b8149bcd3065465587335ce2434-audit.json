@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/geoff/projects/project-flora-pitch-deck/logs/.83e428feb23f9b8149bcd3065465587335ce2434-audit.json",
+    "files": [
+        {
+            "date": 1758493901286,
+            "name": "/home/geoff/projects/project-flora-pitch-deck/logs/mcp-puppeteer-2025-09-21.log",
+            "hash": "67cd0359ff2b9e4b20033f37142d6d83f1d583faf71cdc834b68a643379ddc3d"
+        }
+    ],
+    "hashType": "sha256"
+}

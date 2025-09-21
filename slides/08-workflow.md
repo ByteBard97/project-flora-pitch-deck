@@ -19,37 +19,7 @@ viewerNotes: |
 
 ---
 
-## The New Flow (4 Steps)
-
-<div class="grid-4 gap-4">
-  <div class="card text-center">
-    <div style="font-size:2.2rem; margin-bottom:.5rem">📍</div>
-    <h3>Automated Site Setup</h3>
-    <p><strong>Enter an address.</strong> We pull property lines (GIS), hi-res satellite (Mapbox), and elevation (USGS) to create an accurate 3D-ready base map in seconds.</p>
-    <div class="btn" style="display:inline-block; font-size:.9rem; padding:.45rem .8rem; margin-top:.5rem">Saves: 2–3 hours</div>
-  </div>
-
-  <div class="card text-center">
-    <div style="font-size:2.2rem; margin-bottom:.5rem">💡</div>
-    <h3>Guided, Intelligent Design</h3>
-    <p>Our 2D-first canvas is simple and intuitive. As you design, <strong>Eco-CoPilot</strong> suggests native plants by ecoregion, soil type, and sun exposure.</p>
-    <div class="btn" style="display:inline-block; font-size:.9rem; padding:.45rem .8rem; margin-top:.5rem">Saves: 4–6 hours</div>
-  </div>
-
-  <div class="card text-center">
-    <div style="font-size:2.2rem; margin-bottom:.5rem">👥</div>
-    <h3>Community-Sourced Inspiration</h3>
-    <p>See real photos and templates from your region. Filter by <em>“full sun clay slope”</em> and use what has <strong>actually worked</strong> for neighbors.</p>
-    <div class="btn" style="display:inline-block; font-size:.9rem; padding:.45rem .8rem; margin-top:.5rem">Saves: 2–4 hours</div>
-  </div>
-
-  <div class="card text-center">
-    <div style="font-size:2.2rem; margin-bottom:.5rem">🛒</div>
-    <h3>Confident Execution</h3>
-    <p>One click generates a pro design document, curated plant shopping list, and a phased implementation plan.</p>
-    <div class="btn" style="display:inline-block; font-size:.9rem; padding:.45rem .8rem; margin-top:.5rem">Saves: 1–2 hours</div>
-  </div>
-</div>
+<WorkflowSteps />
 
 ---
 

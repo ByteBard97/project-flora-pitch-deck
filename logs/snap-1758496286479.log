@@ -1,0 +1,17 @@
+[2025-09-21T23:11:26.930Z] LOG: Presentation loaded - no external data dependencies
+[2025-09-21T23:11:27.050Z] LOG: ✅ D3 loaded? object
+[2025-09-21T23:11:27.050Z] LOG: ✅ fc loaded? object
+[2025-09-21T23:11:27.050Z] LOG: ✅ D3 version: 7.9.0
+[2025-09-21T23:11:27.050Z] LOG: ✅ fc.layoutLabel exists? function
+[2025-09-21T23:11:27.051Z] LOG: ================================================================================
+[2025-09-21T23:11:27.051Z] LOG: 🎬 LOADING SLIDE 1/13: Flora
+[2025-09-21T23:11:27.051Z] LOG:    Title: Flora
+[2025-09-21T23:11:27.051Z] LOG: ================================================================================
+[2025-09-21T23:11:27.070Z] LOG: 📄 slideLoaded event received
+[2025-09-21T23:11:27.070Z] LOG:    Found 0 SVG(s) in slide content
+[2025-09-21T23:11:27.650Z] LOG: ================================================================================
+[2025-09-21T23:11:27.650Z] LOG: 🎬 LOADING SLIDE 2/13: The Landscape Software Ecosystem is Broken
+[2025-09-21T23:11:27.650Z] LOG:    Title: The Landscape Software Ecosystem is Broken
+[2025-09-21T23:11:27.650Z] LOG: ================================================================================
+[2025-09-21T23:11:27.680Z] LOG: 📄 slideLoaded event received
+[2025-09-21T23:11:27.680Z] LOG:    Found 0 SVG(s) in slide content

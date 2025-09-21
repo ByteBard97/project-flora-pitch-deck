@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "code-graph-mcp": {
+      "type": "stdio",
+      "command": "/home/geoff/anaconda3/envs/codegraph/bin/code-graph-mcp",
+      "args": ["--project-root", "/home/geoff/projects/hephaestus"],
+      "env": { "PYTHONNOUSERSITE": "1" }
+    }
+  },
+  "puppeteer": {
+    "type": "stdio",
+    "command": "/home/geoff/.nvm/versions/node/v22.16.0/bin/mcp-server-puppeteer",
+    "args": []
+  }
+}

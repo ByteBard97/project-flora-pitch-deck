@@ -25,9 +25,11 @@
   "homepage": "https://github.com/ByteBard97/project-flora-pitch-deck#readme",
   "devDependencies": {
     "@slidev/cli": "^52.2.4",
-    "@slidev/theme-default": "^0.25.0"
+    "@slidev/theme-default": "^0.25.0",
+    "puppeteer": "^24.22.0"
   },
   "dependencies": {
-    "@lume/autolayout": "^0.10.2"
+    "@lume/autolayout": "^0.10.2",
+    "puppeteer-mcp-server": "^0.7.2"
   }
 }

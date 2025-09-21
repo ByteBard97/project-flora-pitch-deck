@@ -1,5 +1,5 @@
 ---
-layout: TitleTest
+layout: Title
 title: Flora
 subtitle: Landscape design software • tech + nature
 meta: |

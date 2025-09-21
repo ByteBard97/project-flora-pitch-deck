@@ -31,11 +31,8 @@ watch(currentPage, () => {
 });
 
 onMounted(() => {
-  if (shouldShow.value && !localStorage.getItem("notes-hint-shown")) {
-    showHint.value = true;
-    localStorage.setItem("notes-hint-shown", "true");
-    setTimeout(() => (showHint.value = false), 4000);
-  }
+  // Don't show hint by default - user can discover the notes button
+  showHint.value = false;
 });
 </script>
 

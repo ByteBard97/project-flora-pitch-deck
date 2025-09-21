@@ -1,5 +1,5 @@
 ---
-layout: two-cols
+layout: TwoCols
 viewerNotes: |
   **Framing:** “Why now? Because three powerful cultural and market waves are converging — and Flora sits right at their intersection.”
 

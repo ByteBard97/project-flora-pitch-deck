@@ -1,363 +1,206 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, nextTick } from "vue";
-import {
-  waitForFontsAndImages,
-  recalcLayout,
-  wireResize,
-  safe,
-} from "../composables/layoutUtils";
+import { onMounted, ref, nextTick } from 'vue'
+import * as AL from '@lume/autolayout'
 
-let unwire: (() => void) | undefined;
-
-let ctrl: AbortController | null = null;
-
-function debounce<T extends (...a: any[]) => void>(fn: T, ms = 100) {
-  let t: number | undefined;
-  return (...args: Parameters<T>) => {
-    if (t) clearTimeout(t);
-    t = window.setTimeout(() => fn(...args), ms);
-  };
-}
-
-// ---- run AFTER everything is ready ----
-async function ready() {
-  await nextTick();
-
-  // fonts (stabilizes text metrics)
-  if ("fonts" in document) {
-    try {
-      await (document as any).fonts.ready;
-    } catch {}
-  }
-
-  // images inside the title container (stabilizes logo size)
-  const root = document.querySelector(".title-slide-container") ?? document;
-  const imgs = Array.from(root.querySelectorAll("img")) as HTMLImageElement[];
-  await Promise.all(
-    imgs.map((img) =>
-      img.complete && img.naturalWidth > 0
-        ? Promise.resolve()
-        : new Promise<void>((res) => {
-            const done = () => {
-              img.removeEventListener("load", done);
-              img.removeEventListener("error", done);
-              res();
-            };
-            img.addEventListener("load", done, { once: true });
-            img.addEventListener("error", done, { once: true });
-          })
-    )
-  );
-
-  // one paint so measurements are consistent
-  await new Promise<void>((r) => requestAnimationFrame(() => r()));
-}
+type Frame = { x: number; y: number; width: number; height: number }
+const frames = ref<Record<string, Frame>>({})
 
 onMounted(async () => {
-  await nextTick();
-  await waitForFontsAndImages(".title-slide-container");
-  /*
-  safe(() => recalcLayout({ containerSelector: ".title-slide-container" }));
-  unwire = wireResize(() =>
-    recalcLayout({ containerSelector: ".title-slide-container" })
-  );
-  */
-});
+  await nextTick()
 
-onBeforeUnmount(() => {
-  unwire?.();
+
+  // Use the actual slide dimensions we found
+  const slideEl = document.querySelector('#slideshow') as HTMLElement
+  if (!slideEl) {
+    throw new Error('Could not find #slideshow element')
+  }
+  const W = slideEl.clientWidth
+  const H = slideEl.clientHeight
+  console.log('Using slide dimensions:', W, 'x', H)
+
+  // Calculate content height to match original design proportions
+  const logoHeight = Math.round(H * 0.45)  // 45% for logo+Flora text (bigger)
+  const taglineHeight = Math.round(H * 0.05) // 5% for tagline (compact)
+  const ruleHeight = 3 // 3px green rule
+  const subtitleHeight = Math.round(H * 0.08) // 8% for subtitle (readable)
+  const cardHeight = Math.round(H * 0.25) // 25% for card (much bigger for readable text)
+
+  const gap = 5 // Fixed 5px gaps
+  const totalContentHeight = logoHeight + taglineHeight + ruleHeight + subtitleHeight + cardHeight + (gap * 4)
+  const leftoverSpace = H - totalContentHeight
+
+  // Use much smaller top and bottom margins
+  const topPx = Math.max(20, Math.round(leftoverSpace * 0.2)) // Use only 20% of leftover space for top
+  const botPx = Math.max(20, Math.round(leftoverSpace * 0.2)) // Use only 20% of leftover space for bottom
+
+  console.log('Space calculation:', {
+    totalHeight: H,
+    contentHeight: totalContentHeight,
+    leftoverSpace,
+    topMargin: topPx,
+    bottomMargin: botPx
+  })
+
+  // Get logo aspect ratio to keep the tree proportional
+  const img = new Image()
+  img.src = '/flora-tree.webp'
+  try { await img.decode() } catch {}
+  const R = (img.naturalWidth && img.naturalHeight)
+    ? img.naturalWidth / img.naturalHeight
+    : 1.6 // sensible fallback
+
+  // Fixed VFL - use much more horizontal space
+  const vfl = [
+    // Vertical chain with proper spacing and explicit heights
+    `V:|-(${topPx})-[logo(${logoHeight})]-${gap}-[tagline(${taglineHeight})]-${gap}-[rule(${ruleHeight})]-${gap}-[subtitle(${subtitleHeight})]-${gap}-[card(${cardHeight})]-(${botPx})-|`,
+
+    // Keep logo aspect ratio - size-only, no positioning
+    `H:[logo(==logo.height*${R})]`,
+
+    // Much wider components - use more horizontal space
+    'H:[tagline(>=400)]',
+    'H:[rule(>=300)]',
+    'H:[subtitle(>=500)]',
+    'H:[card(>=450)]',
+  ].join('\n')
+
+  console.log('Clean VFL:', vfl)
+
+  // Parse extended VFL (creates subViews & constraints)
+  const constraints = AL.VisualFormat.parse(vfl, { extended: true })
+
+  // Build the view with ONLY the VFL constraints - no competing addConstraint calls
+  const view = new AL.View({
+    width: W,
+    height: H,
+    constraints,
+  })
+
+  // Don't use centerX constraints - handle centering manually
+
+  // Extract frames and manually center them
+  frames.value = Object.fromEntries(
+    Object.keys(view.subViews).map((name) => {
+      const v = view.subViews[name]
+      // Calculate centered x position
+      const centeredX = (W - v.width) / 2
+      return [name, { x: centeredX, y: v.top, width: v.width, height: v.height }]
+    })
+  )
+
+  // Debug logging with ChatGPT's sanity check
+  console.log('Canvas size:', W, 'x', H)
+  console.table(Object.fromEntries(
+    Object.entries(view.subViews).map(([k,v]) => [k, {
+      top: (v as any).top,
+      bottom: (v as any).bottom,
+      height: (v as any).height,
+      width: (v as any).width
+    }])
+  ))
+  console.log('Centered frames:', frames.value)
 });
 </script>
 
 <template>
+  <!-- Fixed inner canvas; Slidev scales this uniformly -->
   <div
-    class="title-slide-container"
-    style="
-      background: #002a29;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    "
+    id="cover-canvas"
+    class="relative mx-auto w-full h-full"
+    style="background: #002a29"
   >
-    <!-- Logo -->
-    <img
-      src="/flora-tree.webp"
-      alt="Flora Logo"
-      style="
-        height: min(8vh, 120px);
-        width: auto;
-        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
-        margin-bottom: 1rem;
-      "
-    />
-
-    <!-- Title -->
-    <h1
-      style="
-        background: linear-gradient(135deg, #67c471, #00997e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-family:
-          system-ui,
-          -apple-system,
-          sans-serif;
-        font-weight: 800;
-        font-size: min(4.5vh, 60px);
-        letter-spacing: -0.02em;
-        line-height: 1;
-        margin: 0 0 0.5rem 0;
-        text-align: center;
-      "
-    >
-      Flora.ai
-    </h1>
-
-    <!-- Subtitle -->
-    <p
-      style="
-        color: #97b2a8;
-        font-family: system-ui, sans-serif;
-        font-style: italic;
-        font-size: min(2vh, 20px);
-        margin: 0 0 0.5rem 0;
-        text-align: center;
-      "
-    >
-      Landscape design software • tech + nature
-    </p>
-
-    <!-- Tagline -->
-    <h2
-      style="
-        color: #eef6f3;
-        font-family: system-ui, sans-serif;
-        font-weight: 600;
-        font-size: min(2.5vh, 24px);
-        margin: 0 0 1.5rem 0;
-        text-align: center;
-      "
-    >
-      Seeding the Future of Landscape Design
-    </h2>
-
-    <!-- Card -->
+    <!-- Combined Logo Component -->
     <div
-      style="
-        background: #004440;
-        border: 1px solid #20342d;
-        border-radius: 12px;
-        padding: 20px 30px;
-        max-width: 350px;
-        text-align: center;
-      "
+      :style="{
+        position: 'absolute',
+        left: frames.logo?.x + 'px',
+        top: frames.logo?.y + 'px',
+        width: frames.logo?.width + 'px',
+        height: frames.logo?.height + 'px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }"
     >
-      <div
-        style="
-          color: #67c471;
-          font-weight: bold;
-          margin: 8px 0;
-          font-family: system-ui, serif;
-          font-size: 18px;
-        "
-      >
-        Project Flora
-      </div>
-      <div
-        style="
-          color: #d8e7e1;
-          margin: 4px 0;
-          font-family: system-ui, serif;
-          font-size: 18px;
-        "
-      >
-        Pitch Presentation
-      </div>
-      <div
-        style="
-          color: #d8e7e1;
-          margin: 4px 0;
-          font-family: system-ui, serif;
-          font-size: 18px;
-        "
-      >
-        2025
-      </div>
-      <div
-        style="
-          color: #97b2a8;
-          font-style: italic;
-          margin: 8px 0;
-          font-family: system-ui, sans-serif;
-          font-size: 16px;
-        "
-      >
-        Intelligent design for a living world
-      </div>
+      <FloraLogo size="xl" layout="vertical" :showBounds="true" />
+    </div>
+
+    <div
+      :style="{
+        position: 'absolute',
+        left: frames.tagline?.x + 'px',
+        top: frames.tagline?.y + 'px',
+        width: frames.tagline?.width + 'px',
+        height: frames.tagline?.height + 'px',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }"
+    >
+      <TaglineText
+        text="Landscape design software • tech + nature"
+        :showBounds="true"
+      />
+    </div>
+
+    <div
+      :style="{
+        position: 'absolute',
+        left: frames.rule?.x + 'px',
+        top: frames.rule?.y + 'px',
+        width: frames.rule?.width + 'px',
+        height: frames.rule?.height + 'px',
+        background: '#1e4e49',
+        border: '1px solid #00ff00',
+        boxSizing: 'border-box',
+      }"
+    >
+      <div style="position: absolute; top: -15px; left: 0; font-size: 8px; color: #00ff00; background: rgba(0,0,0,0.8); padding: 1px 3px; border-radius: 2px;">RULE</div>
+    </div>
+
+    <div
+      :style="{
+        position: 'absolute',
+        left: frames.subtitle?.x + 'px',
+        top: frames.subtitle?.y + 'px',
+        width: frames.subtitle?.width + 'px',
+        height: frames.subtitle?.height + 'px',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }"
+    >
+      <SubtitleText
+        text="Seeding the Future of Landscape Design"
+        :showBounds="true"
+      />
+    </div>
+
+    <!-- Project Card -->
+    <div
+      :style="{
+        position: 'absolute',
+        left: frames.card?.x + 'px',
+        top: frames.card?.y + 'px',
+        width: frames.card?.width + 'px',
+        height: frames.card?.height + 'px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }"
+    >
+      <ProjectCard
+        title="Project Flora"
+        subtitle="Pitch Presentation"
+        year="2025"
+        tagline="Intelligent design for a living world"
+        variant="default"
+        :showBounds="true"
+        :containerWidth="frames.card?.width || 450"
+        :containerHeight="frames.card?.height || 99"
+      />
     </div>
   </div>
 </template>
-
-<style>
-/* Import Google Fonts for Flora branding */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap");
-
-.title-slide-container {
-  height: 100%; /* not 100vh */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.title-slide {
-  background: #002a29;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 6vmin;
-  position: relative;
-  overflow: hidden;
-}
-
-.title-content {
-  position: relative;
-  z-index: 2;
-  max-width: 900px;
-  width: 100%;
-  display: grid;
-  gap: 3rem;
-  justify-items: center;
-  text-align: center;
-}
-
-/* Flora logo */
-.flora-logo {
-  width: clamp(200px, 25vw, 350px);
-  height: clamp(200px, 25vw, 350px);
-  margin: 0 auto 2rem auto;
-  display: block;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
-}
-
-/* Main Flora wordmark */
-.flora-wordmark-final {
-  font-family:
-    "Inter",
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  line-height: 1;
-  font-size: clamp(60px, 12vw, 140px);
-  margin: 0;
-  display: inline-block;
-  color: #67c471;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  position: relative;
-}
-
-/* Main tagline */
-.main-tagline {
-  font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: clamp(18px, 3vw, 28px);
-  font-weight: 400;
-  color: #97b2a8;
-  opacity: 0.85;
-  margin: 0;
-  letter-spacing: 0.01em;
-}
-
-/* Subtitle */
-.subtitle-line {
-  font-family: "Inter", sans-serif;
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 600;
-  color: #eef6f3;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-/* Presentation meta info */
-.presentation-meta {
-  padding: 2rem 3rem;
-  display: grid;
-  gap: 1rem;
-  justify-items: center;
-  max-width: 500px;
-  width: 100%;
-  background: #004440;
-  border: 1px solid #20342d;
-  border-radius: 12px;
-}
-
-.meta-item {
-  font-family: "Lora", serif;
-  font-size: clamp(16px, 2vw, 20px);
-  color: #d8e7e1;
-  margin: 0;
-}
-
-.presenter {
-  font-weight: 600;
-  color: #67c471;
-}
-
-.tech-nature-accent {
-  font-family: "Inter", sans-serif;
-  font-size: clamp(14px, 2vw, 18px);
-  color: #97b2a8;
-  font-weight: 500;
-  opacity: 0.9;
-  margin-top: 0.5rem;
-  font-style: italic;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .title-content {
-    gap: 2rem;
-  }
-
-  .presentation-meta {
-    padding: 1.5rem 2rem;
-  }
-}
-
-/* Subtle animation */
-.flora-wordmark-final {
-  animation: fadeInUp 1.2s ease-out;
-}
-
-.main-tagline {
-  animation: fadeInUp 1.2s ease-out 0.3s both;
-}
-
-.subtitle-line {
-  animation: fadeInUp 1.2s ease-out 0.6s both;
-}
-
-.presentation-meta {
-  animation: fadeInUp 1.2s ease-out 0.9s both;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

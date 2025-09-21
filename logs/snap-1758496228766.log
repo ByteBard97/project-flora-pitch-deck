@@ -1,0 +1,11 @@
+[2025-09-21T23:10:29.220Z] LOG: Presentation loaded - no external data dependencies
+[2025-09-21T23:10:29.583Z] LOG: ✅ D3 loaded? object
+[2025-09-21T23:10:29.583Z] LOG: ✅ fc loaded? object
+[2025-09-21T23:10:29.583Z] LOG: ✅ D3 version: 7.9.0
+[2025-09-21T23:10:29.583Z] LOG: ✅ fc.layoutLabel exists? function
+[2025-09-21T23:10:29.583Z] LOG: ================================================================================
+[2025-09-21T23:10:29.583Z] LOG: 🎬 LOADING SLIDE 1/13: Flora
+[2025-09-21T23:10:29.583Z] LOG:    Title: Flora
+[2025-09-21T23:10:29.583Z] LOG: ================================================================================
+[2025-09-21T23:10:29.604Z] LOG: 📄 slideLoaded event received
+[2025-09-21T23:10:29.604Z] LOG:    Found 0 SVG(s) in slide content
