@@ -1,0 +1,363 @@
+<script setup lang="ts">
+import { onMounted, onBeforeUnmount, nextTick } from "vue";
+import {
+  waitForFontsAndImages,
+  recalcLayout,
+  wireResize,
+  safe,
+} from "../composables/layoutUtils";
+
+let unwire: (() => void) | undefined;
+
+let ctrl: AbortController | null = null;
+
+function debounce<T extends (...a: any[]) => void>(fn: T, ms = 100) {
+  let t: number | undefined;
+  return (...args: Parameters<T>) => {
+    if (t) clearTimeout(t);
+    t = window.setTimeout(() => fn(...args), ms);
+  };
+}
+
+// ---- run AFTER everything is ready ----
+async function ready() {
+  await nextTick();
+
+  // fonts (stabilizes text metrics)
+  if ("fonts" in document) {
+    try {
+      await (document as any).fonts.ready;
+    } catch {}
+  }
+
+  // images inside the title container (stabilizes logo size)
+  const root = document.querySelector(".title-slide-container") ?? document;
+  const imgs = Array.from(root.querySelectorAll("img")) as HTMLImageElement[];
+  await Promise.all(
+    imgs.map((img) =>
+      img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>((res) => {
+            const done = () => {
+              img.removeEventListener("load", done);
+              img.removeEventListener("error", done);
+              res();
+            };
+            img.addEventListener("load", done, { once: true });
+            img.addEventListener("error", done, { once: true });
+          })
+    )
+  );
+
+  // one paint so measurements are consistent
+  await new Promise<void>((r) => requestAnimationFrame(() => r()));
+}
+
+onMounted(async () => {
+  await nextTick();
+  await waitForFontsAndImages(".title-slide-container");
+  /*
+  safe(() => recalcLayout({ containerSelector: ".title-slide-container" }));
+  unwire = wireResize(() =>
+    recalcLayout({ containerSelector: ".title-slide-container" })
+  );
+  */
+});
+
+onBeforeUnmount(() => {
+  unwire?.();
+});
+</script>
+
+<template>
+  <div
+    class="title-slide-container"
+    style="
+      background: #002a29;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    "
+  >
+    <!-- Logo -->
+    <img
+      src="/flora-tree.webp"
+      alt="Flora Logo"
+      style="
+        height: min(8vh, 120px);
+        width: auto;
+        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
+        margin-bottom: 1rem;
+      "
+    />
+
+    <!-- Title -->
+    <h1
+      style="
+        background: linear-gradient(135deg, #67c471, #00997e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        font-weight: 800;
+        font-size: min(4.5vh, 60px);
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin: 0 0 0.5rem 0;
+        text-align: center;
+      "
+    >
+      Flora.ai
+    </h1>
+
+    <!-- Subtitle -->
+    <p
+      style="
+        color: #97b2a8;
+        font-family: system-ui, sans-serif;
+        font-style: italic;
+        font-size: min(2vh, 20px);
+        margin: 0 0 0.5rem 0;
+        text-align: center;
+      "
+    >
+      Landscape design software • tech + nature
+    </p>
+
+    <!-- Tagline -->
+    <h2
+      style="
+        color: #eef6f3;
+        font-family: system-ui, sans-serif;
+        font-weight: 600;
+        font-size: min(2.5vh, 24px);
+        margin: 0 0 1.5rem 0;
+        text-align: center;
+      "
+    >
+      Seeding the Future of Landscape Design
+    </h2>
+
+    <!-- Card -->
+    <div
+      style="
+        background: #004440;
+        border: 1px solid #20342d;
+        border-radius: 12px;
+        padding: 20px 30px;
+        max-width: 350px;
+        text-align: center;
+      "
+    >
+      <div
+        style="
+          color: #67c471;
+          font-weight: bold;
+          margin: 8px 0;
+          font-family: system-ui, serif;
+          font-size: 18px;
+        "
+      >
+        Project Flora
+      </div>
+      <div
+        style="
+          color: #d8e7e1;
+          margin: 4px 0;
+          font-family: system-ui, serif;
+          font-size: 18px;
+        "
+      >
+        Pitch Presentation
+      </div>
+      <div
+        style="
+          color: #d8e7e1;
+          margin: 4px 0;
+          font-family: system-ui, serif;
+          font-size: 18px;
+        "
+      >
+        2025
+      </div>
+      <div
+        style="
+          color: #97b2a8;
+          font-style: italic;
+          margin: 8px 0;
+          font-family: system-ui, sans-serif;
+          font-size: 16px;
+        "
+      >
+        Intelligent design for a living world
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+/* Import Google Fonts for Flora branding */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap");
+
+.title-slide-container {
+  height: 100%; /* not 100vh */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title-slide {
+  background: #002a29;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 6vmin;
+  position: relative;
+  overflow: hidden;
+}
+
+.title-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  gap: 3rem;
+  justify-items: center;
+  text-align: center;
+}
+
+/* Flora logo */
+.flora-logo {
+  width: clamp(200px, 25vw, 350px);
+  height: clamp(200px, 25vw, 350px);
+  margin: 0 auto 2rem auto;
+  display: block;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+}
+
+/* Main Flora wordmark */
+.flora-wordmark-final {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  font-size: clamp(60px, 12vw, 140px);
+  margin: 0;
+  display: inline-block;
+  color: #67c471;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+
+/* Main tagline */
+.main-tagline {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 400;
+  color: #97b2a8;
+  opacity: 0.85;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Subtitle */
+.subtitle-line {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 600;
+  color: #eef6f3;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Presentation meta info */
+.presentation-meta {
+  padding: 2rem 3rem;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  max-width: 500px;
+  width: 100%;
+  background: #004440;
+  border: 1px solid #20342d;
+  border-radius: 12px;
+}
+
+.meta-item {
+  font-family: "Lora", serif;
+  font-size: clamp(16px, 2vw, 20px);
+  color: #d8e7e1;
+  margin: 0;
+}
+
+.presenter {
+  font-weight: 600;
+  color: #67c471;
+}
+
+.tech-nature-accent {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  color: #97b2a8;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .title-content {
+    gap: 2rem;
+  }
+
+  .presentation-meta {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Subtle animation */
+.flora-wordmark-final {
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.main-tagline {
+  animation: fadeInUp 1.2s ease-out 0.3s both;
+}
+
+.subtitle-line {
+  animation: fadeInUp 1.2s ease-out 0.6s both;
+}
+
+.presentation-meta {
+  animation: fadeInUp 1.2s ease-out 0.9s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

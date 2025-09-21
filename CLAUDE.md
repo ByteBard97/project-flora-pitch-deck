@@ -1,85 +1,78 @@
-# CLAUDE.md
+# CLAUDE.md - Development Guidelines
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## CRITICAL DEBUGGING PHILOSOPHY: FAIL FAST AND LOUD
 
-## Overview
+### ❌ NEVER USE FALLBACKS
+- **NO `|| 'default value'`** - Fallbacks hide real problems
+- **NO `?.` optional chaining to paper over undefined data** - Find why it's undefined
+- **NO defensive programming** - We want crashes when data is missing
+- **NO graceful degradation** - We want explicit failures
 
-This is a mathematical presentation build system for creating interactive HTML presentations about circular quantities and wraparound bugs. The system generates two output formats: a single bundled HTML file for phone calls and a folder bundle with separate assets.
+### ❌ NEVER USE TRY-CATCH BLOCKS
+- **NO `try { ... } catch { ... }`** - Errors must bubble up
+- **NO error swallowing** - Every error is valuable information
+- **NO "just in case" error handling** - Fix the root cause instead
 
-## Key Build Commands
+### ✅ ALWAYS FAIL FAST AND LOUD
+- **Throw explicit errors** when data is missing
+- **Use assertions** to validate assumptions
+- **Force crashes** to reveal configuration issues
+- **Make problems visible immediately**
+
+### Examples:
+
+#### ❌ BAD - Hides Problems:
+```js
+const title = props.frontmatter?.title || 'Default Title';
+try {
+  renderComponent();
+} catch (e) {
+  console.log('Something went wrong');
+}
+```
+
+#### ✅ GOOD - Fails Fast:
+```js
+if (!props.frontmatter?.title) {
+  throw new Error(`Missing title in frontmatter. Props: ${JSON.stringify(props)}`);
+}
+const title = props.frontmatter.title;
+```
+
+### Debugging Strategy:
+1. **Add explicit error checks** for missing data
+2. **Throw detailed error messages** with context
+3. **Use console.log liberally** during debugging
+4. **Remove debugging code** only after problems are solved
+5. **Never mask problems** with fallback values
+
+### Vue Component Rules:
+- Every prop must be validated on component load
+- Missing data should throw errors with full context
+- Use explicit error boundaries, not silent failures
+- Log all received props during debugging
+
+## FAIL FAST = FASTER DEBUGGING = BETTER CODE
+
+---
+
+## Project Overview
+
+This is a Slidev-based presentation system for Project Flora pitch deck.
+
+### Key Commands
 
 ```bash
-# Main build command (builds both single file and bundle)
-python build.py
-
-# Alternative using shell script
-./build.sh
-
-# Build with custom config
-python build.py config_stroke_pipeline.yaml
+npm run dev        # Start Slidev development server
+npm run build      # Build presentation
+npm run export     # Export to PDF
 ```
 
-## Architecture
+### Architecture
 
-### Core Components
-
-- **`presentation_builder.py`** - Main presentation builder class (`PresentationBuilder`)
-- **`build.py`** - Entry point that instantiates the builder
-- **`config.yaml`** - Presentation configuration (title, slides, build settings)
-- **`index.html`** - Main HTML template
-- **`presentation.js`** - Navigation and presentation logic
-- **`styles.css`** - Dark theme styling
-
-### Build Process
-
-1. **Single File Build** (`build_single_file()`):
-   - Embeds CSS and JavaScript directly into HTML
-   - Processes slides from `slides/` directory according to `config.yaml` order
-   - Creates JavaScript object with slide content as strings
-   - Embeds JavaScript modules directly via `templates.py` 
-   - Outputs to `dist/math_presentation_bundled.html`
-
-2. **Bundle Folder Build** (`build_bundle_folder()`):
-   - Copies files separately to `dist/math_presentation_bundle/`
-   - Maintains original file structure
-   - Includes interactive JavaScript modules from `js/` directory
-
-### Slide Processing
-
-- Slides are HTML files in `slides/` directory
-- Order defined by `slides` array in `config.yaml`
-- Content is embedded as escaped JavaScript strings in single file version
-- Code blocks (`<pre><code>`) preserve formatting and newlines
-- Script tags are preserved intact during processing
-
-### Interactive Components
-
-- **Vector Calculator** (`js/vector-calculator.js`) - For slide 16
-- **Timeseries Analyzer** (`js/timeseries-analyzer.js`) - For slide 17
-- Interactive demos embedded directly in slides (circular mean, atan2 visualizations)
-
-## Dependencies
-
-```bash
-pip install PyYAML
-```
-
-## Configuration
-
-Edit `config.yaml` to:
-- Change presentation metadata (title, author, date)
-- Reorder slides by modifying the `slides` array
-- Adjust build settings (WebP quality, image dimensions, etc.)
-
-## File Structure
-
-```
-presentation/
-├── slides/              # HTML slide files (processed in config.yaml order)
-├── js/                  # Interactive JavaScript modules
-├── templates/           # Build templates
-├── docs/               # Generated output (GitHub Pages)
-├── config.yaml         # Main configuration
-├── build.py           # Build entry point
-└── presentation_builder.py  # Core build logic
-```
+- **Slidev** - Vue-based presentation framework
+- **slides.md** - Main slide configuration file
+- **slides/** - Individual slide markdown files
+- **layouts/** - Vue layout components
+- **components/** - Reusable Vue components
+- **style.css** - Global styling with Flora brand colors

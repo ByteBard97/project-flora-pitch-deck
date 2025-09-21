@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* Flora logo exact colors */
@@ -19,14 +19,15 @@
   --muted:   #97b2a8;
 
   /* Flora brand colors (exact from logo) */
+  --flora-bg: #002a29;       /* deep background */
   --flora-leaf: #67c471;     /* exact leaf green */
-  --flora-trunk: #00997e;    /* exact tree/trunk teal */
+  --flora-tree: #00997e;     /* exact tree/trunk teal */
   --flora-root: #007866;     /* darker version of tree color */
-  --flora-circuit: #4dd4c8;  /* circuit node highlights */
+  --flora-circuit: #8fdab7;  /* lighter tint (derived) */
 
   /* Accent system using Flora brand colors */
   --accent: var(--flora-leaf);
-  --accent-600: var(--flora-trunk);
+  --accent-600: var(--flora-tree);
   --accent-300: var(--flora-circuit);
 
   /* Legacy aliases so existing rules keep working (no literals elsewhere) */
@@ -58,12 +59,64 @@ html,
 body {
   height: 100%;
   margin: 0;
-  background: var(--bg-1);
+  background-color: var(--bg-1);
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.6;
   font-weight: 400;
   font-size: var(--body-size);
+}
+
+/* Override Slidev's default black background */
+.slidev-layout,
+#slide-container,
+.slide-content,
+[data-slidev-presenter] {
+  background-color: var(--bg-1);
+}
+
+/* === Slideshow Container Structure === */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background-color: var(--bg-1);
+}
+
+/* === Card-based Slide Layout === */
+.slide {
+  padding: 3.5rem 4rem;
+  background:
+    radial-gradient(
+      600px 400px at 10% 5%,
+      rgba(103, 196, 113, 0.06),
+      transparent 50%
+    ),
+    radial-gradient(
+      700px 500px at 90% 0%,
+      rgba(0, 153, 126, 0.05),
+      transparent 60%
+    ),
+    var(--surface-1); /* Solid base color underneath gradients */
+  border-radius: 12px;
+  margin: 1.25rem;
+  min-height: calc(100vh - 5rem);
+  animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 h1, .h1 {
@@ -268,10 +321,11 @@ li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: auto;
+  min-height: calc(100vh - 5rem);
   background: var(--bg-1);
   color: var(--text);
-  padding: 2em;
+  padding: 0; /* Remove padding since .slide now handles it */
   position: relative;
 }
 
@@ -542,96 +596,68 @@ h1,
   display: block;
 }
 
-/* === Title slide modernization === */
-.title-slide {
-  background: var(--bg-1) !important;
-  color: var(--text) !important;
-}
-
-/* Wordmark: no gradient fill, no glossy highlight */
-.flora-wordmark {
-  background: none !important;
-  -webkit-background-clip: initial !important;
-  background-clip: initial !important;
-  color: var(--text-hi) !important;
-  text-shadow: none !important;
-}
-.flora-wordmark::after { content: none !important; }
-
-/* Tagline + subtitle: simple, high-contrast */
-.main-tagline { color: var(--muted) !important; }
-.subtitle-line {
-  color: var(--text-hi) !important;
-  border-left: 6px solid var(--accent) !important;
-  padding-left: 20px;
-  letter-spacing: -0.01em;
-  text-transform: none;
-  text-shadow: none;
-}
-
-/* Presentation meta card: dark surface, subtle border */
-.presentation-meta {
-  background: var(--surface-2) !important;
-  color: var(--text) !important;
-  border: 1px solid var(--line-1) !important;
-  border-radius: var(--radius);
-  box-shadow: 0 18px 50px var(--shadow-1);
-  backdrop-filter: none !important;
-}
+/* Title slide styles removed - now handled by Title.vue component */
 
 /* Kill any remaining text glows on headings */
 h1, h2, h3, .title, .logo-wordmark { text-shadow: none !important; }
 
-/* Navigation controls */
+/* Modern navigation controls */
 .navigation {
   position: fixed;
-  bottom: 40px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
   display: flex;
-  gap: 16px;
+  gap: 14px;
+  z-index: 1000;
 }
 
 .nav-button {
-  background: linear-gradient(135deg, var(--flora-leaf), var(--flora-trunk));
-  color: var(--bg-1);
+  background: linear-gradient(135deg, var(--accent), var(--accent-600));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6em 1.2em;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.95rem;
-  border: none;
-  border-radius: 50px;
-  padding: 0.7em 1.6em;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 6px 18px rgba(124, 197, 118, 0.25);
-  backdrop-filter: blur(6px);
-  min-width: 120px;
+  box-shadow: 0 8px 24px var(--shadow-1);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .nav-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--flora-trunk), var(--flora-root));
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(43, 166, 160, 0.35);
-}
-
-.nav-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px var(--shadow-1);
+  box-shadow: 0 12px 28px var(--shadow-2);
 }
 
 .nav-button:disabled {
-  background: var(--surface-2);
-  color: var(--muted);
+  opacity: 0.45;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: 0 2px 8px var(--shadow-1);
-  opacity: 0.6;
 }
 
-.nav-button:focus {
-  outline: 2px solid var(--flora-circuit);
-  outline-offset: 3px;
+.nav-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Progress bar across the bottom */
+.deck-progress {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  z-index: 999;
+}
+
+.deck-progress > i {
+  display: block;
+  height: 100%;
+  width: var(--deck-progress, 0%);
+  background: linear-gradient(90deg, var(--accent), var(--accent-600));
+  transition: width 0.25s ease;
 }
 
 /* Slide counter */
@@ -653,9 +679,97 @@ h1, h2, h3, .title, .logo-wordmark { text-shadow: none !important; }
   letter-spacing: 0.02em;
 }
 
+/* === Reusable Panel Components === */
+
+/* Standard content panel - extracted from slide 2 */
+.panel {
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.panel h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-hi);
+}
+
+.panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.panel li {
+  margin-bottom: 0.8rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.panel li strong {
+  color: var(--text-hi);
+}
+
+/* Large container panel */
+.container-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--line-1);
+  border-radius: 16px;
+  padding: 4rem 2rem;
+  position: relative;
+}
+
+/* Split layout for two-column content */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+/* Accessibility & motion polish */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Print mode should also use dark variables (no literals) */
 @media print {
   body { background: var(--bg-0) !important; color: var(--text) !important; }
   h1, h2, h3, p, li { color: var(--text) !important; }
-  .navigation, .slide-counter { display: none !important; }
+  .navigation, .slide-counter, .deck-progress { display: none !important; }
+}
+
+/* Flora Title Layout Styles */
+.slidev-layout.flora-title {
+  background: var(--flora-bg);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.slidev-layout.flora-title h1 {
+  color: var(--flora-leaf);
+  font-size: 80px;
+  font-weight: bold;
+  font-family: var(--slidev-font-serif, var(--font-heading));
+  margin-bottom: 1rem;
+  text-align: center;
+  line-height: 0.9;
+}
+
+.slidev-layout.flora-title p {
+  color: var(--muted);
+  font-size: 24px;
+  font-family: var(--slidev-font-sans, var(--font-heading));
+  text-align: center;
+  margin: 0;
 }

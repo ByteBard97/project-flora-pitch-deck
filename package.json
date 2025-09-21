@@ -1,0 +1,33 @@
+{
+  "name": "project-flora-pitch-deck",
+  "version": "1.0.0",
+  "description": "![Byte Bard Logo](bytebard-logo.webp)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "slidev",
+    "build": "slidev build --base /project-flora-pitch-deck/ --out docs && cp docs/index.html docs/404.html",
+    "export": "slidev export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ByteBard97/project-flora-pitch-deck.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ByteBard97/project-flora-pitch-deck/issues"
+  },
+  "homepage": "https://github.com/ByteBard97/project-flora-pitch-deck#readme",
+  "devDependencies": {
+    "@slidev/cli": "^52.2.4",
+    "@slidev/theme-default": "^0.25.0"
+  },
+  "dependencies": {
+    "@lume/autolayout": "^0.10.2"
+  }
+}

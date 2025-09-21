@@ -11,7 +11,17 @@
       "Bash(git commit:*)",
       "Bash(git add:*)",
       "Bash(git push:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Read(//home/geoff/projects/daq-slide-deck/**)",
+      "WebSearch",
+      "WebFetch(domain:sli.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:chat.sli.dev)",
+      "Bash(git clone:*)",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(chmod:*)",
+      "Bash(/home/geoff/projects/project-flora-pitch-deck/list-structure.sh:*)"
     ],
     "deny": [],
     "ask": []

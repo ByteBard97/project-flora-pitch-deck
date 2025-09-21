@@ -2,45 +2,47 @@
   <h1>The "Franken-Stack": Our Industry's Inefficient Reality</h1>
   <p class="subtitle">We're Wasting Time and Money on a Disconnected Workflow</p>
 
-  <div class="workflow-chaos">
-    <div class="software-node" data-software="autocad">
-      <div class="logo-placeholder">AutoCAD</div>
-      <div class="cost">$1,600/year</div>
-    </div>
+  <div class="container-panel">
+    <div class="workflow-chaos">
+      <div class="software-node" data-software="autocad">
+        <div class="logo-placeholder">AutoCAD</div>
+        <div class="cost">$1,600/year</div>
+      </div>
 
-    <div class="connection-arrow error-prone">
-      <span class="risk-label">Manual Data Entry</span>
-      <div class="arrow">→</div>
-    </div>
+      <div class="connection-arrow error-prone">
+        <span class="risk-label">Manual Data Entry</span>
+        <div class="arrow">→</div>
+      </div>
 
-    <div class="software-node" data-software="illustrator">
-      <div class="logo-placeholder">Illustrator</div>
-      <div class="cost">$240/year</div>
-    </div>
+      <div class="software-node" data-software="illustrator">
+        <div class="logo-placeholder">Illustrator</div>
+        <div class="cost">$240/year</div>
+      </div>
 
-    <div class="connection-arrow error-prone">
-      <span class="risk-label">Risk of Error</span>
-      <div class="arrow">→</div>
-    </div>
+      <div class="connection-arrow error-prone">
+        <span class="risk-label">Risk of Error</span>
+        <div class="arrow">→</div>
+      </div>
 
-    <div class="software-node" data-software="excel">
-      <div class="logo-placeholder">Excel</div>
-      <div class="cost">$70/year</div>
-    </div>
+      <div class="software-node" data-software="excel">
+        <div class="logo-placeholder">Excel</div>
+        <div class="cost">$70/year</div>
+      </div>
 
-    <div class="connection-arrow error-prone">
-      <span class="risk-label">Wasted Hours</span>
-      <div class="arrow">→</div>
-    </div>
+      <div class="connection-arrow error-prone">
+        <span class="risk-label">Wasted Hours</span>
+        <div class="arrow">→</div>
+      </div>
 
-    <div class="software-node" data-software="web">
-      <div class="logo-placeholder">NWF Website</div>
-      <div class="cost">Free but slow</div>
+      <div class="software-node" data-software="web">
+        <div class="logo-placeholder">NWF Website</div>
+        <div class="cost">Free but slow</div>
+      </div>
     </div>
   </div>
 
   <div class="cost-analysis">
-    <div class="pain-points">
+    <div class="panel">
       <h3>💸 The Hidden Costs</h3>
       <div class="pain-grid">
         <div class="pain-item">
@@ -63,7 +65,7 @@
       </div>
     </div>
 
-    <div class="total-cost">
+    <div class="panel">
       <h3>Annual Software Cost</h3>
       <div class="cost-breakdown">
         <div class="cost-item">AutoCAD: $1,600</div>
@@ -100,10 +102,6 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: var(--white_5);
-  border-radius: 16px;
   flex-wrap: wrap;
 }
 
@@ -186,9 +184,9 @@
   align-items: start;
 }
 
-.pain-points h3 {
+.panel h3 {
   font-size: 1.4rem;
-  color: var(--gold);
+  color: var(--text-hi);
   margin-bottom: 1.5rem;
 }
 
@@ -227,19 +225,6 @@
   grid-column: 2;
 }
 
-.total-cost {
-  background: var(--navy_10);
-  border: 1px solid var(--gold);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.total-cost h3 {
-  font-size: 1.2rem;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  text-align: center;
-}
 
 .cost-breakdown {
   margin-bottom: 1rem;
