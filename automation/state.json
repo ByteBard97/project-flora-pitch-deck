@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "slide": 1,
+      "status": "wip",
+      "lastAction": "VERIFY",
+      "name": "01-flora.html",
+      "doubleChecksRemaining": 2
+    },
+    {
+      "slide": 2,
+      "status": "todo",
+      "name": "02-the-landscape-software-ecosystem-is-broken.html"
+    },
+    {
+      "slide": 3,
+      "status": "wip",
+      "lastAction": "VERIFY",
+      "name": "03-the-franken-stack-our-industrys-inefficient-reality.html",
+      "doubleChecksRemaining": 2
+    },
+    {
+      "slide": 4,
+      "status": "wip",
+      "lastAction": "VERIFY",
+      "name": "04-this-frustration-represents-a-multi-billion-dollar-opportunity.html",
+      "doubleChecksRemaining": 2
+    },
+    {
+      "slide": 5,
+      "status": "todo",
+      "name": "05-three-powerful-waves-are-converging.html"
+    },
+    {
+      "slide": 6,
+      "status": "todo",
+      "name": "06-no-one-is-serving-the-eco-conscious-designer.html"
+    },
+    {
+      "slide": 7,
+      "status": "todo",
+      "name": "07-an-intelligent-intuitive-platform-for-sustainable-landscape-design.html"
+    },
+    {
+      "slide": 8,
+      "status": "todo",
+      "name": "08-from-hours-of-research-to-minutes-of-creation.html"
+    },
+    { "slide": 9, "status": "todo", "name": "09-our-three-layer-moat.html" },
+    {
+      "slide": 10,
+      "status": "todo",
+      "name": "10-building-a-community-not-just-a-customer-list.html"
+    },
+    {
+      "slide": 11,
+      "status": "todo",
+      "name": "11-the-perfect-team-to-cultivate-this-vision.html"
+    },
+    {
+      "slide": 12,
+      "status": "todo",
+      "name": "12-lets-build-this-together.html"
+    },
+    { "slide": 13, "status": "todo", "name": "13-discussion-questions.html" }
+  ]
+}
