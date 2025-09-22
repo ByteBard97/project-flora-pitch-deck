@@ -9,10 +9,38 @@
         <div class="panel">
           <h4>Professional tools are powerful, but...</h4>
           <ul>
-            <li><strong>Clunky & Archaic:</strong> "archaic" interfaces (DynaSCAPE)</li>
-            <li><strong>Expensive:</strong> The "plugin tax" (Land F/X + AutoCAD)</li>
+            <li><strong>Clunky & Archaic:</strong> "archaic" interfaces (<FloraTooltip
+              text="DynaSCAPE"
+              href="https://dynascape.com/"
+              icon="🏗️"
+              title="DynaSCAPE"
+              description="Professional landscape design and construction software suite used by landscape contractors for design, estimating, and project management."
+              context="💼 Known for powerful features but criticized for outdated user interfaces that haven't modernized with current design standards."
+            />)</li>
+            <li><strong>Expensive:</strong> The "plugin tax" (<FloraTooltip
+              text="Land F/X"
+              href="https://landfx.com/"
+              icon="🔌"
+              title="Land F/X"
+              description="AutoCAD plugin specifically designed for landscape architects, providing plant libraries, irrigation design, and project management tools."
+              context="💰 Requires both AutoCAD license (~$1,600/year) plus Land F/X subscription (~$1,200/year), creating expensive barrier to entry."
+            /> + <FloraTooltip
+              text="AutoCAD"
+              href="https://www.autodesk.com/products/autocad/overview"
+              icon="📐"
+              title="AutoCAD"
+              description="Industry-standard computer-aided design (CAD) software for creating precise 2D and 3D technical drawings and models."
+              context="🏛️ The foundation software that most professional design tools build upon, but requires significant training and annual licensing fees."
+            />)</li>
             <li><strong>Ecologically Blind:</strong> Plants are just generic objects</li>
-            <li><strong>Disconnected Workflow:</strong> Juggling AutoCAD, Adobe, spreadsheets, and external native plant websites</li>
+            <li><strong>Disconnected Workflow:</strong> Juggling <FloraTooltip
+              text="AutoCAD"
+              href="https://www.autodesk.com/products/autocad/overview"
+              icon="📐"
+              title="AutoCAD"
+              description="Industry-standard computer-aided design (CAD) software for creating precise 2D and 3D technical drawings and models."
+              context="🔄 Part of fragmented workflow where designers must constantly switch between multiple specialized applications."
+            />, Adobe, spreadsheets, and external native plant websites</li>
           </ul>
         </div>
       </div>
@@ -25,7 +53,21 @@
             <li><strong>Simplistic:</strong> Hit an "aesthetic ceiling" quickly</li>
             <li><strong>Aesthetically Driven:</strong> Form over function</li>
             <li><strong>Ecologically Ignorant:</strong> Non-regional plant libraries</li>
-            <li><strong>Hack Together Solutions:</strong> PowerPoint or even <em>The Sims</em></li>
+            <li><strong>Hack Together Solutions:</strong> <FloraTooltip
+              text="PowerPoint"
+              href="https://en.wikipedia.org/wiki/Microsoft_PowerPoint"
+              icon="📊"
+              title="Microsoft PowerPoint"
+              description="Presentation software developed by Microsoft, primarily designed for creating slideshows and business presentations."
+              context="🤷‍♂️ Often repurposed by homeowners for basic layout planning despite not being designed for spatial design work."
+            /> or even <em><FloraTooltip
+              text="The Sims"
+              href="https://en.wikipedia.org/wiki/The_Sims"
+              icon="🎮"
+              title="The Sims"
+              description="Life simulation video game series where players create virtual people and design their homes and environments."
+              context="😅 Surprisingly, many homeowners resort to using this game for landscape planning due to lack of accessible, purpose-built tools."
+            /></em></li>
           </ul>
         </div>
       </div>
