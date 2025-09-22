@@ -1,7 +1,7 @@
 <template>
-  <div class="market-card">
+  <div ref="marketCardRef" class="market-card">
     <div ref="chartContentRef" class="chart-content">
-      <h3 title="GLOBAL LANDSCAPE SOFTWARE MARKET">📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
+      <h3 ref="titleRef" title="GLOBAL LANDSCAPE SOFTWARE MARKET">📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
       <div class="chart-section">
         <div class="bar-container">
           <div
@@ -35,20 +35,82 @@ import { ref, onMounted } from 'vue'
 const bar2024Height = ref('0px')
 const bar2030Height = ref('0px')
 const showGrowthRate = ref(false)
+const titleRef = ref()
+const chartContentRef = ref()
+const marketCardRef = ref()
+
+const scaleTextToFit = () => {
+  if (!titleRef.value || !marketCardRef.value) return
+
+  const title = titleRef.value
+  const container = marketCardRef.value
+
+  // Reset any previous scaling
+  title.style.transform = 'scale(1)'
+  title.style.transformOrigin = 'center'
+
+  // Get dimensions
+  const titleWidth = title.scrollWidth
+  const containerWidth = container.clientWidth
+  const containerHeight = container.clientHeight
+  const targetWidth = containerWidth * 0.9 // 90% of MarketChart component width
+
+  // Print dimensions for debugging
+  console.log('🔍 MarketChart Dimensions:')
+  console.log(`  Container Width: ${containerWidth}px`)
+  console.log(`  Container Height: ${containerHeight}px`)
+  console.log(`  Title Text Width: ${titleWidth}px`)
+  console.log(`  Target Width (90%): ${targetWidth}px`)
+
+  // Always scale to exactly 90% of container width
+  const scale = targetWidth / titleWidth
+  console.log(`  Scaling factor: ${scale.toFixed(3)}`)
+  title.style.transform = `scale(${scale})`
+  console.log(`  Final text width will be: ${(titleWidth * scale).toFixed(1)}px`)
+
+  // Calculate available height for bars
+  const titleRect = title.getBoundingClientRect()
+  const containerRect = container.getBoundingClientRect()
+  const titleBottom = titleRect.bottom
+  const containerBottom = containerRect.bottom
+  const availableHeight = containerBottom - titleBottom - 60 // Leave some margin for growth rate text
+
+  console.log(`  Title bottom: ${titleBottom}px`)
+  console.log(`  Container bottom: ${containerBottom}px`)
+  console.log(`  Available height for bars: ${availableHeight}px`)
+
+  // Store available height for bar scaling
+  window.marketChartAvailableHeight = availableHeight
+}
 
 onMounted(() => {
-  // Animate bars after mount
+  // Scale text to fit first
   setTimeout(() => {
-    bar2024Height.value = 'clamp(40px, 15cqh, 100px)' // Responsive height
-  }, 500)
+    scaleTextToFit()
+  }, 100)
+
+  // Animate bars after mount with proper proportions
+  setTimeout(() => {
+    // $2.95B vs $5.45B ratio = 2.95/5.45 = 0.541
+    bar2024Height.value = '54.1%' // Proportional to $2.95B
+    console.log(`🟡 2024 bar height: 54.1% ($2.95B)`)
+  }, 600)
 
   setTimeout(() => {
-    bar2030Height.value = 'clamp(60px, 25cqh, 150px)' // Responsive height
-  }, 800)
+    // 2030 is the larger value, so it gets the full height
+    bar2030Height.value = '100%' // Full height for $5.45B
+    console.log(`🟢 2030 bar height: 100% ($5.45B)`)
+    console.log(`📊 Ratio: 2030 is 1.85x taller than 2024 (100% vs 54.1%)`)
+  }, 900)
 
   setTimeout(() => {
     showGrowthRate.value = true
-  }, 1200)
+    // Final verification after all animations complete
+    console.log(`✅ Final state: 2024 = ${bar2024Height.value}, 2030 = ${bar2030Height.value}`)
+  }, 1500)
+
+  // Re-scale on window resize
+  window.addEventListener('resize', scaleTextToFit)
 })
 </script>
 
@@ -74,14 +136,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(8px, 2cqh, 16px);
+  gap: clamp(1cqh, 2cqh, 4cqh);
   width: 100%;
   height: 100%;
   justify-content: space-between;
 }
 
 .market-card h3 {
-  font-size: clamp(9px, 2.5cqw, 16px);
+  font-size: clamp(8px, 3.5cqw, 5cqw);
   margin: 0;
   text-align: center;
   color: #fbbf24;
@@ -93,8 +155,8 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: end;
-  gap: clamp(12px, 4cqw, 32px);
-  height: clamp(80px, 25cqh, 150px);
+  gap: clamp(2cqw, 4cqw, 8cqw);
+  height: clamp(20cqh, 35cqh, 50cqh);
   margin: 0;
   flex: 1;
 }
@@ -103,13 +165,15 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   height: 100%;
+  position: relative;
 }
 
 .bar {
-  width: clamp(40px, 10cqw, 70px);
+  width: clamp(8cqw, 10cqw, 15cqw);
   height: 0px;
+  max-height: 100%;
   border-radius: 6px 6px 0 0;
   display: flex;
   align-items: start;
