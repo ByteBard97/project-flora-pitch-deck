@@ -1,7 +1,7 @@
 <template>
-  <div ref="chartRef" class="market-card">
-    <div class="chart-content">
-      <h3>📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
+  <div class="market-card">
+    <div ref="chartContentRef" class="chart-content">
+      <h3 title="GLOBAL LANDSCAPE SOFTWARE MARKET">📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
       <div class="chart-section">
         <div class="bar-container">
           <div
@@ -58,16 +58,15 @@ onMounted(() => {
   container-type: size;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: clamp(4px, 2cqw, 12px);
-  padding: clamp(8px, 3cqw, 20px);
+  border-radius: 12px;
+  padding: 1rem;
   backdrop-filter: blur(10px);
   text-align: center;
   height: 100%;
+  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 0;
-  max-height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
 }
 
@@ -75,27 +74,29 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(2px, 1.5cqh, 8px);
+  gap: clamp(8px, 2cqh, 16px);
   width: 100%;
   height: 100%;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .market-card h3 {
-  font-size: clamp(12px, 3.5cqw, 20px);
+  font-size: clamp(9px, 2.5cqw, 16px);
   margin: 0;
   text-align: center;
   color: #fbbf24;
-  line-height: 1.1;
+  line-height: 1.15;
+  padding: 0 clamp(2px, 1cqw, 4px);
 }
 
 .chart-section {
   display: flex;
   justify-content: center;
   align-items: end;
-  gap: clamp(16px, 5cqw, 40px);
-  height: clamp(100px, 30cqh, 180px);
+  gap: clamp(12px, 4cqw, 32px);
+  height: clamp(80px, 25cqh, 150px);
   margin: 0;
+  flex: 1;
 }
 
 .bar-container {
@@ -107,18 +108,18 @@ onMounted(() => {
 }
 
 .bar {
-  width: clamp(50px, 12cqw, 80px);
+  width: clamp(40px, 10cqw, 70px);
   height: 0px;
-  border-radius: clamp(4px, 1.5cqw, 8px) clamp(4px, 1.5cqw, 8px) 0 0;
+  border-radius: 6px 6px 0 0;
   display: flex;
   align-items: start;
   justify-content: center;
-  padding-top: clamp(4px, 1.5cqh, 8px);
-  margin-bottom: clamp(4px, 1.5cqh, 8px);
+  padding-top: clamp(4px, 1.2cqh, 6px);
+  margin-bottom: clamp(2px, 1cqh, 4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   color: white;
   font-weight: bold;
-  font-size: clamp(12px, 3.5cqw, 18px);
+  font-size: clamp(10px, 3cqw, 16px);
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   transition: height 0.8s ease-out;
   overflow: visible;
@@ -148,14 +149,14 @@ onMounted(() => {
   text-align: center;
   color: #10b981;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: clamp(4px, 1.5cqw, 8px);
-  padding: clamp(6px, 2.5cqh, 14px) clamp(10px, 4cqw, 24px);
+  border-radius: 6px;
+  padding: clamp(4px, 2cqh, 10px) clamp(8px, 3cqw, 16px);
   margin: 0;
   border: 2px solid rgba(16, 185, 129, 0.3);
   font-weight: 600;
-  font-size: clamp(12px, 3.5cqw, 18px);
+  font-size: clamp(10px, 3cqw, 16px);
   opacity: 0;
-  transform: translateY(clamp(8px, 3cqh, 16px));
+  transform: translateY(10px);
   transition: all 0.6s ease-out;
 }
 
