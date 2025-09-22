@@ -1,5 +1,6 @@
 <template>
-  <div class="competitive-gap-slide">
+  <div class="slide-root">
+    <div class="competitive-gap-slide">
     <div class="slide-header">
       <h1>No One is Serving the Eco-Conscious Designer</h1>
       <p class="subtitle">A Vast White Space</p>
@@ -99,6 +100,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>

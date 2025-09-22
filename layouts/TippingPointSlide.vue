@@ -1,76 +1,78 @@
 <template>
-  <div class="tipping-point-slide">
-    <div class="slide-header">
-      <h1>Three Powerful Waves are Converging</h1>
-      <p class="subtitle">Why Now?</p>
-    </div>
-
-    <div class="waves-visualization">
-      <div class="wave-container">
-        <div class="wave wave-1" :class="{ visible: showWave1 }">
-          <div class="wave-icon">🌱</div>
-          <h3>The Eco-Conscious Consumer</h3>
-          <div class="wave-stats">
-            <div class="stat">
-              <div class="number">71%</div>
-              <div class="label">searches ↑</div>
-            </div>
-            <div class="stat">
-              <div class="number">2.7x</div>
-              <div class="label">growth</div>
-            </div>
-          </div>
-          <p>The yard is the new frontier for climate action</p>
-        </div>
-
-        <div class="wave wave-2" :class="{ visible: showWave2 }">
-          <div class="wave-icon">🦅</div>
-          <h3>The Native Plant Movement Matures</h3>
-          <div class="wave-content">
-            <p><strong>Audubon</strong> and <strong>NWF</strong> mainstreaming movement</p>
-            <div class="pain-point">
-              <span class="quote">"mired in complexity"</span>
-              <span class="solution">Need simplification tool</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="wave wave-3" :class="{ visible: showWave3 }">
-          <div class="wave-icon">🎨</div>
-          <h3>The Democratization of Design</h3>
-          <div class="wave-content">
-            <p><strong>Proven playbook:</strong> Billion-dollar design platforms</p>
-            <div class="analogy">
-              <div class="comparison">
-                <span class="company">Canva</span>
-                <span class="arrow">→</span>
-                <span class="domain">Graphics</span>
-              </div>
-              <div class="comparison">
-                <span class="company">Figma</span>
-                <span class="arrow">→</span>
-                <span class="domain">UI/UX</span>
-              </div>
-              <div class="comparison opportunity">
-                <span class="company">Flora</span>
-                <span class="arrow">→</span>
-                <span class="domain">Landscapes</span>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="slide-root">
+    <div class="tipping-point-slide">
+      <div class="slide-header">
+        <h1>Three Powerful Waves are Converging</h1>
+        <p class="subtitle">Why Now?</p>
       </div>
 
-      <div class="convergence-point" :class="{ visible: showConvergence }">
-        <div class="convergence-visual">
-          <div class="meeting-point">
-            <div class="logo-placeholder">Project Flora</div>
-            <div class="timing">Perfect Timing</div>
+      <div class="waves-visualization">
+        <div class="wave-container">
+          <div class="wave wave-1" :class="{ visible: showWave1 }">
+            <div class="wave-icon">🌱</div>
+            <h3>The Eco-Conscious Consumer</h3>
+            <div class="wave-stats">
+              <div class="stat">
+                <div class="number">71%</div>
+                <div class="label">increase in searches for sustainable goods</div>
+              </div>
+              <div class="stat">
+                <div class="number">2.7x</div>
+                <div class="label">faster growth for sustainable products</div>
+              </div>
+            </div>
+            <p>The yard is the new frontier for personal climate action</p>
           </div>
-          <div class="wave-lines">
-            <div class="line line-1" :class="{ animate: showLines }"></div>
-            <div class="line line-2" :class="{ animate: showLines }"></div>
-            <div class="line line-3" :class="{ animate: showLines }"></div>
+
+          <div class="wave wave-2" :class="{ visible: showWave2 }">
+            <div class="wave-icon">🦅</div>
+            <h3>The Native Plant Movement Matures</h3>
+            <div class="wave-content">
+              <p>Organizations like <strong>Audubon and the National Wildlife Federation</strong> are mainstreaming the movement</p>
+              <div class="pain-point">
+                <span class="quote">"mired in complexity"</span>
+                <span class="solution">They need a tool to simplify the process</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="wave wave-3" :class="{ visible: showWave3 }">
+            <div class="wave-icon">🎨</div>
+            <h3>The Democratization of Design</h3>
+            <div class="wave-content">
+              <p><strong>Proven playbook:</strong> Platforms like Canva and Figma have built billion-dollar companies</p>
+              <div class="analogy">
+                <div class="comparison">
+                  <span class="company">Canva</span>
+                  <span class="arrow">→</span>
+                  <span class="domain">Graphic Design</span>
+                </div>
+                <div class="comparison">
+                  <span class="company">Figma</span>
+                  <span class="arrow">→</span>
+                  <span class="domain">UI/UX Design</span>
+                </div>
+                <div class="comparison opportunity">
+                  <span class="company">Project Flora</span>
+                  <span class="arrow">→</span>
+                  <span class="domain">Ecological Landscape Design</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="convergence-point" :class="{ visible: showConvergence }">
+          <div class="convergence-visual">
+            <div class="meeting-point">
+              <div class="logo-placeholder">Project Flora</div>
+              <div class="timing">Perfect Timing</div>
+            </div>
+            <div class="wave-lines">
+              <div class="line line-1" :class="{ animate: showLines }"></div>
+              <div class="line line-2" :class="{ animate: showLines }"></div>
+              <div class="line line-3" :class="{ animate: showLines }"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -111,64 +113,80 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* The slide is the size container */
+.slide-root {
+  container-type: size;
+  width: 100%;
+  height: 100%;
+}
+
 .tipping-point-slide {
   background: linear-gradient(135deg, #0f4a3c 0%, #1e6b5a 100%);
   color: white;
-  padding: 1rem;
-  height: 100vh;
+  padding: 1.5rem 1.5rem 3rem 1.5rem;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .slide-header {
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .slide-header h1 {
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 4cqw, 2.4rem);
   font-weight: bold;
+  color: white;
   margin-bottom: 0.3rem;
-  line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 0.8rem;
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: clamp(0.8rem, 2cqw, 1.3rem);
   color: #a0c4c7;
   font-style: italic;
   margin: 0;
+  margin-bottom: 1rem;
 }
 
 .waves-visualization {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 0.8rem;
-  align-items: start;
-  height: 85%;
+  gap: 2rem;
+  align-items: center;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .wave-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  height: 100%;
+  display: grid;
+  gap: 1rem;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .wave {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  position: relative;
+  transition: all 0.8s ease-out;
   backdrop-filter: blur(10px);
   opacity: 0;
   transform: translateX(-30px);
-  transition: all 0.8s ease-out;
 }
 
 .wave.visible {
   opacity: 1;
   transform: translateX(0);
+}
+
+.wave:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .wave-1 {
@@ -184,20 +202,22 @@ onMounted(() => {
 }
 
 .wave-icon {
-  font-size: 0.8rem;
-  margin-bottom: 0.2rem;
+  font-size: clamp(1.5rem, 4cqw, 2.5rem);
+  margin-bottom: 0.5rem;
 }
 
 .wave h3 {
-  font-size: 0.7rem;
+  font-size: clamp(0.9rem, 2.5cqw, 1.3rem);
   color: white;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.8rem;
+  font-weight: bold;
 }
 
 .wave-stats {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.3rem;
+  gap: 1.5rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .stat {
@@ -205,57 +225,57 @@ onMounted(() => {
 }
 
 .stat .number {
-  font-size: 0.7rem;
+  font-size: clamp(1rem, 3cqw, 1.8rem);
   font-weight: bold;
   color: #fbbf24;
 }
 
 .stat .label {
-  font-size: 0.4rem;
+  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
   color: #a0c4c7;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .wave-content p {
-  color: #a0c4c7;
-  line-height: 1.2;
-  margin-bottom: 0.3rem;
-  font-size: 0.5rem;
+  color: #e5e5e5;
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+  font-size: clamp(0.7rem, 1.8cqw, 0.9rem);
 }
 
 .pain-point {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  padding: 0.3rem;
+  gap: 0.3rem;
+  padding: 0.8rem;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+  border-radius: 6px;
 }
 
 .quote {
   font-style: italic;
-  color: #f87171;
-  font-size: 0.4rem;
+  color: #ff6b6b;
+  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
 }
 
 .solution {
   color: white;
   font-weight: 600;
-  font-size: 0.4rem;
+  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
 }
 
 .analogy {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  padding: 0.3rem;
+  border-radius: 6px;
+  padding: 0.8rem;
 }
 
 .comparison {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
-  margin-bottom: 0.1rem;
-  font-size: 0.4rem;
+  gap: 0.8rem;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
 }
 
 .comparison:last-child {
@@ -265,7 +285,7 @@ onMounted(() => {
 .company {
   font-weight: bold;
   color: white;
-  min-width: 40px;
+  min-width: 60px;
 }
 
 .arrow {
@@ -273,7 +293,7 @@ onMounted(() => {
 }
 
 .domain {
-  color: #a0c4c7;
+  color: #e5e5e5;
 }
 
 .opportunity .company {
@@ -302,8 +322,8 @@ onMounted(() => {
 
 .convergence-visual {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: clamp(120px, 20cqw, 200px);
+  height: clamp(120px, 20cqw, 200px);
 }
 
 .meeting-point {
@@ -311,8 +331,8 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
+  width: clamp(80px, 15cqw, 120px);
+  height: clamp(80px, 15cqw, 120px);
   background: linear-gradient(135deg, #fbbf24, #10b981);
   border-radius: 50%;
   display: flex;
@@ -326,12 +346,12 @@ onMounted(() => {
 
 .logo-placeholder {
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 2cqw, 1rem);
   margin-bottom: 0.2rem;
 }
 
 .timing {
-  font-size: 0.6rem;
+  font-size: clamp(0.5rem, 1.5cqw, 0.8rem);
   opacity: 0.9;
 }
 
@@ -347,13 +367,13 @@ onMounted(() => {
   position: absolute;
   width: 0;
   height: 2px;
-  border-radius: 1px;
+  border-radius: 2px;
   opacity: 0;
   transition: all 1s ease-out;
 }
 
 .line.animate {
-  width: 45px;
+  width: clamp(30px, 8cqw, 60px);
   opacity: 0.7;
 }
 
@@ -362,6 +382,7 @@ onMounted(() => {
   top: 20%;
   left: 10%;
   transform: rotate(-30deg);
+  animation: flowIn 2s ease-out 0.5s both;
 }
 
 .line-2 {
@@ -369,6 +390,7 @@ onMounted(() => {
   top: 50%;
   left: 5%;
   transform: rotate(0deg);
+  animation: flowIn 2s ease-out 1s both;
 }
 
 .line-3 {
@@ -376,5 +398,29 @@ onMounted(() => {
   bottom: 20%;
   left: 10%;
   transform: rotate(30deg);
+  animation: flowIn 2s ease-out 1.5s both;
+}
+
+@keyframes flowIn {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: clamp(30px, 8cqw, 60px);
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 768px) {
+  .waves-visualization {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .wave-stats {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 }
 </style>

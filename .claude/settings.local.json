@@ -35,7 +35,11 @@
       "Bash(cat:*)",
       "Bash(for i in {7..13})",
       "Bash(do node tools/snap.js --url \"http://localhost:3030/$i\" --out \"screens/slide$i-check.png\" --width 1920 --height 1080 --wait 2000)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(for i in {8..13})",
+      "Bash(do echo \"=== Slide $i ===\")",
+      "Bash(for slide in WorkflowSlide MoatSlide GoToMarketSlide TeamSlide AskSlide QASlide)",
+      "Bash(do touch \"/home/geoff/projects/project-flora-pitch-deck/layouts/$slide.vue\")"
     ],
     "deny": [],
     "ask": []

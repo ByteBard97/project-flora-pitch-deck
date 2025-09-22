@@ -13,7 +13,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useAutoScale } from '../composables/useAutoScale'
 
 defineProps({
   icon: {
@@ -38,14 +37,7 @@ defineProps({
   }
 })
 
-// Auto-scaling setup
 const cardRef = ref()
-const { scale, isOverflowing } = useAutoScale(cardRef, {
-  padding: 16,        // Account for card padding
-  maxScale: 1.0,      // Don't make text larger
-  minScale: 0.3,      // Don't make text too small
-  scaleStep: 0.95     // Gentle scaling steps
-})
 </script>
 
 <style scoped>
@@ -58,12 +50,11 @@ const { scale, isOverflowing } = useAutoScale(cardRef, {
   padding: clamp(8px, 3cqw, 20px);
   backdrop-filter: blur(10px);
   text-align: center;
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 0;
-  max-height: 100%;
+  min-height: clamp(80px, 15cqh, 120px);
   overflow: hidden;
 }
 

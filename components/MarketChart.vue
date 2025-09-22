@@ -254,6 +254,7 @@ const openLink = () => {
 .bar-text {
   white-space: nowrap;
   margin-top: clamp(-2px, -0.5cqh, -4px);
+  font-size: clamp(8px, 2.5cqw, 12px);
 }
 
 .year {
