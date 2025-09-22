@@ -1,6 +1,15 @@
+/* Import Vuetify CSS first */
+@import 'vuetify/dist/vuetify.min.css';
+
 /* Flora Design System - Safe utility classes */
 
 :root {
+  /* Vuetify theme variables */
+  --v-theme-surface: #ffffff;
+  --v-theme-primary: #1976d2;
+  --v-theme-on-surface: #000000;
+  --v-theme-background: #fafafa;
+
   /* Flora brand colors (exact from logo) */
   --flora-bg: #002a29;       /* deep background */
   --flora-leaf: #67c471;     /* exact leaf green */

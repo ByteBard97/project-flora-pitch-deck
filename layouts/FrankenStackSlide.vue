@@ -10,33 +10,14 @@
         <div class="workflow-chain">
           <div class="tool-node">
             <div class="tool-name">
-              <div class="tooltip-container">
-                <a
-                  href="https://www.autodesk.com/products/autocad/overview"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="tool-link"
-                  @mouseenter="showTooltip = 'autocad'"
-                  @mouseleave="delayHideTooltip"
-                >
-                  AutoCAD
-                </a>
-                <div
-                  v-if="showTooltip === 'autocad'"
-                  class="preview-card"
-                  @mouseenter="cancelHideTooltip"
-                  @mouseleave="hideTooltip"
-                >
-                  <div class="preview-header">
-                    <span class="tool-icon">🏗️</span>
-                    <strong>AutoCAD + Land F/X</strong>
-                  </div>
-                  <div class="preview-content">
-                    <p>Industry standard CAD software for technical drafting, but treats plants as generic objects with no ecological intelligence.</p>
-                    <p class="context">💸 <strong>$1,600/year</strong> + steep learning curve</p>
-                  </div>
-                </div>
-              </div>
+              <FloraTooltip
+                text="AutoCAD"
+                href="https://www.autodesk.com/products/autocad/overview"
+                icon="🏗️"
+                title="AutoCAD + Land F/X"
+                description="Industry standard CAD software for technical drafting, but treats plants as generic objects with no ecological intelligence."
+                context="💸 $1,600/year + steep learning curve"
+              />
             </div>
             <div class="tool-cost">$1600/year</div>
           </div>
@@ -48,33 +29,14 @@
 
           <div class="tool-node">
             <div class="tool-name">
-              <div class="tooltip-container">
-                <a
-                  href="https://www.adobe.com/products/illustrator.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="tool-link"
-                  @mouseenter="showTooltip = 'illustrator'"
-                  @mouseleave="delayHideTooltip"
-                >
-                  Illustrator
-                </a>
-                <div
-                  v-if="showTooltip === 'illustrator'"
-                  class="preview-card"
-                  @mouseenter="cancelHideTooltip"
-                  @mouseleave="hideTooltip"
-                >
-                  <div class="preview-header">
-                    <span class="tool-icon">🎨</span>
-                    <strong>Adobe Illustrator</strong>
-                  </div>
-                  <div class="preview-content">
-                    <p>Vector graphics software used for creating presentation visuals and client-facing materials from CAD exports.</p>
-                    <p class="context">🔄 Requires manual import/export from CAD</p>
-                  </div>
-                </div>
-              </div>
+              <FloraTooltip
+                text="Illustrator"
+                href="https://www.adobe.com/products/illustrator.html"
+                icon="🎨"
+                title="Adobe Illustrator"
+                description="Vector graphics software used for creating presentation visuals and client-facing materials from CAD exports."
+                context="🔄 Requires manual import/export from CAD"
+              />
             </div>
             <div class="tool-cost">$240/year</div>
           </div>
@@ -86,26 +48,14 @@
 
           <div class="tool-node">
             <div class="tool-name">
-              <div class="tooltip-container">
-                <span class="tool-link-plain" @mouseenter="showTooltip = 'excel'" @mouseleave="delayHideTooltip">
-                  Excel
-                </span>
-                <div
-                  v-if="showTooltip === 'excel'"
-                  class="preview-card"
-                  @mouseenter="cancelHideTooltip"
-                  @mouseleave="hideTooltip"
-                >
-                  <div class="preview-header">
-                    <span class="tool-icon">📊</span>
-                    <strong>Microsoft Excel</strong>
-                  </div>
-                  <div class="preview-content">
-                    <p>Manual takeoffs and quantity calculations - "time-consuming and prone to human error" on razor-thin margins.</p>
-                    <p class="context">⏱️ Countless hours of manual calculations</p>
-                  </div>
-                </div>
-              </div>
+              <FloraTooltip
+                text="Excel"
+                href="https://www.microsoft.com/en-us/microsoft-365/excel"
+                icon="📊"
+                title="Microsoft Excel"
+                description="Manual takeoffs and quantity calculations - 'time-consuming and prone to human error' on razor-thin margins."
+                context="⏱️ Countless hours of manual calculations"
+              />
             </div>
             <div class="tool-cost">$70/year</div>
           </div>
@@ -117,33 +67,14 @@
 
           <div class="tool-node">
             <div class="tool-name">
-              <div class="tooltip-container">
-                <a
-                  href="https://www.nwf.org/nativeplantfinder"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="tool-link"
-                  @mouseenter="showTooltip = 'nwf'"
-                  @mouseleave="delayHideTooltip"
-                >
-                  NWF Website
-                </a>
-                <div
-                  v-if="showTooltip === 'nwf'"
-                  class="preview-card"
-                  @mouseenter="cancelHideTooltip"
-                  @mouseleave="hideTooltip"
-                >
-                  <div class="preview-header">
-                    <span class="tool-icon">🌿</span>
-                    <strong>National Wildlife Federation</strong>
-                  </div>
-                  <div class="preview-content">
-                    <p>Native Plant Finder - external research tool for plant selection, but disconnected from design workflow.</p>
-                    <p class="context">🐌 Free but slow, manual research process</p>
-                  </div>
-                </div>
-              </div>
+              <FloraTooltip
+                text="NWF Website"
+                href="https://www.nwf.org/nativeplantfinder"
+                icon="🌿"
+                title="National Wildlife Federation"
+                description="Native Plant Finder - external research tool for plant selection, but disconnected from design workflow."
+                context="🐌 Free but slow, manual research process"
+              />
             </div>
             <div class="tool-cost">Free but slow</div>
           </div>
@@ -455,6 +386,44 @@ const hideTooltip = () => {
   color: #a0c4c7;
   font-size: 11px;
   font-style: italic;
+}
+
+/* Vuetify tooltip styles */
+.vuetify-tooltip {
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  width: 280px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.vuetify-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fbbf24;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.vuetify-tooltip .tool-icon {
+  font-size: 16px;
+}
+
+.vuetify-tooltip .tooltip-content p {
+  color: #e5e5e5;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0 0 6px 0;
+}
+
+.vuetify-tooltip .tooltip-content .context {
+  color: #a0c4c7;
+  font-size: 11px;
+  font-style: italic;
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {

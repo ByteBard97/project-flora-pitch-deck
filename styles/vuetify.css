@@ -1,0 +1,18 @@
+/* Import Vuetify styles manually */
+@import 'vuetify/dist/vuetify.min.css';
+
+/* Basic Vuetify theme variables for debugging */
+:root {
+  --v-theme-surface: #ffffff;
+  --v-theme-primary: #1976d2;
+  --v-theme-on-surface: #000000;
+}
+
+/* Basic tooltip styling if Vuetify CSS doesn't load */
+.v-tooltip .v-overlay__content {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+}

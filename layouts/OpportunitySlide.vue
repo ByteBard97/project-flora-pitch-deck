@@ -49,7 +49,6 @@
         </div>
       </footer>
 
-      <DebugOverlaps />
     </div>
   </div>
 </template>

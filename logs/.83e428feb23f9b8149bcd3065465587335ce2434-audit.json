@@ -9,6 +9,11 @@
             "date": 1758493901286,
             "name": "/home/geoff/projects/project-flora-pitch-deck/logs/mcp-puppeteer-2025-09-21.log",
             "hash": "67cd0359ff2b9e4b20033f37142d6d83f1d583faf71cdc834b68a643379ddc3d"
+        },
+        {
+            "date": 1758574297863,
+            "name": "/home/geoff/projects/project-flora-pitch-deck/logs/mcp-puppeteer-2025-09-22.log",
+            "hash": "c854c03d59abb6b0b5169fd1210e058fc91ccea59160951eabaf6acf60005562"
         }
     ],
     "hashType": "sha256"

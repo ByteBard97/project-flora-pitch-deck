@@ -23,37 +23,14 @@
         </div>
       </div>
       <div class="growth-rate" :class="{ visible: showGrowthRate }">
-        <div class="tooltip-container">
-          <a
-            href="https://en.wikipedia.org/wiki/Compound_annual_growth_rate"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="growth-link"
-            @mouseenter="showPreview = true"
-            @mouseleave="delayHidePreview"
-          >
-            10.8% CAGR
-          </a>
-
-          <div
-            v-if="showPreview"
-            class="preview-card"
-            @mouseenter="cancelHidePreview"
-            @mouseleave="hidePreview"
-          >
-            <div class="preview-header">
-              <span class="wiki-icon">📖</span>
-              <strong>Compound Annual Growth Rate</strong>
-            </div>
-            <div class="preview-content">
-              <p>The compound annual growth rate (CAGR) is the rate of return required for an investment to grow from its beginning balance to its ending balance.</p>
-              <p class="context">📊 In this case: <strong>10.8% CAGR</strong> represents the annual growth rate from $2.95B (2024) to $5.45B (2030).</p>
-            </div>
-            <div class="preview-footer">
-              <span class="read-more">Click to read on Wikipedia →</span>
-            </div>
-          </div>
-        </div>
+        <FloraTooltip
+          text="10.8% CAGR"
+          href="https://en.wikipedia.org/wiki/Compound_annual_growth_rate"
+          icon="📖"
+          title="Compound Annual Growth Rate"
+          description="The compound annual growth rate (CAGR) is the rate of return required for an investment to grow from its beginning balance to its ending balance."
+          context="📊 In this case: 10.8% CAGR represents the annual growth rate from $2.95B (2024) to $5.45B (2030)."
+        />
       </div>
     </div>
   </div>
@@ -68,8 +45,6 @@ const showGrowthRate = ref(false)
 const titleRef = ref()
 const chartContentRef = ref()
 const marketCardRef = ref()
-const showPreview = ref(false)
-let hideTimeout = null
 
 const scaleTextToFit = () => {
   if (!titleRef.value || !marketCardRef.value) return
@@ -145,27 +120,6 @@ onMounted(() => {
   window.addEventListener('resize', scaleTextToFit)
 })
 
-// Preview card hover logic
-const delayHidePreview = () => {
-  hideTimeout = setTimeout(() => {
-    showPreview.value = false
-  }, 300) // 300ms delay before hiding
-}
-
-const cancelHidePreview = () => {
-  if (hideTimeout) {
-    clearTimeout(hideTimeout)
-    hideTimeout = null
-  }
-}
-
-const hidePreview = () => {
-  delayHidePreview()
-}
-
-const openLink = () => {
-  showPreview.value = false
-}
 </script>
 
 <style scoped>
@@ -284,68 +238,4 @@ const openLink = () => {
   transform: translateY(0);
 }
 
-.growth-link {
-  color: inherit;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.preview-card {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 16px;
-  width: 320px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-  margin-bottom: 8px;
-}
-
-.preview-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fbbf24;
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-.wiki-icon {
-  font-size: 18px;
-}
-
-.preview-content p {
-  color: #e5e5e5;
-  font-size: 14px;
-  line-height: 1.4;
-  margin: 0 0 8px 0;
-}
-
-.preview-content .context {
-  color: #a0c4c7;
-  font-size: 13px;
-  font-style: italic;
-}
-
-.preview-footer {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.read-more {
-  color: #10b981;
-  font-size: 12px;
-  font-weight: 500;
-}
 </style>

@@ -39,7 +39,11 @@
       "Bash(for i in {8..13})",
       "Bash(do echo \"=== Slide $i ===\")",
       "Bash(for slide in WorkflowSlide MoatSlide GoToMarketSlide TeamSlide AskSlide QASlide)",
-      "Bash(do touch \"/home/geoff/projects/project-flora-pitch-deck/layouts/$slide.vue\")"
+      "Bash(do touch \"/home/geoff/projects/project-flora-pitch-deck/layouts/$slide.vue\")",
+      "Bash(npm install:*)",
+      "Bash(pkill:*)",
+      "Bash(kill:*)",
+      "Bash(netstat:*)"
     ],
     "deny": [],
     "ask": []
