@@ -142,15 +142,16 @@ onMounted(() => {
 .notes-container {
   position: fixed;
   right: 16px;
-  bottom: 16px;
+  top: 16px;
   z-index: 1000;
 }
 
 .viewer-notes-toggle {
   border: none;
   cursor: pointer;
-  font-weight: 700;
-  padding: 0.6em 1.1em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.4em 0.8em;
   border-radius: 999px;
   background: linear-gradient(
     135deg,
@@ -158,7 +159,7 @@ onMounted(() => {
     var(--flora-tree, #00997e)
   );
   color: #fff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
 }
 .viewer-notes-toggle:hover {

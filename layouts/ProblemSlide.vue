@@ -80,16 +80,22 @@
 }
 
 h1 {
-  font-size: 1.9rem;
-  margin-bottom: 0.2rem;
-  color: var(--slidev-color-primary);
+  font-size: 2.1rem;
+  margin-bottom: 0.3rem;
+  color: #eef6f3;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: #64748b;
-  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #97b2a8;
+  margin-bottom: 1.2rem;
   font-style: italic;
+  font-family: 'Lora', serif;
+  font-weight: 400;
 }
 
 .split-layout {
@@ -127,26 +133,33 @@ h1 {
 }
 
 .panel h4 {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  color: #e2e8f0;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: #eef6f3;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .panel ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-grow: 1;
 }
 
 .panel li {
-  margin-bottom: 0.5rem;
-  color: #cbd5e1;
-  line-height: 1.3;
-  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+  color: #d8e7e1;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  font-family: 'Lora', serif;
+  font-weight: 400;
 }
 
 .panel li strong {
-  color: #e2e8f0;
+  color: #eef6f3;
+  font-weight: 600;
 }
 
 .visual-metaphor {
