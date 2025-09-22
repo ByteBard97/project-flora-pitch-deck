@@ -13,8 +13,6 @@
             :wave-number="1"
             border-color="#10b981"
             :visible="showWave1"
-            :max-scale="1.3"
-            :min-scale="0.7"
           >
             <template #icon>🌱</template>
             <template #title>The Eco-Conscious Consumer</template>
@@ -37,8 +35,6 @@
             :wave-number="2"
             border-color="#06b6d4"
             :visible="showWave2"
-            :max-scale="1.3"
-            :min-scale="0.7"
           >
             <template #icon>🦅</template>
             <template #title>The Native Plant Movement Matures</template>
@@ -58,8 +54,6 @@
             :wave-number="3"
             border-color="#fbbf24"
             :visible="showWave3"
-            :max-scale="1.3"
-            :min-scale="0.7"
           >
             <template #icon>🎨</template>
             <template #title>The Democratization of Design</template>
@@ -89,7 +83,7 @@
 
         <!-- Right Half: Convergence Visualization -->
         <div class="right-half">
-          <ConvergenceVisualization :start-animation="startSpinning" />
+          <FloraConvergenceAnimation :start-animation="startSpinning" />
         </div>
       </div>
     </div>
@@ -99,7 +93,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import WaveCell from "../components/WaveCell.vue";
-import ConvergenceVisualization from "../components/ConvergenceVisualization2.vue";
+import FloraConvergenceAnimation from "../components/FloraConvergenceAnimation.vue";
 
 const showWave1 = ref(false);
 const showWave2 = ref(false);

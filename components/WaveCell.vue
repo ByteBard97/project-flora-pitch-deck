@@ -1,122 +1,92 @@
 <template>
-  <article class="wave" :class="waveClass" :style="{ '--border-color': borderColor }" ref="root">
-    <header class="head">
-      <slot name="icon"/>
-      <h3 class="title"><slot name="title"/></h3>
-    </header>
+  <article
+    class="wave"
+    :class="waveClass"
+    :style="{ '--border-color': borderColor }"
+    ref="root"
+  >
+    <div class="wave-content">
+      <!-- Icon and Title -->
+      <div class="wave-header">
+        <div class="wave-icon">
+          <slot name="icon" />
+        </div>
+        <h3 class="wave-title">
+          <slot name="title" />
+        </h3>
+      </div>
 
-    <section class="body">
-      <!-- auto-shrink only if needed; safe to leave on -->
-      <div ref="fitBox" class="fit-box">
-        <div ref="fitInner" class="fit-inner" :style="{ '--s': scale }">
-          <div class="metrics"><slot name="metrics"/></div>
-          <p class="copy"><slot/></p>
-          <div class="badges"><slot name="badges"/></div>
+      <!-- Body content -->
+      <div class="wave-body">
+        <!-- Metrics if provided -->
+        <div v-if="$slots.metrics" class="wave-metrics">
+          <slot name="metrics" />
+        </div>
+
+        <!-- Main text content -->
+        <div class="wave-text">
+          <slot />
+        </div>
+
+        <!-- Badges/Additional content if provided -->
+        <div v-if="$slots.badges" class="wave-badges">
+          <slot name="badges" />
         </div>
       </div>
-    </section>
-
-    <footer class="foot"><slot name="foot"/></footer>
+    </div>
   </article>
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { ref, computed } from "vue";
 
 const props = defineProps({
   borderColor: {
     type: String,
-    default: '#10b981'
+    default: "#10b981",
   },
   waveNumber: {
     type: Number,
-    default: 1
+    default: 1,
   },
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  maxScale: {
-    type: Number,
-    default: 1.5  // Allow growing up to 1.5x
-  },
-  minScale: {
-    type: Number,
-    default: 0.5  // Don't shrink below 0.5x
-  }
-})
+});
 
-const root = ref(null)
-const fitBox = ref(null)
-const fitInner = ref(null)
-const scale = ref(1)
+const root = ref(null);
 
 const waveClass = computed(() => ({
   [`wave-${props.waveNumber}`]: true,
-  'visible': props.visible
-}))
-
-let ro = null
-
-function fit() {
-  if (!fitBox.value || !fitInner.value) return
-
-  const box = fitBox.value
-  const inner = fitInner.value
-
-  scale.value = 1 // measure natural size
-
-  const s = Math.min(
-    box.clientWidth / Math.max(inner.scrollWidth, 1),
-    box.clientHeight / Math.max(inner.scrollHeight, 1),
-    props.maxScale
-  )
-
-  scale.value = Number.isFinite(s) ? Math.max(s, props.minScale) : 1 // can grow or shrink within bounds
-}
-
-onMounted(() => {
-  if (fitBox.value && fitInner.value) {
-    ro = new ResizeObserver(fit)
-    ro.observe(fitBox.value)
-    ro.observe(fitInner.value)
-    fit()
-  }
-})
-
-onBeforeUnmount(() => {
-  if (ro) {
-    ro.disconnect()
-  }
-})
+  visible: props.visible,
+}));
 </script>
 
 <style scoped>
 .wave {
-  /* This makes cqw/cqh relative to THIS card */
+  /* Container setup */
   container-type: size;
-
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  display: grid;
-  grid-template-rows: min-content 1fr min-content; /* head | body | foot */
-  gap: clamp(8px, 1.2cqh, 18px);
-  padding: clamp(12px, 2cqh, 28px);
-  border-radius: clamp(8px, 1.2cqh, 16px);
 
+  /* Visual styling */
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-left: 4px solid var(--border-color, #10b981);
-
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0; /* allow shrinking in grid */
+  border-radius: 12px;
+  padding: clamp(16px, 3%, 24px);
+  backdrop-filter: blur(10px);
 
   /* Animation */
   opacity: 0;
   transform: translateX(-30px);
   transition: all 0.8s ease-out;
-  backdrop-filter: blur(10px);
+
+  /* Flexbox for content */
+  display: flex;
+  flex-direction: column;
 }
 
 .wave.visible {
@@ -126,181 +96,166 @@ onBeforeUnmount(() => {
 
 .wave:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.head {
-  display: grid;
-  grid-auto-flow: column;
+/* Content wrapper - fills available space */
+.wave-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.5cqh, 16px);
+  min-height: 0; /* Allow shrinking */
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Header section with icon and title */
+.wave-header {
+  display: flex;
   align-items: center;
-  gap: clamp(8px, 1cqw, 16px);
-  justify-content: start;
+  gap: clamp(12px, 2cqw, 16px);
+  flex-shrink: 0; /* Don't shrink header */
 }
 
-.title {
-  margin: 0;
-  font-size: clamp(14px, 2.8cqw, 20px);
-  line-height: 1.15;
-  text-wrap: balance;
-  color: white;
-  font-weight: bold;
-}
-
-.body {
-  min-height: 0; /* allow the middle area to shrink */
-}
-
-/* Auto-shrink container (only scales down if content too tall) */
-.fit-box {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /* overflow: hidden; -- Removed to prevent clipping scaled content */
-}
-
-.fit-inner {
-  transform: scale(var(--s, 1));
-  transform-origin: top left;
-  width: 100%; /* Force content to wrap within container */
-  box-sizing: border-box;
-}
-
-/* Content that should wrap instead of overflow */
-.copy {
-  margin: clamp(8px, 1cqh, 14px) 0 0 0;
-  font-size: clamp(11px, 1.8cqw, 16px);
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-  color: #e5e5e5;
-}
-
-/* Metrics: stay in a row when spacious, wrap gracefully when tight */
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(22cqw, 220px), 1fr));
-  gap: clamp(8px, 1cqw, 16px);
-  align-items: baseline;
-  min-width: 0;
-}
-
-/* Badges row */
-.badges {
-  display: grid;
-  grid-auto-flow: column;
-  gap: clamp(6px, 0.8cqw, 12px);
-  margin-top: clamp(8px, 1cqh, 14px);
-  justify-content: start;
-  min-width: 0;
-}
-
-/* Media should never burst the card */
-img, svg, canvas {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* Make *everything* shrinkable inside the card */
-.wave :where(*) {
-  min-width: 0;
-  min-height: 0;
-}
-
-/* Icon styling */
-.wave :deep(template[#icon] + *) {
-  font-size: clamp(20px, 4cqw, 32px);
+.wave-icon {
+  font-size: clamp(24px, 6cqh, 40px);
+  line-height: 1;
   flex-shrink: 0;
 }
 
-/* Stats styling */
-.stat {
-  text-align: center;
-  min-width: 0;
+.wave-title {
+  margin: 0;
+  font-size: clamp(14px, 3.5cqh, 22px);
+  line-height: 1.15;
+  color: white;
+  font-weight: bold;
+  flex: 1;
 }
 
-.stat .number {
-  font-size: clamp(18px, 3.2cqw, 24px);
+/* Body section - takes remaining space */
+.wave-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.5cqh, 16px);
+  min-height: 0; /* Allow shrinking */
+}
+
+/* Metrics section */
+.wave-metrics {
+  display: flex;
+  gap: clamp(16px, 3cqw, 24px);
+  justify-content: space-around;
+  flex-shrink: 0;
+}
+
+.wave-metrics :deep(.stat) {
+  text-align: center;
+  flex: 1;
+}
+
+.wave-metrics :deep(.stat .number) {
+  font-size: clamp(20px, 5cqh, 32px);
   font-weight: bold;
   color: #fbbf24;
   line-height: 1;
   display: block;
+  margin-bottom: 2px;
 }
 
-.stat .label {
-  font-size: clamp(9px, 1.4cqw, 12px);
+.wave-metrics :deep(.stat .label) {
+  font-size: clamp(11px, 2.5cqh, 14px);
   color: #a0c4c7;
-  line-height: 1.1;
-  margin-top: 4px;
+  line-height: 1.2;
   display: block;
 }
 
-/* Pain point styling */
-.pain-point {
+/* Main text content - expands to fill space */
+.wave-text {
+  flex: 1;
+  font-size: clamp(13px, 2.8cqh, 18px);
+  line-height: 1.3;
+  color: #e5e5e5;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Badges section */
+.wave-badges {
+  flex-shrink: 0;
+}
+
+/* Pain point box */
+.wave-badges :deep(.pain-point) {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: clamp(6px, 1.2cqh, 10px);
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: clamp(6px, 1cqh, 8px);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
 }
 
-.quote {
+.wave-badges :deep(.quote) {
   font-style: italic;
   color: #ff6b6b;
-  font-size: clamp(10px, 1.6cqw, 12px);
-  line-height: 1.2;
+  font-size: clamp(11px, 2.2cqh, 14px);
+  line-height: 1.15;
 }
 
-.solution {
+.wave-badges :deep(.solution) {
   color: white;
   font-weight: 600;
-  font-size: clamp(10px, 1.6cqw, 12px);
-  line-height: 1.2;
+  font-size: clamp(11px, 2.2cqh, 14px);
+  line-height: 1.15;
 }
 
-/* Analogy styling */
-.analogy {
+/* Analogy box */
+.wave-badges :deep(.analogy) {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  padding: clamp(6px, 1cqh, 8px);
-  font-size: clamp(10px, 1.6cqw, 12px);
+  padding: clamp(6px, 1.2cqh, 10px);
 }
 
-.comparison {
+.wave-badges :deep(.comparison) {
   display: flex;
   align-items: center;
-  gap: clamp(4px, 0.8cqw, 8px);
+  gap: 6px;
   margin-bottom: 4px;
+  font-size: clamp(11px, 2.2cqh, 14px);
 }
 
-.comparison:last-child {
+.wave-badges :deep(.comparison:last-child) {
   margin-bottom: 0;
 }
 
-.company {
+.wave-badges :deep(.company) {
   font-weight: bold;
   color: white;
-  min-width: clamp(40px, 8cqw, 60px);
+  min-width: 50px;
+  font-size: clamp(10px, 2cqh, 13px);
 }
 
-.arrow {
+.wave-badges :deep(.arrow) {
   color: #a0c4c7;
+  font-size: clamp(10px, 2cqh, 13px);
 }
 
-.domain {
+.wave-badges :deep(.domain) {
   color: #e5e5e5;
+  flex: 1;
+  font-size: clamp(10px, 2cqh, 13px);
 }
 
-.opportunity .company {
+.wave-badges :deep(.opportunity .company) {
   color: #fbbf24;
 }
 
-.opportunity .domain {
+.wave-badges :deep(.opportunity .domain) {
   color: #fbbf24;
   font-weight: 600;
 }
 
-/* Wave-specific styles for backwards compatibility */
+/* Wave-specific border colors */
 .wave-1 {
   --border-color: #10b981;
 }
@@ -311,5 +266,20 @@ img, svg, canvas {
 
 .wave-3 {
   --border-color: #fbbf24;
+}
+
+/* Responsive adjustments */
+@media (max-height: 600px) {
+  .wave {
+    padding: 12px;
+  }
+
+  .wave-content {
+    gap: 8px;
+  }
+
+  .wave-icon {
+    font-size: 24px;
+  }
 }
 </style>

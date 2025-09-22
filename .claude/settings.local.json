@@ -43,7 +43,8 @@
       "Bash(npm install:*)",
       "Bash(pkill:*)",
       "Bash(kill:*)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
