@@ -1,364 +1,220 @@
 <template>
-  <div class="opportunity-slide">
-    <div class="slide-header">
-      <h1>This Frustration Represents a Multi-Billion Dollar Opportunity</h1>
-      <p class="subtitle">A Massive, Growing, and Underserved Market</p>
-    </div>
+  <div class="slide-root">
+    <div class="opportunity-slide">
+      <!-- Header Section with container -->
+      <header class="slide-header">
+        <div class="header-content">
+          <h1 class="slide-title">This Frustration Represents a Multi-Billion Dollar Opportunity</h1>
+          <p class="subtitle">A Massive, Growing, and Underserved Market</p>
+        </div>
+      </header>
 
-    <div class="main-content">
-      <div class="left-column">
-        <div class="market-card" :class="{ visible: showMarketCard }">
-          <h3>📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
-          <div class="chart-section">
-            <div class="bar-container">
-              <div class="bar-2024" :style="{ height: bar2024Height }">$2.95B</div>
-              <div class="year">2024</div>
-            </div>
-            <div class="bar-container">
-              <div class="bar-2030" :style="{ height: bar2030Height }">$5.45B</div>
-              <div class="year">2030</div>
-            </div>
+      <!-- Main content section with weighted flex -->
+      <main class="slide-main">
+        <div class="main-section">
+          <div class="left-column">
+            <MarketChart />
           </div>
-          <div class="growth-rate" :class="{ visible: showGrowthRate }">10.8% CAGR</div>
-        </div>
-      </div>
 
-      <div class="right-column">
-        <div class="insight-card foundation" :class="{ visible: showCard1 }">
-          <div class="icon">🏗️</div>
-          <h4>Parent Industry Foundation</h4>
-          <div class="big-number">$264.7B</div>
-          <p>Global landscaping services market provides massive foundation</p>
-        </div>
+          <div class="right-column">
+            <InsightCard
+              icon="🏗"
+              title="Parent Industry Foundation"
+              bigNumber="$264.7B"
+              description="Global landscaping services market provides massive foundation"
+            />
 
-        <div class="insight-card adoption" :class="{ visible: showCard2 }">
-          <div class="icon">💻</div>
-          <h4>High Digital Adoption</h4>
-          <div class="big-number">93%</div>
-          <p>of landscape businesses already use software</p>
-        </div>
+            <InsightCard
+              icon="💻"
+              title="High Digital Adoption"
+              bigNumber="93%"
+              description="of landscape businesses already use software"
+            />
 
-        <div class="insight-card opportunity" :class="{ visible: showCard3 }">
-          <div class="icon">🎯</div>
-          <h4>The Real Opportunity</h4>
-          <p class="key-insight">The question isn't <em>if</em> they'll use software, but <strong>which</strong> integrated platform will finally solve their workflow</p>
+            <InsightCard
+              icon="🎯"
+              title="The Real Opportunity"
+              cardType="opportunity"
+            >
+              The question isn't <em>if</em> they'll use software, but <strong>which</strong> integrated platform will finally solve their workflow
+            </InsightCard>
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
 
-    <div class="signals-section" :class="{ visible: showSignals }">
-      <h3>MARKET READINESS SIGNALS</h3>
-      <div class="signals">
-        <div class="ready">✅ Market is mature and ready</div>
-        <div class="ready">✅ Users already paying for software</div>
-        <div class="ready">✅ Pain points are well-documented</div>
-        <div class="hot">🔥 No integrated solution exists</div>
-      </div>
+      <!-- Bottom section for signals -->
+      <footer class="slide-footer">
+        <div class="signals-container">
+          <MarketSignals />
+        </div>
+      </footer>
+
+      <DebugOverlaps />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
-const bar2024Height = ref('0px')
-const bar2030Height = ref('0px')
-const showGrowthRate = ref(false)
-const showMarketCard = ref(false)
-const showCard1 = ref(false)
-const showCard2 = ref(false)
-const showCard3 = ref(false)
-const showSignals = ref(false)
-
+// Overlap detection to catch layout issues
 onMounted(() => {
-  // Show market card first
   setTimeout(() => {
-    showMarketCard.value = true
-  }, 300)
+    const elements = document.querySelectorAll('.insight-card, .market-card, .signals-section')
+    const overlaps = []
 
-  // Animate bars
-  setTimeout(() => {
-    bar2024Height.value = '60px'
-  }, 500)
+    for (let i = 0; i < elements.length; i++) {
+      for (let j = i + 1; j < elements.length; j++) {
+        const rect1 = elements[i].getBoundingClientRect()
+        const rect2 = elements[j].getBoundingClientRect()
 
-  setTimeout(() => {
-    bar2030Height.value = '100px'
-  }, 800)
+        // Check if rectangles overlap
+        if (!(rect1.right <= rect2.left || rect2.right <= rect1.left ||
+              rect1.bottom <= rect2.top || rect2.bottom <= rect1.top)) {
 
-  setTimeout(() => {
-    showGrowthRate.value = true
-  }, 1200)
+          const overlap = {
+            el1: elements[i].className || elements[i].tagName,
+            el2: elements[j].className || elements[j].tagName,
+            el1Bounds: `${rect1.left.toFixed(0)},${rect1.top.toFixed(0)} ${rect1.width.toFixed(0)}×${rect1.height.toFixed(0)}`,
+            el2Bounds: `${rect2.left.toFixed(0)},${rect2.top.toFixed(0)} ${rect2.width.toFixed(0)}×${rect2.height.toFixed(0)}`
+          }
+          overlaps.push(overlap)
 
-  // Animate right column cards
-  setTimeout(() => {
-    showCard1.value = true
-  }, 1500)
+          // Highlight overlapping elements
+          elements[i].style.outline = '3px solid red'
+          elements[j].style.outline = '3px solid red'
+        }
+      }
+    }
 
-  setTimeout(() => {
-    showCard2.value = true
-  }, 1800)
-
-  setTimeout(() => {
-    showCard3.value = true
-  }, 2100)
-
-  setTimeout(() => {
-    showSignals.value = true
-  }, 2400)
+    if (overlaps.length > 0) {
+      console.warn('🚨 OVERLAPPING ELEMENTS DETECTED:')
+      overlaps.forEach((overlap, index) => {
+        console.warn(`  ${index + 1}. ${overlap.el1} overlaps ${overlap.el2}`)
+        console.warn(`     Element 1: ${overlap.el1Bounds}`)
+        console.warn(`     Element 2: ${overlap.el2Bounds}`)
+      })
+    } else {
+      console.log('✅ No overlaps detected - layout is clean')
+    }
+  }, 2000) // Wait for animations and layout to settle
 })
 </script>
 
 <style scoped>
+/* The slide is the size container: cqw/cqh now mean "% of slide". */
+.slide-root {
+  container-type: size;
+  width: 100%;
+  height: 100%;
+}
+
 .opportunity-slide {
   background: linear-gradient(135deg, #0f4a3c 0%, #1e6b5a 100%);
   color: white;
-  padding: 1rem;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+
+  /* Scale tokens once; everything reads these. */
+  --gutter: clamp(16px, 3cqw, 44px); /* left/right gutters */
+  --col-gap: clamp(12px, 2cqw, 32px); /* space between columns */
+  --stack-gap: clamp(12px, 1.8cqh, 28px);
+  --radius: clamp(8px, 1.2cqh, 16px);
+  --pad: clamp(10px, 1.4cqh, 22px);
+  --title: clamp(18px, 3.4cqw, 40px);
+  --body: clamp(12px, 2cqw, 18px);
 }
 
+/* Header section - takes only what it needs */
 .slide-header {
+  flex: 0 0 auto;
+  padding: var(--pad) var(--gutter);
   text-align: center;
-  margin-bottom: 0.5rem;
 }
 
-.slide-header h1 {
-  font-size: 1.4rem;
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--stack-gap) * 0.5);
+}
+
+.slide-title {
+  font-size: var(--title);
+  line-height: 1.15;
+  margin: 0;
   font-weight: bold;
-  margin-bottom: 0.1rem;
-  line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 0.8rem;
-  color: #a0c4c7;
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: clamp(14px, 2.4cqw, 24px);
+  color: rgba(255, 255, 255, 0.75);
   font-style: italic;
   margin: 0;
+  letter-spacing: 0.01em;
+  font-weight: 400;
 }
 
-.main-content {
+/* Main content section - takes most space */
+.slide-main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* allow shrinking without overflow */
+  padding: 0 var(--gutter);
+}
+
+.main-section {
+  flex: 1 1 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) var(--col-gap) minmax(0, 1fr);
+  gap: var(--col-gap);
   min-height: 0;
-  height: 30%;
 }
 
 .left-column {
+  grid-column: 1;
   display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.market-card {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1rem;
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
-  text-align: center;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.market-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.market-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.chart-section {
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  gap: 2rem;
-  height: 120px;
-  margin: 1rem 0;
-}
-
-.bar-container {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.bar-2024, .bar-2030 {
-  width: 60px;
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  align-items: start;
   justify-content: center;
-  padding-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  color: white;
-  font-weight: bold;
-  font-size: 0.9rem;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  transition: height 0.8s ease-out;
-}
-
-.bar-2024 {
-  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
-}
-
-.bar-2030 {
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
-}
-
-.year {
-  font-size: 0.9rem;
-  color: #a0c4c7;
-  font-weight: 600;
-}
-
-.growth-rate {
-  text-align: center;
-  color: #10b981;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0.8rem 1.5rem;
-  margin-top: 1rem;
-  border: 2px solid rgba(16, 185, 129, 0.3);
-  font-weight: 600;
-  font-size: 1.1rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease-out;
-}
-
-.growth-rate.visible {
-  opacity: 1;
-  transform: translateY(0);
+  min-height: 0;
 }
 
 .right-column {
+  grid-column: 3;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  height: 100%;
+  gap: var(--stack-gap);
+  justify-content: space-between;
+  min-height: 0;
 }
 
-.insight-card {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 0.4rem;
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  transform: translateX(30px);
-  transition: all 0.6s ease-out;
-  text-align: center;
-  flex: 1;
+/* Footer section - takes only what it needs */
+.slide-footer {
+  flex: 0 0 auto;
+  padding: var(--pad) var(--gutter);
+}
+
+.signals-container {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
-.insight-card.visible {
-  opacity: 1;
-  transform: translateX(0);
+/* Make sure insight cards don't overflow */
+:deep(.insight-card) {
+  min-height: 0;
+  flex: 1 1 0%;
 }
 
-.insight-card .icon {
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
-}
-
-.insight-card h4 {
-  font-size: 0.7rem;
-  color: white;
-  margin-bottom: 0.2rem;
-  font-weight: 600;
-}
-
-.insight-card p {
-  font-size: 0.6rem;
-  color: #a0c4c7;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.insight-card.opportunity {
-  text-align: left;
-}
-
-.key-insight {
-  font-size: 0.8rem !important;
-  color: white !important;
-  line-height: 1.3 !important;
-}
-
-.key-insight em {
-  color: #a0c4c7;
-}
-
-.key-insight strong {
-  color: #fbbf24;
-}
-
-.big-number {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fbbf24;
-  display: block;
-  margin: 0.1rem 0;
-}
-
-.signals-section {
-  margin-top: 0.5rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s ease-out;
-  flex-shrink: 0;
-}
-
-.signals-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.signals-section h3 {
-  font-size: 0.8rem;
-  margin-bottom: 0.4rem;
-  text-align: center;
-}
-
-.signals {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-}
-
-.ready, .hot {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  padding: 0.6rem;
-  font-size: 0.75rem;
-  color: #a0c4c7;
-  backdrop-filter: blur(5px);
-}
-
-.hot {
-  color: #fbbf24;
-  border-color: rgba(251, 191, 36, 0.3);
-  background: rgba(251, 191, 36, 0.1);
+/* Ensure no components overflow their containers */
+:deep(.market-card),
+:deep(.signals-section) {
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 </style>

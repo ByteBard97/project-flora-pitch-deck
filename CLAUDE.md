@@ -3,17 +3,20 @@
 ## CRITICAL DEBUGGING PHILOSOPHY: FAIL FAST AND LOUD
 
 ### ❌ NEVER USE FALLBACKS
+
 - **NO `|| 'default value'`** - Fallbacks hide real problems
 - **NO `?.` optional chaining to paper over undefined data** - Find why it's undefined
 - **NO defensive programming** - We want crashes when data is missing
 - **NO graceful degradation** - We want explicit failures
 
 ### ❌ NEVER USE TRY-CATCH BLOCKS
+
 - **NO `try { ... } catch { ... }`** - Errors must bubble up
 - **NO error swallowing** - Every error is valuable information
 - **NO "just in case" error handling** - Fix the root cause instead
 
 ### ✅ ALWAYS FAIL FAST AND LOUD
+
 - **Throw explicit errors** when data is missing
 - **Use assertions** to validate assumptions
 - **Force crashes** to reveal configuration issues
@@ -22,24 +25,29 @@
 ### Examples:
 
 #### ❌ BAD - Hides Problems:
+
 ```js
-const title = props.frontmatter?.title || 'Default Title';
+const title = props.frontmatter?.title || "Default Title";
 try {
   renderComponent();
 } catch (e) {
-  console.log('Something went wrong');
+  console.log("Something went wrong");
 }
 ```
 
 #### ✅ GOOD - Fails Fast:
+
 ```js
 if (!props.frontmatter?.title) {
-  throw new Error(`Missing title in frontmatter. Props: ${JSON.stringify(props)}`);
+  throw new Error(
+    `Missing title in frontmatter. Props: ${JSON.stringify(props)}`
+  );
 }
 const title = props.frontmatter.title;
 ```
 
 ### Debugging Strategy:
+
 1. **Add explicit error checks** for missing data
 2. **Throw detailed error messages** with context
 3. **Use console.log liberally** during debugging
@@ -47,12 +55,130 @@ const title = props.frontmatter.title;
 5. **Never mask problems** with fallback values
 
 ### Vue Component Rules:
+
 - Every prop must be validated on component load
 - Missing data should throw errors with full context
 - Use explicit error boundaries, not silent failures
 - Log all received props during debugging
 
 ## FAIL FAST = FASTER DEBUGGING = BETTER CODE
+
+---
+
+## 🚨 CRITICAL SLIDEV CSS CONSTRAINTS
+
+### ✅ CONTAINER QUERY UNITS - THE PERFECT SOLUTION
+
+**Container query units (`cqw`, `cqh`) are the BEST way to create responsive layouts in Slidev.**
+
+#### Required Setup:
+
+```vue
+<template>
+  <div class="slide-root">
+    <div class="slide-content">
+      <!-- Your slide content -->
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.slide-root {
+  container-type: size;
+  width: 100%;
+  height: 100%;
+}
+</style>
+```
+
+#### Perfect Responsive CSS:
+
+```css
+/* Typography scales with container */
+h1 {
+  font-size: clamp(20px, 4cqw, 64px);
+}
+h2 {
+  font-size: clamp(16px, 2.2cqw, 32px);
+}
+
+/* Layout spacing scales with container */
+.main-content {
+  gap: clamp(8px, 3cqw, 80px);
+}
+.right-column {
+  gap: clamp(8px, 2cqh, 32px);
+}
+
+/* Padding/margins scale with container */
+.slide-content {
+  padding: clamp(8px, 2cqw, 40px) clamp(8px, 2cqh, 24px);
+}
+```
+
+#### Why This Works:
+
+- `1cqw` = 1% of container width
+- `1cqh` = 1% of container height
+- `clamp(min, preferred, max)` provides responsive bounds
+- Scales perfectly from 1080p to 4K automatically
+- Works with Slidev's transform/zoom system
+
+#### Container Query Debugging:
+
+```javascript
+// Add this to verify container queries are working
+const probe = document.createElement("div");
+probe.style.cssText =
+  "position: absolute; left: -9999px; width: 100cqw; height: 100cqh;";
+slideRoot.appendChild(probe);
+const cqW = probe.offsetWidth; // Should equal container width
+const cqH = probe.offsetHeight; // Should equal container height
+slideRoot.removeChild(probe);
+console.log(
+  "Container queries working:",
+  Math.abs(cqW - container.clientWidth) < 5
+);
+```
+
+### ❌ NEVER USE VIEWPORT UNITS IN SLIDEV
+
+- **NO `vh` (viewport height)** - Slidev environment confounds this completely
+- **NO `vw` (viewport width)** - Causes unpredictable scaling issues
+- **NO `vmin` or `vmax`** - Same problems as vh/vw
+- **NO `clamp()` with viewport units** - Will fail across different resolutions
+
+### ✅ SLIDEV-SAFE CSS UNITS (fallback options)
+
+- **Use `rem` and `em`** for scalable sizing
+- **Use `%` for proportional layouts** within containers
+- **Use `px` for fixed dimensions** when needed
+- **Use CSS transforms** with media queries for multi-resolution support
+
+### Multi-Resolution Strategy:
+
+```css
+/* Design at base 1920x1080, then scale up */
+@media (min-width: 2560px) {
+  .slide-container {
+    transform: scale(1.8);
+    transform-origin: top left;
+    width: 55.56vw; /* Only in transform container */
+    height: 55.56vh; /* Only in transform container */
+  }
+}
+
+@media (min-width: 3840px) {
+  .slide-container {
+    transform: scale(2.5);
+    transform-origin: top left;
+    width: 40vw;
+    height: 40vh;
+  }
+}
+```
+
+**Key Insight:** Slidev's presentation environment breaks standard responsive CSS. Always design for base resolution (1920x1080) using rem/px, then scale the entire container for higher resolutions.
 
 ---
 
@@ -88,6 +214,7 @@ npm run export     # Export to PDF
 ### ⚠️ NEVER CLAIM COMPLETION WITHOUT VERIFICATION
 
 #### Step 1: STUDY THE ORIGINAL
+
 ```bash
 # Always start by examining the original slide
 ls /home/geoff/projects/project-flora-pitch-deck/extracted-slides/
@@ -96,6 +223,7 @@ ls /home/geoff/projects/project-flora-pitch-deck/extracted-slides/
 ```
 
 #### Step 2: CREATE VUE LAYOUT
+
 - Create Vue layout file in `/layouts/` directory
 - Use Vue components, NOT markdown HTML
 - Include all content from original
@@ -103,9 +231,10 @@ ls /home/geoff/projects/project-flora-pitch-deck/extracted-slides/
 - Include smooth animations
 
 #### Step 3: CONTINUOUS VERIFICATION LOOP
+
 ```bash
 # Take HD screenshot using tools
-node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/slide[N]-current.png" --width 1920 --height 1080 --wait 3000
+node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screenshots/slide[N]-current.png" --width 1920 --height 1080 --wait 3000
 
 # MANDATORY: Read and examine the screenshot
 # Compare against original design
@@ -115,6 +244,7 @@ node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/s
 ```
 
 #### Step 4: FIX UNTIL PERFECT
+
 - **NEVER move to next slide until current slide is 100% complete**
 - Fix any cut-off content
 - Adjust layout to fit all content in viewport
@@ -122,6 +252,7 @@ node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/s
 - Verify against original design
 
 #### Step 5: FINAL VERIFICATION
+
 - Take final HD screenshot
 - Compare side-by-side with original
 - Verify all 4 requirements met:
@@ -142,6 +273,7 @@ node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/s
 ### 🔄 VERIFICATION PROCESS
 
 **For EVERY change:**
+
 1. Make change to Vue file
 2. Take HD screenshot using `node tools/snap.js`
 3. Read screenshot file to verify visually
@@ -155,7 +287,7 @@ node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/s
 ```
 /layouts/Slide[N].vue           # Main Vue layout
 /slides/[N]-[slide-name].md     # Minimal markdown (just layout reference)
-/screens/slide[N]-final.png     # Final verified screenshot
+/screenshots/slide[N]-final.png     # Final verified screenshot
 ```
 
 ### 🛠️ Available Tools
@@ -177,6 +309,7 @@ node tools/snap.js --url "http://localhost:3030/[SLIDE_NUMBER]" --out "screens/s
 ### 📋 SLIDE CONVERSION CHECKLIST
 
 For each slide, verify:
+
 - [ ] Vue layout created in `/layouts/`
 - [ ] All original content included
 - [ ] Green gradient background applied
@@ -200,6 +333,7 @@ For each slide, verify:
 ### Step-by-Step Process (Run Until All 13 Complete)
 
 #### 1. IDENTIFY NEXT SLIDE
+
 ```bash
 # Check which slide needs work
 ls /home/geoff/projects/project-flora-pitch-deck/extracted-slides/
@@ -207,14 +341,16 @@ ls /home/geoff/projects/project-flora-pitch-deck/extracted-slides/
 ```
 
 #### 2. STUDY ORIGINAL
+
 ```bash
 # Read original HTML
 Read: /home/geoff/projects/project-flora-pitch-deck/extracted-slides/[SLIDE-NAME].html
 # Take reference screenshot if needed
-node tools/snap.js --url "file:///home/geoff/projects/project-flora-pitch-deck/docs/index.html" --out "screens/original-slide[N].png"
+node tools/snap.js --url "file:///home/geoff/projects/project-flora-pitch-deck/docs/index.html" --out "screenshots/original-slide[N].png"
 ```
 
 #### 3. CREATE/FIX VUE LAYOUT
+
 ```bash
 # Create or edit Vue layout
 Write/Edit: /home/geoff/projects/project-flora-pitch-deck/layouts/Slide[N].vue
@@ -223,14 +359,16 @@ Edit: /home/geoff/projects/project-flora-pitch-deck/slides/[N]-*.md
 ```
 
 #### 4. VERIFY WITH HD SCREENSHOT
+
 ```bash
 # Take HD screenshot
-node tools/snap.js --url "http://localhost:3030/[N]" --out "screens/slide[N]-current.png" --width 1920 --height 1080 --wait 3000
+node tools/snap.js --url "http://localhost:3030/[N]" --out "screenshots/slide[N]-current.png" --width 1920 --height 1080 --wait 3000
 # MANDATORY: Read screenshot to verify
-Read: /home/geoff/projects/project-flora-pitch-deck/screens/slide[N]-current.png
+Read: /home/geoff/projects/project-flora-pitch-deck/screenshots/slide[N]-current.png
 ```
 
 #### 5. CHECK COMPLETION CRITERIA
+
 - ✅ All content visible (nothing cut off)
 - ✅ Green gradient background
 - ✅ Matches original design
@@ -238,11 +376,13 @@ Read: /home/geoff/projects/project-flora-pitch-deck/screens/slide[N]-current.png
 - ✅ Smooth animations
 
 #### 6. IF NOT PERFECT → FIX AND REPEAT FROM STEP 3
+
 #### 7. IF PERFECT → MOVE TO NEXT SLIDE
 
 ### 🎯 SIMPLE SUCCESS CRITERIA
 
 **For each slide, answer YES to all:**
+
 1. Can I see ALL text content from the original?
 2. Is nothing cut off at edges/bottom?
 3. Does it have the green gradient background?
@@ -272,6 +412,7 @@ Read: /home/geoff/projects/project-flora-pitch-deck/screens/slide[N]-current.png
 ### ⚡ AUTOMATION READY
 
 This process is designed to be:
+
 - **Mechanical** - Same steps every time
 - **Verifiable** - HD screenshots prove completion
 - **Foolproof** - Can't claim done until criteria met

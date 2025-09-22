@@ -32,7 +32,10 @@
       "mcp__puppeteer__puppeteer_click",
       "Read(//tmp/**)",
       "Bash(curl:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(for i in {7..13})",
+      "Bash(do node tools/snap.js --url \"http://localhost:3030/$i\" --out \"screens/slide$i-check.png\" --width 1920 --height 1080 --wait 2000)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []
