@@ -7,41 +7,41 @@
 
     <div class="main-content">
       <div class="left-column">
-        <h3>📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
-        <div class="chart-section">
-          <div class="bar-container">
-            <div class="bar-2024" :style="{ height: bar2024Height }">$2.95B</div>
-            <div class="year">2024</div>
+        <div class="market-card" :class="{ visible: showMarketCard }">
+          <h3>📈 GLOBAL LANDSCAPE SOFTWARE MARKET</h3>
+          <div class="chart-section">
+            <div class="bar-container">
+              <div class="bar-2024" :style="{ height: bar2024Height }">$2.95B</div>
+              <div class="year">2024</div>
+            </div>
+            <div class="bar-container">
+              <div class="bar-2030" :style="{ height: bar2030Height }">$5.45B</div>
+              <div class="year">2030</div>
+            </div>
           </div>
-          <div class="bar-container">
-            <div class="bar-2030" :style="{ height: bar2030Height }">$5.45B</div>
-            <div class="year">2030</div>
-          </div>
+          <div class="growth-rate" :class="{ visible: showGrowthRate }">10.8% CAGR</div>
         </div>
-        <div class="growth-rate" :class="{ visible: showGrowthRate }">10.8% CAGR</div>
       </div>
 
       <div class="right-column">
-        <div class="insight-container" :class="{ visible: showInsights }">
-          <div class="insight-item foundation">
-            <div class="icon">🏗️</div>
-            <h4>Parent Industry Foundation</h4>
-            <div class="big-number">$264.7B</div>
-            <p>Global landscaping services market provides massive foundation</p>
-          </div>
+        <div class="insight-card foundation" :class="{ visible: showCard1 }">
+          <div class="icon">🏗️</div>
+          <h4>Parent Industry Foundation</h4>
+          <div class="big-number">$264.7B</div>
+          <p>Global landscaping services market provides massive foundation</p>
+        </div>
 
-          <div class="insight-item adoption">
-            <div class="icon">💻</div>
-            <h4>High Digital Adoption</h4>
-            <div class="big-number">93%</div>
-            <p>of landscape businesses already use software</p>
-          </div>
+        <div class="insight-card adoption" :class="{ visible: showCard2 }">
+          <div class="icon">💻</div>
+          <h4>High Digital Adoption</h4>
+          <div class="big-number">93%</div>
+          <p>of landscape businesses already use software</p>
+        </div>
 
-          <div class="insight-item opportunity">
-            <div class="icon">🎯</div>
-            <h4>The Real Opportunity</h4>
-            <p class="key-insight">The question isn't <em>if</em> they'll use software, but <strong>which</strong> integrated platform will finally solve their workflow</p>
-          </div>
+        <div class="insight-card opportunity" :class="{ visible: showCard3 }">
+          <div class="icon">🎯</div>
+          <h4>The Real Opportunity</h4>
+          <p class="key-insight">The question isn't <em>if</em> they'll use software, but <strong>which</strong> integrated platform will finally solve their workflow</p>
         </div>
       </div>
     </div>
@@ -64,10 +64,18 @@ import { ref, onMounted } from 'vue'
 const bar2024Height = ref('0px')
 const bar2030Height = ref('0px')
 const showGrowthRate = ref(false)
-const showInsights = ref(false)
+const showMarketCard = ref(false)
+const showCard1 = ref(false)
+const showCard2 = ref(false)
+const showCard3 = ref(false)
 const showSignals = ref(false)
 
 onMounted(() => {
+  // Show market card first
+  setTimeout(() => {
+    showMarketCard.value = true
+  }, 300)
+
   // Animate bars
   setTimeout(() => {
     bar2024Height.value = '60px'
@@ -81,10 +89,18 @@ onMounted(() => {
     showGrowthRate.value = true
   }, 1200)
 
-  // Animate insights container
+  // Animate right column cards
   setTimeout(() => {
-    showInsights.value = true
+    showCard1.value = true
   }, 1500)
+
+  setTimeout(() => {
+    showCard2.value = true
+  }, 1800)
+
+  setTimeout(() => {
+    showCard3.value = true
+  }, 2100)
 
   setTimeout(() => {
     showSignals.value = true
@@ -96,7 +112,7 @@ onMounted(() => {
 .opportunity-slide {
   background: linear-gradient(135deg, #0f4a3c 0%, #1e6b5a 100%);
   color: white;
-  padding: 1.5rem;
+  padding: 1rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -105,18 +121,18 @@ onMounted(() => {
 
 .slide-header {
   text-align: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .slide-header h1 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
   line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #a0c4c7;
   font-style: italic;
   margin: 0;
@@ -125,21 +141,41 @@ onMounted(() => {
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  flex: 1;
-  align-items: stretch;
+  gap: 0.8rem;
+  align-items: start;
   min-height: 0;
-  height: 65%;
+  height: 30%;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 100%;
 }
 
-.left-column h3 {
-  font-size: 1.2rem;
+.market-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.market-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market-card h3 {
+  font-size: 1.1rem;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -211,58 +247,52 @@ onMounted(() => {
 
 .right-column {
   display: flex;
-  align-items: start;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 100%;
 }
 
-.insight-container {
+.insight-card {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1rem;
-  width: 100%;
+  border-radius: 6px;
+  padding: 0.4rem;
   backdrop-filter: blur(10px);
   opacity: 0;
   transform: translateX(30px);
-  transition: all 0.8s ease-out;
-  height: fit-content;
+  transition: all 0.6s ease-out;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.insight-container.visible {
+.insight-card.visible {
   opacity: 1;
   transform: translateX(0);
 }
 
-.insight-item {
-  text-align: center;
-  margin-bottom: 0.8rem;
+.insight-card .icon {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
 }
 
-.insight-item:last-child {
-  margin-bottom: 0;
-}
-
-.insight-item .icon {
-  font-size: 1.3rem;
-  margin-bottom: 0.3rem;
-}
-
-.insight-item h4 {
-  font-size: 0.85rem;
+.insight-card h4 {
+  font-size: 0.7rem;
   color: white;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
   font-weight: 600;
 }
 
-.insight-item p {
-  font-size: 0.75rem;
+.insight-card p {
+  font-size: 0.6rem;
   color: #a0c4c7;
   margin: 0;
   line-height: 1.2;
 }
 
-.insight-item.opportunity {
-  border-top: 2px solid #fbbf24;
-  padding-top: 0.8rem;
+.insight-card.opportunity {
   text-align: left;
 }
 
@@ -281,18 +311,19 @@ onMounted(() => {
 }
 
 .big-number {
-  font-size: 1.6rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #fbbf24;
   display: block;
-  margin: 0.3rem 0;
+  margin: 0.1rem 0;
 }
 
 .signals-section {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s ease-out;
+  flex-shrink: 0;
 }
 
 .signals-section.visible {
@@ -301,26 +332,26 @@ onMounted(() => {
 }
 
 .signals-section h3 {
-  font-size: 0.9rem;
-  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
   text-align: center;
 }
 
 .signals {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .ready, .hot {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 1rem;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 0.6rem;
+  font-size: 0.75rem;
   color: #a0c4c7;
   backdrop-filter: blur(5px);
 }

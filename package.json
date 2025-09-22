@@ -26,10 +26,18 @@
   "devDependencies": {
     "@slidev/cli": "^52.2.4",
     "@slidev/theme-default": "^0.25.0",
+    "eslint": "^9.36.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
     "puppeteer": "^24.22.0"
   },
   "dependencies": {
     "@lume/autolayout": "^0.10.2",
-    "puppeteer-mcp-server": "^0.7.2"
+    "@modelcontextprotocol/sdk": "^1.18.1",
+    "@types/node": "^24.5.2",
+    "fs-extra": "^11.3.2",
+    "puppeteer-mcp-server": "^0.7.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }
