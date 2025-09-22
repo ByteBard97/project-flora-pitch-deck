@@ -6,8 +6,9 @@
         <p class="subtitle">Why Now?</p>
       </div>
 
-      <div class="waves-visualization">
-        <div class="wave-container">
+      <div class="content-container">
+        <!-- Left Half: Three Wave Cards -->
+        <div class="left-half">
           <div class="wave wave-1" :class="{ visible: showWave1 }">
             <div class="wave-icon">🌱</div>
             <h3>The Eco-Conscious Consumer</h3>
@@ -21,14 +22,14 @@
                 <div class="label">faster growth for sustainable products</div>
               </div>
             </div>
-            <p>The yard is the new frontier for personal climate action</p>
+            <p class="wave-text">The yard is the new frontier for personal climate action</p>
           </div>
 
           <div class="wave wave-2" :class="{ visible: showWave2 }">
             <div class="wave-icon">🦅</div>
             <h3>The Native Plant Movement Matures</h3>
             <div class="wave-content">
-              <p>Organizations like <strong>Audubon and the National Wildlife Federation</strong> are mainstreaming the movement</p>
+              <p>Organizations like <strong>Audubon and NWF</strong> are mainstreaming the movement</p>
               <div class="pain-point">
                 <span class="quote">"mired in complexity"</span>
                 <span class="solution">They need a tool to simplify the process</span>
@@ -62,16 +63,45 @@
           </div>
         </div>
 
-        <div class="convergence-point" :class="{ visible: showConvergence }">
-          <div class="convergence-visual">
-            <div class="meeting-point">
-              <div class="logo-placeholder">Project Flora</div>
-              <div class="timing">Perfect Timing</div>
+        <!-- Right Half: Convergence Visualization -->
+        <div class="right-half">
+          <div class="convergence-area" :class="{ visible: showConvergence }">
+            <div class="convergence-title">The Perfect Storm</div>
+
+            <!-- Flowing energy lines from left to center -->
+            <div class="energy-flows">
+              <div class="energy-line energy-1" :class="{ flowing: showLines }"></div>
+              <div class="energy-line energy-2" :class="{ flowing: showLines }"></div>
+              <div class="energy-line energy-3" :class="{ flowing: showLines }"></div>
             </div>
-            <div class="wave-lines">
-              <div class="line line-1" :class="{ animate: showLines }"></div>
-              <div class="line line-2" :class="{ animate: showLines }"></div>
-              <div class="line line-3" :class="{ animate: showLines }"></div>
+
+            <!-- Central convergence orb -->
+            <div class="convergence-orb" :class="{ spinning: startSpinning }">
+              <div class="orb-container">
+                <div class="sphere-3d">
+                  <!-- Multiple faces to create a more spherical appearance -->
+                  <div class="sphere-face front">
+                    <img src="/flora-tree.webp" alt="Flora Tree" class="flora-texture" />
+                  </div>
+                  <div class="sphere-face back">
+                    <img src="/flora-tree.webp" alt="Flora Tree" class="flora-texture" />
+                  </div>
+                  <div class="sphere-face left">
+                    <img src="/flora-tree.webp" alt="Flora Tree" class="flora-texture" />
+                  </div>
+                  <div class="sphere-face right">
+                    <img src="/flora-tree.webp" alt="Flora Tree" class="flora-texture" />
+                  </div>
+                </div>
+                <div class="orb-glow"></div>
+                <div class="orb-particles">
+                  <span class="particle" v-for="i in 8" :key="i"></span>
+                </div>
+              </div>
+              <div class="orb-label">
+                <div class="main-text">Project Flora</div>
+                <div class="sub-text">Where All Waves Meet</div>
+              </div>
             </div>
           </div>
         </div>
@@ -88,6 +118,7 @@ const showWave2 = ref(false)
 const showWave3 = ref(false)
 const showConvergence = ref(false)
 const showLines = ref(false)
+const startSpinning = ref(false)
 
 onMounted(() => {
   setTimeout(() => {
@@ -109,6 +140,11 @@ onMounted(() => {
   setTimeout(() => {
     showLines.value = true
   }, 1500)
+
+  // Start the 3D spinning animation
+  setTimeout(() => {
+    startSpinning.value = true
+  }, 2000)
 })
 </script>
 
@@ -123,60 +159,74 @@ onMounted(() => {
 .tipping-point-slide {
   background: linear-gradient(135deg, #0f4a3c 0%, #1e6b5a 100%);
   color: white;
-  padding: 1.5rem 1.5rem 3rem 1.5rem;
+  padding: clamp(8px, 2cqh, 24px) clamp(16px, 2cqw, 24px);
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .slide-header {
+  flex: 0 0 auto;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(8px, 1.5cqh, 16px);
 }
 
 .slide-header h1 {
-  font-size: clamp(1.2rem, 4cqw, 2.4rem);
+  font-size: clamp(20px, 4cqw, 38px);
   font-weight: bold;
   color: white;
-  margin-bottom: 0.3rem;
+  margin-bottom: clamp(4px, 0.5cqh, 8px);
 }
 
 .subtitle {
   font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: clamp(0.8rem, 2cqw, 1.3rem);
+  font-size: clamp(12px, 2cqw, 20px);
   color: #a0c4c7;
   font-style: italic;
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(8px, 1cqh, 16px);
 }
 
-.waves-visualization {
+.content-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3cqw, 40px);
   flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
 }
 
-.wave-container {
-  display: grid;
-  gap: 1rem;
-  max-height: 100%;
-  overflow-y: auto;
+.left-half {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2cqh, 20px);
+  justify-content: space-evenly;
+  padding-right: clamp(10px, 2cqw, 20px);
+}
+
+.right-half {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .wave {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 1rem;
+  padding: clamp(12px, 2cqh, 20px) clamp(16px, 2cqw, 24px);
   position: relative;
   transition: all 0.8s ease-out;
   backdrop-filter: blur(10px);
   opacity: 0;
   transform: translateX(-30px);
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .wave.visible {
@@ -202,21 +252,24 @@ onMounted(() => {
 }
 
 .wave-icon {
-  font-size: clamp(1.5rem, 4cqw, 2.5rem);
-  margin-bottom: 0.5rem;
+  font-size: clamp(28px, 5cqw, 48px);
+  margin-bottom: clamp(8px, 1.5cqh, 16px);
+  flex-shrink: 0;
 }
 
 .wave h3 {
-  font-size: clamp(0.9rem, 2.5cqw, 1.3rem);
+  font-size: clamp(16px, 3cqw, 24px);
   color: white;
-  margin-bottom: 0.8rem;
+  margin-bottom: clamp(8px, 1.5cqh, 16px);
   font-weight: bold;
+  line-height: 1.2;
+  flex-shrink: 0;
 }
 
 .wave-stats {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 0.8rem;
+  gap: clamp(20px, 3cqw, 40px);
+  margin-bottom: clamp(8px, 1.5cqh, 16px);
   flex-wrap: wrap;
 }
 
@@ -225,29 +278,43 @@ onMounted(() => {
 }
 
 .stat .number {
-  font-size: clamp(1rem, 3cqw, 1.8rem);
+  font-size: clamp(24px, 4cqw, 36px);
   font-weight: bold;
   color: #fbbf24;
+  line-height: 1;
 }
 
 .stat .label {
-  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
+  font-size: clamp(10px, 1.8cqw, 14px);
   color: #a0c4c7;
   line-height: 1.2;
+  margin-top: 4px;
+}
+
+.wave-text {
+  font-size: clamp(11px, 2cqw, 15px);
+  line-height: 1.4;
+  margin: 0;
+  color: #e5e5e5;
+}
+
+.wave-content {
+  flex: 1;
+  overflow: hidden;
 }
 
 .wave-content p {
   color: #e5e5e5;
   line-height: 1.4;
-  margin-bottom: 0.8rem;
-  font-size: clamp(0.7rem, 1.8cqw, 0.9rem);
+  margin-bottom: clamp(6px, 1cqh, 10px);
+  font-size: clamp(11px, 2cqw, 15px);
 }
 
 .pain-point {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.8rem;
+  gap: 4px;
+  padding: clamp(6px, 1.5cqh, 10px);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
 }
@@ -255,27 +322,29 @@ onMounted(() => {
 .quote {
   font-style: italic;
   color: #ff6b6b;
-  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
+  font-size: clamp(10px, 1.8cqw, 13px);
+  line-height: 1.3;
 }
 
 .solution {
   color: white;
   font-weight: 600;
-  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
+  font-size: clamp(10px, 1.8cqw, 13px);
+  line-height: 1.3;
 }
 
 .analogy {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  padding: 0.8rem;
+  padding: clamp(6px, 1.5cqh, 10px);
 }
 
 .comparison {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 0.5rem;
-  font-size: clamp(0.6rem, 1.5cqw, 0.8rem);
+  gap: clamp(6px, 1cqw, 10px);
+  margin-bottom: clamp(4px, 0.8cqh, 8px);
+  font-size: clamp(10px, 1.8cqw, 13px);
 }
 
 .comparison:last-child {
@@ -305,110 +374,287 @@ onMounted(() => {
   font-weight: 600;
 }
 
-.convergence-point {
+/* Right Half - Convergence Area */
+.convergence-area {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.8s ease-out;
 }
 
-.convergence-point.visible {
+.convergence-area.visible {
   opacity: 1;
   transform: scale(1);
 }
 
-.convergence-visual {
-  position: relative;
-  width: clamp(120px, 20cqw, 200px);
-  height: clamp(120px, 20cqw, 200px);
+.convergence-title {
+  position: absolute;
+  top: 10%;
+  font-size: clamp(16px, 3cqw, 24px);
+  color: #fbbf24;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.meeting-point {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: clamp(80px, 15cqw, 120px);
-  height: clamp(80px, 15cqw, 120px);
-  background: linear-gradient(135deg, #fbbf24, #10b981);
-  border-radius: 50%;
+/* Convergence Orb */
+.convergence-orb {
+  position: relative;
+  width: clamp(150px, 25cqw, 250px);
+  height: clamp(150px, 25cqw, 250px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: #0f4a3c;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(255, 193, 7, 0.3);
+  gap: clamp(20px, 3cqh, 30px);
 }
 
-.logo-placeholder {
-  font-weight: bold;
-  font-size: clamp(0.7rem, 2cqw, 1rem);
-  margin-bottom: 0.2rem;
-}
-
-.timing {
-  font-size: clamp(0.5rem, 1.5cqw, 0.8rem);
-  opacity: 0.9;
-}
-
-.wave-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
+.orb-container {
+  position: relative;
   width: 100%;
   height: 100%;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  animation: orbFloat 6s ease-in-out infinite;
 }
 
-.line {
+.sphere-3d {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-10deg);
+}
+
+.convergence-orb.spinning .sphere-3d {
+  animation: orbSpin 12s linear infinite;
+}
+
+@keyframes orbSpin {
+  0% {
+    transform: rotateX(-10deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(-10deg) rotateY(360deg);
+  }
+}
+
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.sphere-face {
   position: absolute;
-  width: 0;
-  height: 2px;
-  border-radius: 2px;
-  opacity: 0;
-  transition: all 1s ease-out;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  /* Use Flora's deep background color */
+  background: #002a29;
+  box-shadow:
+    0 0 60px rgba(103, 196, 113, 0.6),  /* Flora leaf green glow */
+    0 0 100px rgba(0, 153, 126, 0.4),    /* Flora tree teal glow */
+    inset 0 0 40px rgba(143, 218, 183, 0.2); /* Flora circuit light glow */
 }
 
-.line.animate {
-  width: clamp(30px, 8cqw, 60px);
-  opacity: 0.7;
+.sphere-face.front {
+  transform: translateZ(0px);
 }
 
-.line-1 {
-  background: #10b981;
-  top: 20%;
-  left: 10%;
-  transform: rotate(-30deg);
-  animation: flowIn 2s ease-out 0.5s both;
+.sphere-face.back {
+  transform: rotateY(180deg) translateZ(0px);
 }
 
-.line-2 {
-  background: #06b6d4;
-  top: 50%;
-  left: 5%;
-  transform: rotate(0deg);
-  animation: flowIn 2s ease-out 1s both;
+.sphere-face.left {
+  transform: rotateY(-90deg) translateZ(0px);
 }
 
-.line-3 {
-  background: #fbbf24;
-  bottom: 20%;
-  left: 10%;
-  transform: rotate(30deg);
-  animation: flowIn 2s ease-out 1.5s both;
+.sphere-face.right {
+  transform: rotateY(90deg) translateZ(0px);
 }
 
-@keyframes flowIn {
-  from {
-    width: 0;
+.flora-texture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  filter: brightness(1.2) contrast(1.1);
+  animation: texturePulse 4s ease-in-out infinite;
+}
+
+@keyframes texturePulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.orb-glow {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(103, 196, 113, 0.4),  /* Flora leaf green */
+    rgba(0, 153, 126, 0.3),     /* Flora tree teal */
+    transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+}
+
+.orb-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #67c471; /* Flora leaf green */
+  border-radius: 50%;
+  animation: particleFloat 8s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(103, 196, 113, 0.8);
+}
+
+.particle:nth-child(1) { top: 10%; left: 50%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 1s; }
+.particle:nth-child(3) { top: 50%; left: 90%; animation-delay: 2s; }
+.particle:nth-child(4) { top: 70%; left: 80%; animation-delay: 3s; }
+.particle:nth-child(5) { top: 90%; left: 50%; animation-delay: 4s; }
+.particle:nth-child(6) { top: 70%; left: 20%; animation-delay: 5s; }
+.particle:nth-child(7) { top: 50%; left: 10%; animation-delay: 6s; }
+.particle:nth-child(8) { top: 30%; left: 20%; animation-delay: 7s; }
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
     opacity: 0;
   }
-  to {
-    width: clamp(30px, 8cqw, 60px);
-    opacity: 0.7;
+  25% {
+    transform: translate(-20px, -20px) scale(1.5);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-40px, 0) scale(1);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(-20px, 20px) scale(0.5);
+    opacity: 0.3;
+  }
+}
+
+.orb-label {
+  text-align: center;
+}
+
+.main-text {
+  font-size: clamp(14px, 2.5cqw, 20px);
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.sub-text {
+  font-size: clamp(10px, 1.8cqw, 14px);
+  color: #a0c4c7;
+  font-style: italic;
+}
+
+/* Energy Flow Lines */
+.energy-flows {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.energy-line {
+  position: absolute;
+  left: -50%;
+  height: 3px;
+  width: 50%;
+  opacity: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+}
+
+.energy-1 {
+  top: 25%;
+  color: #10b981;
+  transform: rotate(-15deg);
+}
+
+.energy-2 {
+  top: 50%;
+  color: #06b6d4;
+}
+
+.energy-3 {
+  top: 75%;
+  color: #fbbf24;
+  transform: rotate(15deg);
+}
+
+.energy-line.flowing {
+  animation: energyFlow 3s ease-in-out infinite;
+}
+
+.energy-1.flowing { animation-delay: 0s; }
+.energy-2.flowing { animation-delay: 0.5s; }
+.energy-3.flowing { animation-delay: 1s; }
+
+@keyframes energyFlow {
+  0% {
+    left: -50%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  50% {
+    left: 25%;
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    left: 50%;
+    opacity: 0;
   }
 }
 
