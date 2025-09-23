@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Project Flora – Angelo's Phone Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a1f1e;
+      --bg-secondary: #0f2826;
+      --bg-gradient-1: #1a3633;
+      --bg-gradient-2: #0d2422;
+      --text-primary: #f0fdf9;
+      --text-secondary: #a7f3d0;
+      --text-muted: #6ee7b7;
+      --accent-primary: #34d399;
+      --accent-secondary: #10b981;
+      --accent-glow: #86efac;
+      --card-bg: rgba(16, 185, 129, 0.05);
+      --border-color: rgba(52, 211, 153, 0.2);
+      --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 60px rgba(52, 211, 153, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: radial-gradient(ellipse at top right, var(--bg-gradient-1), var(--bg-primary)),
+                  radial-gradient(ellipse at bottom left, var(--bg-gradient-2), var(--bg-primary));
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: drift 60s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes drift {
+      to { transform: translate(50px, 50px); }
+    }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 8vh 8vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+
+    .slide.prev {
+      transform: translateX(-100px);
+    }
+
+    /* Title Slide */
+    .title-slide {
+      text-align: center;
+      align-items: center;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .logo {
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow), var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      content: '🌿';
+      font-size: 80px;
+      filter: brightness(0) invert(1);
+      z-index: 2;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    h1.main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-glow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2.main-subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 300;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Regular Slides */
+    .slide-header {
+      margin-bottom: 3rem;
+    }
+
+    h1.slide-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1.slide-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-primary), transparent);
+      border-radius: 2px;
+    }
+
+    .slide-content {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      line-height: 1.8;
+    }
+
+    /* Cards and Lists */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-primary);
+      box-shadow: 0 10px 30px rgba(52, 211, 153, 0.2);
+    }
+
+    .feature-card:hover::before {
+      transform: translateX(0);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--accent-glow);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Bullet Points */
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      animation: slideIn 0.6s ease backwards;
+    }
+
+    .bullet-list li:nth-child(1) { animation-delay: 0.1s; }
+    .bullet-list li:nth-child(2) { animation-delay: 0.2s; }
+    .bullet-list li:nth-child(3) { animation-delay: 0.3s; }
+    .bullet-list li:nth-child(4) { animation-delay: 0.4s; }
+    .bullet-list li:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .bullet-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+
+    .highlight {
+      color: var(--accent-glow);
+      font-weight: 600;
+    }
+
+    /* Metrics */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .metric-card {
+      text-align: center;
+      animation: fadeInUp 0.6s ease backwards;
+    }
+
+    .metric-card:nth-child(1) { animation-delay: 0.1s; }
+    .metric-card:nth-child(2) { animation-delay: 0.2s; }
+    .metric-card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .metric-value {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Team Section */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .team-member {
+      text-align: center;
+    }
+
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--accent-primary));
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .member-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .member-role {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(10, 31, 30, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-xl);
+      z-index: 100;
+    }
+
+    .controls button {
+      background: transparent;
+      border: 2px solid var(--accent-primary);
+      color: var(--accent-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .controls button:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      transform: scale(1.05);
+    }
+
+    #counter {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-primary);
+    }
+
+    /* Help */
+    .help {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .help:hover {
+      opacity: 1;
+    }
+
+    kbd {
+      background: rgba(255,255,255,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    /* Mobile indicator */
+    .mobile-swipe-hint {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Enhanced Mobile Responsive - Small Phones */
+    @media (max-width: 480px) {
+      .slide {
+        padding: 1rem;
+        padding-top: 3rem;
+        padding-bottom: 6rem;
+        justify-content: flex-start;
+      }
+
+      /* Make slides scrollable on mobile */
+      .slide.active {
+        overflow-y: auto;
+      }
+
+      /* Shrink logo on mobile */
+      .logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .logo::before {
+        font-size: 60px;
+      }
+
+      .logo-container {
+        margin-bottom: 2rem;
+      }
+
+      /* Adjust title sizes */
+      h1.main-title {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      h2.main-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+
+      h1.slide-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .slide-header {
+        margin-bottom: 1.5rem;
+      }
+
+      /* Stack all grids vertically */
+      .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      /* Smaller cards on mobile */
+      .feature-card {
+        padding: 1rem;
+      }
+
+      .feature-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-title {
+        font-size: 1.1rem;
+      }
+
+      .feature-desc {
+        font-size: 0.9rem;
+      }
+
+      /* Adjust metrics */
+      .metric-value {
+        font-size: 2rem;
+      }
+
+      .metric-label {
+        font-size: 0.9rem;
+      }
+
+      /* Smaller avatars */
+      .member-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+      }
+
+      .member-name {
+        font-size: 1.1rem;
+      }
+
+      .member-role {
+        font-size: 0.85rem;
+      }
+
+      /* Adjust bullet points */
+      .bullet-list li {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+      }
+
+      /* Better mobile controls */
+      .controls {
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        transform: none;
+        padding: 0.5rem;
+        gap: 0;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        background: rgba(10, 31, 30, 0.95);
+        border-radius: 20px;
+        max-width: none;
+      }
+
+      .controls button {
+        padding: 0;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        min-width: auto;
+        border-width: 2px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(52, 211, 153, 0.1);
+      }
+
+      .controls button:active {
+        transform: scale(0.95);
+        background: var(--accent-primary);
+        color: var(--bg-primary);
+      }
+
+      #prev {
+        justify-self: start;
+        margin-left: 0.5rem;
+      }
+
+      #next {
+        justify-self: end;
+        margin-right: 0.5rem;
+      }
+
+      #counter {
+        font-size: 1rem;
+        white-space: nowrap;
+        color: var(--accent-glow);
+        font-weight: 600;
+        padding: 0 1rem;
+      }
+
+      /* Hide help text on mobile */
+      .help {
+        display: none;
+      }
+
+      /* Better swipe hint */
+      .mobile-swipe-hint {
+        display: block;
+        bottom: 75px;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        background: rgba(10, 31, 30, 0.8);
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      /* Adjust general text */
+      .slide-content {
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .slide-content p {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Medium Mobile */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .slide {
+        padding: 2rem;
+        padding-top: 3rem;
+        padding-bottom: 5rem;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1.main-title {
+        font-size: 3.5rem;
+      }
+
+      h1.slide-title {
+        font-size: 2.25rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      
+      .controls {
+        bottom: 1rem;
+        padding: 0.65rem 1.25rem;
+      }
+
+      .controls button {
+        padding: 0.6rem 1.1rem;
+        font-size: 1rem;
+      }
+      
+      .help {
+        display: none;
+      }
+
+      .mobile-swipe-hint {
+        display: block;
+      }
+    }
+
+    /* Landscape orientation for small screens */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .slide {
+        padding: 1rem 2rem;
+        padding-bottom: 4rem;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .logo::before {
+        font-size: 40px;
+      }
+
+      h1.main-title {
+        font-size: 2rem;
+      }
+
+      h1.slide-title {
+        font-size: 1.5rem;
+      }
+
+      .slide-header {
+        margin-bottom: 1rem;
+      }
+
+      .metrics-grid,
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .controls {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #111;
+      }
+      
+      #deck {
+        height: auto;
+      }
+      
+      .slide {
+        position: static;
+        page-break-after: always;
+        opacity: 1;
+        transform: none;
+      }
+      
+      .controls, .help, .progress-container, .mobile-swipe-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+  
+  <div id="deck">
+    <!-- Slide 1: Title -->
+    <section class="slide title-slide active" data-index="1">
+      <div class="logo-container">
+        <div class="logo"></div>
+      </div>
+      <h1 class="main-title">Project Flora</h1>
+      <h2 class="main-subtitle">The Operating System for Sustainable Landscape Design</h2>
+      <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Angelo's Phone Edition</p>
+    </section>
+
+    <!-- Slide 2: The Opportunity -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <h1 class="slide-title">The $180B Opportunity</h1>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">$180B</div>
+          <div class="metric-label">U.S. Landscaping Market</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">$3B→$5.6B</div>
+          <div class="metric-label">Software Market by 2030</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">700K+</div>
+          <div class="metric-label">U.S. Businesses</div>
+        </div>
+      </div>
+      <ul class="bullet-list" style="margin-top: 3rem;">
+        <li>72% of landscaping businesses have <span class="highlight">fewer than 10 employees</span></li>
+        <li>Post-pandemic <span class="highlight">outdoor living boom</span> driving demand</li>
+        <li>This is the <span class="highlight">Altium vs. OrCAD moment</span> for landscaping</li>
+      </ul>
+    </section>
+
+    <!-- Slide 3: The Problem -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <h1 class="slide-title">Current Tools Are Broken</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏗️</div>
+          <div class="feature-title">Pro Tools</div>
+          <div class="feature-desc">AutoCAD, Vectorworks: Powerful but clunky, expensive, and plant-ignorant</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Consumer Apps</div>
+          <div class="feature-desc">iScape, Home Outside: Pretty but shallow – basically clip art</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✏️</div>
+          <div class="feature-title">Current Reality</div>
+          <div class="feature-desc">Annie does everything manually in Illustrator with no intelligence</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: The Solution -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <h1 class="slide-title">Flora: Intelligence Meets Beauty</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <div class="feature-title">Instant Site Setup</div>
+          <div class="feature-desc">Type address → get parcel + imagery instantly</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <div class="feature-title">Plant Intelligence</div>
+          <div class="feature-desc">Native species, zones, spacing – built-in ecology</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Beautiful Design</div>
+          <div class="feature-desc">Illustrator feel for outdoor spaces</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Auto Takeoffs</div>
+          <div class="feature-desc">One-click plant lists and sales-ready PDFs</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎮</div>
+          <div class="feature-title">3D Walkthrough</div>
+          <div class="feature-desc">Doom-style exploration of designs</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">AI-Powered</div>
+          <div class="feature-desc">Smart recommendations and plant ID</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: MVP Demo Flow -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <h1 class="slide-title">MVP in 4 Simple Steps</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Step 1:</span> Enter address → site instantly appears with parcel + aerial</li>
+        <li><span class="highlight">Step 2:</span> Drag & drop native plants with smart filters and spacing</li>
+        <li><span class="highlight">Step 3:</span> Generate branded plant list PDF with counts & species</li>
+        <li><span class="highlight">Step 4:</span> Click to walk through your design in 3D (optional wow)</li>
+      </ul>
+    </section>
+
+    <!-- Slide 6: Value Props -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <h1 class="slide-title">Everyone Wins</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Nurseries:</span> Designs convert directly to plant sales</li>
+        <li><span class="highlight">Designers:</span> Hours saved on takeoffs and documentation</li>
+        <li><span class="highlight">Contractors:</span> Professional proposals without CAD expertise</li>
+        <li><span class="highlight">Homeowners:</span> Approachable, confidence-building experience</li>
+        <li><span class="highlight">Planet:</span> More native plants, better ecosystems</li>
+      </ul>
+    </section>
+
+    <!-- Slide 7: Tech Approach -->
+    <section class="slide" data-index="7">
+      <div class="slide-header">
+        <h1 class="slide-title">Built for Scale</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Babylon.js Core</div>
+          <div class="feature-desc">Unified 2D/3D rendering with orthographic camera</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-title">GIS Integration</div>
+          <div class="feature-desc">GeoTIFFs, KMLs, parcel APIs, elevation data</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Progressive Web App</div>
+          <div class="feature-desc">Works everywhere, offline-capable</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Business Model -->
+    <section class="slide" data-index="8">
+      <div class="slide-header">
+        <h1 class="slide-title">Multiple Revenue Streams</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Freemium SaaS:</span> Free tier → Pro at $20-50/month</li>
+        <li><span class="highlight">White Label:</span> Branded exports for nursery partners</li>
+        <li><span class="highlight">Affiliate Revenue:</span> Integration with suppliers (Home Depot, local nurseries)</li>
+        <li><span class="highlight">Future Expansion:</span> Full proposals with cost estimation</li>
+      </ul>
+    </section>
+
+    <!-- Slide 9: Why Now -->
+    <section class="slide" data-index="9">
+      <div class="slide-header">
+        <h1 class="slide-title">Perfect Timing</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏡</div>
+          <div class="feature-title">Outdoor Living Boom</div>
+          <div class="feature-desc">Post-pandemic shift to home improvement</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌱</div>
+          <div class="feature-title">Sustainability Push</div>
+          <div class="feature-desc">Regulations favor native plants & water conservation</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">☁️</div>
+          <div class="feature-title">Cloud + AI Ready</div>
+          <div class="feature-desc">Small teams can now build magic quickly</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: Team -->
+    <section class="slide" data-index="10">
+      <div class="slide-header">
+        <h1 class="slide-title">The Perfect Team</h1>
+      </div>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-avatar">🌺</div>
+          <div class="member-name">Annie</div>
+          <div class="member-role">Nursery Owner & Designer<br>Domain expertise + aesthetics</div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">🗺️</div>
+          <div class="member-name">You</div>
+          <div class="member-role">CAD/GIS Expert<br>Product strategy + data systems</div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">⚡</div>
+          <div class="member-name">Jake</div>
+          <div class="member-role">Full-Stack + ML<br>Engineering velocity</div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+        Right people • Right time • Right domain
+      </p>
+    </section>
+
+    <!-- Slide 11: Traction -->
+    <section class="slide" data-index="11">
+      <div class="slide-header">
+        <h1 class="slide-title">Path to Launch</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">3-6 months:</span> Weekend sprints to MVP</li>
+        <li><span class="highlight">Validation:</span> Pilot with Annie's nursery customers</li>
+        <li><span class="highlight">Unfair advantage:</span> GIS/CAD + nursery domain expertise</li>
+        <li><span class="highlight">Next milestone:</span> Demo-ready for seed investors</li>
+      </ul>
+    </section>
+
+    <!-- Slide 12: Vision -->
+    <section class="slide" data-index="12">
+      <div class="slide-header">
+        <h1 class="slide-title">The Vision</h1>
+      </div>
+      <div class="slide-content">
+        <p style="font-size: 1.4rem; line-height: 1.8; margin-bottom: 2rem;">
+          Flora will be the <span class="highlight">operating system for sustainable landscape design</span>.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          By uniting instant site data, ecological intelligence, and delightful design, we'll enable small businesses and homeowners to create outdoor spaces that are beautiful, resilient, and ecologically sound.
+        </p>
+        <p style="color: var(--text-secondary);">
+          Long-term: From plant lists to full proposals. From individual yards to urban-scale ecological planning.
+        </p>
+      </div>
+    </section>
+
+    <!-- Slide 13: Call to Action -->
+    <section class="slide title-slide" data-index="13">
+      <h1 class="main-title">Let's Build This</h1>
+      <h2 class="main-subtitle">Join us in transforming landscape design</h2>
+      <div style="margin-top: 3rem;">
+        <ul class="bullet-list" style="text-align: left; display: inline-block;">
+          <li>Annie: Design polish + customer validation</li>
+          <li>Jake: Engineering excellence</li>
+          <li>You: GIS/CAD + product vision</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button id="prev" aria-label="Previous slide">←</button>
+    <span id="counter">1 / 13</span>
+    <button id="next" aria-label="Next slide">→</button>
+  </div>
+
+  <div class="help">
+    Use ← / → arrows • <kbd>F</kbd> fullscreen • <kbd>P</kbd> print • <kbd>Space</kbd> next
+  </div>
+
+  <div class="mobile-swipe-hint">
+    Swipe left/right to navigate
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progressBar = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      // Remove all classes
+      slides.forEach(s => {
+        s.classList.remove('active', 'prev');
+      });
+      
+      // Wrap around
+      currentIndex = (index + slides.length) % slides.length;
+      
+      // Set classes
+      slides[currentIndex].classList.add('active');
+      if (currentIndex > 0) {
+        slides[currentIndex - 1].classList.add('prev');
+      } else {
+        slides[slides.length - 1].classList.add('prev');
+      }
+      
+      // Reset scroll position for new slide
+      slides[currentIndex].scrollTop = 0;
+      
+      // Update UI
+      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+      progressBar.style.width = `${((currentIndex + 1) / slides.length) * 100}%`;
+    }
+
+    // Navigation
+    document.getElementById('prev').onclick = () => showSlide(currentIndex - 1);
+    document.getElementById('next').onclick = () => showSlide(currentIndex + 1);
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowRight':
+        case ' ':
+          e.preventDefault();
+          showSlide(currentIndex + 1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          showSlide(currentIndex - 1);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+          } else {
+            document.exitFullscreen();
+          }
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          window.print();
+          break;
+        case 'Home':
+          e.preventDefault();
+          showSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          showSlide(slides.length - 1);
+          break;
+      }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const horizontalDiff = Math.abs(touchEndX - touchStartX);
+      const verticalDiff = Math.abs(touchEndY - touchStartY);
+      
+      // Only trigger if horizontal swipe is stronger than vertical
+      if (horizontalDiff > verticalDiff && horizontalDiff > 50) {
+        if (touchEndX < touchStartX) {
+          showSlide(currentIndex + 1); // Swipe left = next
+        } else {
+          showSlide(currentIndex - 1); // Swipe right = previous
+        }
+      }
+    }
+
+    // Initialize
+    showSlide(0);
+
+    // Hide mobile hint after first interaction
+    let hasInteracted = false;
+    function hideHint() {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        const hint = document.querySelector('.mobile-swipe-hint');
+        if (hint) {
+          hint.style.opacity = '0';
+          setTimeout(() => hint.style.display = 'none', 500);
+        }
+      }
+    }
+
+    document.addEventListener('touchstart', hideHint);
+    document.addEventListener('click', hideHint);
+  </script>
+</body>
+</html>
