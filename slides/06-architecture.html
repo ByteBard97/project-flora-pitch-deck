@@ -1,0 +1,151 @@
+<!-- Slide 6: Phase 1 - Illustrator Bridge -->
+<section class="slide" data-index="6">
+  <div class="slide-header">
+    <h1 class="slide-title">Phase 1: The Illustrator Bridge</h1>
+    <div class="phase-subtitle">Making Annie's workflow 10x faster</div>
+  </div>
+
+  <div class="feature-grid" style="margin-top: 2rem;">
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">UXP Plugin Architecture</div>
+      <div class="feature-desc">Client-side JavaScript geometry • Offline-capable • No server round-trips</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📐</div>
+      <div class="feature-title">Plant Layout Algorithms</div>
+      <div class="feature-desc">Grid • Hexagonal • Poisson-disk sampling • Along-path placement</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Plant Intelligence</div>
+      <div class="feature-desc">Cached plant database • Smart spacing • Growth predictions • Auto-labels</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Instant Takeoffs</div>
+      <div class="feature-desc">One-click plant schedules • PDF exports • Cost estimation</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">✓</div>
+      <div class="feature-title">Design Validation</div>
+      <div class="feature-desc">Real-time spacing checks • Overlap detection • Maturity conflicts</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Sync & Updates</div>
+      <div class="feature-desc">Optimized plant data sync • Offline-first • Background updates</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; text-align: center; color: #ffc107; font-weight: 600; font-size: 1.1rem;">
+    ⚡ Currently Building
+  </div>
+</section>
+
+<style>
+.architecture-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.arch-tier {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.tier-label {
+  min-width: 140px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.tier-content {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.arch-component {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(52, 211, 153, 0.05));
+  border: 1px solid var(--accent-primary);
+  border-radius: 8px;
+  padding: 1rem;
+  flex: 1;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.arch-component:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.2);
+}
+
+.component-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.component-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.component-tech {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.roadmap-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.status-badge.done {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.status-badge.wip {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 2px solid #ffc107;
+}
+
+.status-text {
+  color: var(--text-primary);
+}
+</style>

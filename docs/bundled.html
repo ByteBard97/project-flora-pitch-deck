@@ -1141,19 +1141,782 @@
       </ul>
     </section>
 
-<!-- Slide 6: Value Props -->
-    <section class="slide" data-index="6">
-      <div class="slide-header">
-        <h1 class="slide-title">Everyone Wins</h1>
-      </div>
-      <ul class="bullet-list">
-        <li><span class="highlight">Nurseries:</span> Designs convert directly to plant sales</li>
-        <li><span class="highlight">Designers:</span> Hours saved on takeoffs and documentation</li>
-        <li><span class="highlight">Contractors:</span> Professional proposals without CAD expertise</li>
-        <li><span class="highlight">Homeowners:</span> Approachable, confidence-building experience</li>
-        <li><span class="highlight">Planet:</span> More native plants, better ecosystems</li>
+<!-- Slide 6: Phase 1 Overview -->
+<section class="slide" data-index="6">
+  <div class="slide-header">
+    <h1 class="slide-title">Phase 1: Prove Value with Annie</h1>
+    <div class="phase-subtitle">Validation before vision</div>
+  </div>
+
+  <div class="two-column" style="margin-top: 2rem; gap: 3rem;">
+    <div class="left-column">
+      <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">The Goal</h3>
+      <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 1rem;">
+        Get Annie's nursery staff <span class="highlight">designing with Flora for real client projects</span> within weeks.
+      </p>
+      <p style="color: var(--text-secondary); line-height: 1.6;">
+        Establish a user feedback loop. Learn which features provide the most value. Prove measurable time savings vs. manual Illustrator workflow.
+      </p>
+    </div>
+
+    <div class="right-column">
+      <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">The Constraints</h3>
+      <ul class="bullet-list" style="font-size: 0.95rem;">
+        <li><span class="highlight">Geography:</span> Tampa Bay + Sarasota only</li>
+        <li><span class="highlight">Plants:</span> ~250 species Annie actually sells</li>
+        <li><span class="highlight">Platform:</span> Illustrator plugin (not web app)</li>
+        <li><span class="highlight">Timeline:</span> Weeks to pilot, not months</li>
       </ul>
-    </section>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; padding: 1.5rem; background: rgba(52, 211, 153, 0.1); border-left: 4px solid var(--accent-primary); border-radius: 8px;">
+    <p style="font-size: 1.05rem; line-height: 1.7; margin: 0;">
+      <strong style="color: var(--accent-primary);">Why start small?</strong>
+      Risk reduction. We validate the business model and learn what matters <em>before</em> building a massive platform.
+      Annie's feedback guides Phase 2 priorities.
+    </p>
+  </div>
+</section>
+
+<style>
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.phase-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+</style>
+
+<!-- Slide 6a: Phase 1 - GIS & Data -->
+<section class="slide" data-index="6a">
+  <div class="slide-header">
+    <h1 class="slide-title">Phase 1: GIS & Plant Data</h1>
+    <div class="phase-subtitle">Tampa Bay + Sarasota region</div>
+  </div>
+
+  <div class="feature-grid" style="margin-top: 2rem;">
+    <div class="feature-card">
+      <div class="feature-icon">📍</div>
+      <div class="feature-title">Regional GIS Pipeline</div>
+      <div class="feature-desc">Tampa Bay + Sarasota parcels • Local aerial imagery • Soil data • Working pipeline for pilot region</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Curated Plant Database</div>
+      <div class="feature-desc">~250 Florida native species • Plants Annie actually sells • Enough variety for real designs</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🌱</div>
+      <div class="feature-title">Plant Intelligence</div>
+      <div class="feature-desc">Growth data • Spacing requirements • Sun/water needs • Native status • Zone compatibility</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💧</div>
+      <div class="feature-title">Local Conditions</div>
+      <div class="feature-desc">Florida soil types • Rainfall patterns • Hardiness zones • Regional climate data</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; text-align: center; color: var(--accent-primary); font-weight: 600; font-size: 1rem;">
+    Focus on what Annie needs for her customers, not comprehensive coverage
+  </div>
+</section>
+
+<!-- Slide 6b: Phase 1 - Core Features -->
+<section class="slide" data-index="6b">
+  <div class="slide-header">
+    <h1 class="slide-title">Phase 1: Core Features</h1>
+    <div class="phase-subtitle">Illustrator plugin, not web app</div>
+  </div>
+
+  <div class="feature-grid" style="margin-top: 2rem;">
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">GIS Import Button</div>
+      <div class="feature-desc">Type address → parcel + aerial imagery appears in Illustrator • Scaled correctly • Ready to design</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🪴</div>
+      <div class="feature-title">Plant Picker Panel</div>
+      <div class="feature-desc">Browse/filter 250 plants • Drag & drop placement • Smart filters (sun, water, native status)</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📐</div>
+      <div class="feature-title">Basic Layout Tools</div>
+      <div class="feature-desc">Grid placement • Along-path planting • Simple area fills • Spacing helpers</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Plant Schedule Export</div>
+      <div class="feature-desc">One-click BOM generation • Counts by species • PDF export • Ready for nursery orders</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">✓</div>
+      <div class="feature-title">Basic Validation</div>
+      <div class="feature-desc">Spacing warnings • Overlap detection • Simple growth preview</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Plant Data Sync</div>
+      <div class="feature-desc">Offline-first • Background updates • Cached for speed</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; text-align: center; color: var(--accent-primary); font-weight: 600; font-size: 1rem;">
+    Augment Annie's existing Illustrator workflow, don't replace it
+  </div>
+</section>
+
+<!-- Slide 6c: Phase 1 - NPR Preview -->
+<section class="slide" data-index="6c">
+  <div class="slide-header">
+    <h1 class="slide-title">Phase 1: Hand-Drawn 2.5D Preview</h1>
+    <div class="phase-subtitle">The "wow factor" - artist's sketch aesthetic</div>
+  </div>
+
+  <div class="two-column" style="margin-top: 2rem; gap: 3rem;">
+    <div class="left-column">
+      <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">The Vision</h3>
+      <p style="font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
+        Walk through the design in 3D with a <span class="highlight">hand-drawn sketch aesthetic</span> -
+        like an architect's illustration come to life.
+      </p>
+
+      <ul class="bullet-list" style="font-size: 0.95rem;">
+        <li><span class="highlight">Sprite-based plants</span> - Simple "cardboard cutout" style</li>
+        <li><span class="highlight">Procedural pencil shaders</span> - GLSL sketch effects</li>
+        <li><span class="highlight">Basic terrain</span> - Flat or simple elevation</li>
+        <li><span class="highlight">First-person walk</span> - Explore the design</li>
+      </ul>
+
+      <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; font-style: italic;">
+        Note: This is optional for Phase 1. If Annie's team values the 2D tools more, we focus there first.
+      </p>
+    </div>
+
+    <div class="right-column" style="background: rgba(52, 211, 153, 0.05); border: 1px solid var(--accent-primary); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">Live Shader Demo</h4>
+      <div style="position: relative; width: 100%; aspect-ratio: 1; max-width: 400px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <canvas id="nprShaderCanvas" style="width: 100%; height: 100%; display: block;"></canvas>
+      </div>
+      <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;">
+        <em>Procedural colored pencil sketch rendering</em>
+      </p>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 8px;">
+    <p style="font-size: 0.95rem; line-height: 1.6; margin: 0;">
+      <strong style="color: #ffc107;">Why this aesthetic?</strong>
+      Differentiates from competitors' clinical 3D renderings. Aligns with landscape architecture presentation style.
+      Performant enough for real-time on modest hardware. Makes designs feel artistic, not robotic.
+    </p>
+  </div>
+</section>
+
+<style>
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.phase-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+</style>
+
+<script>
+// Initialize NPR shader demo when slide is visible
+let shaderInitialized = false;
+function initShader() {
+  if (shaderInitialized) {
+    console.log('Shader already initialized, skipping');
+    return;
+  }
+
+  const canvas = document.getElementById('nprShaderCanvas');
+  if (!canvas) {
+    console.error('Canvas not found!');
+    return;
+  }
+  console.log('Initializing shader on canvas:', canvas);
+  shaderInitialized = true;
+
+  const gl = canvas.getContext('webgl2');
+  if (!gl) {
+    console.error('WebGL 2.0 not supported - falling back to WebGL 1.0');
+    const gl1 = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl1) {
+      console.error('WebGL not supported at all');
+      canvas.getContext('2d').fillText('WebGL not supported', 50, 50);
+      return;
+    }
+    console.error('This shader requires WebGL 2.0');
+    return;
+  }
+  console.log('Using WebGL 2.0');
+
+  // Set canvas size to match display size
+  const rect = canvas.getBoundingClientRect();
+  const size = Math.min(rect.width, rect.height) || 512;
+  canvas.width = size;
+  canvas.height = size;
+
+  console.log('Canvas size:', canvas.width, 'x', canvas.height);
+
+  // Vertex shader (standard quad) - WebGL 2.0 / GLSL ES 3.00
+  const vertexShaderSource = `#version 300 es
+in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}
+`;
+
+  // Fragment shader loaded from external file
+  // IMPORTANT: No whitespace before #version directive
+  const fragmentShaderSource = `#version 300 es
+precision highp float;
+uniform vec2 iResolution;
+uniform float iTime;
+
+out vec4 fragColor;
+
+// Common helper functions from common.glsl
+
+// Hexagon vertices (from common.glsl)
+vec2[6] vID = vec2[6](vec2(-.5, -2./6.)/vec2(.5, 1), vec2(-.5, 2./6.)/vec2(.5, 1), vec2(0, 2./3.)/vec2(.5, 1),
+                      vec2(.5, 2./6.)/vec2(.5, 1), vec2(.5, -2./6.)/vec2(.5, 1), vec2(0, -2./3.)/vec2(.5, 1));
+
+// Standard 2D rotation formula.
+mat2 rot2(in float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+
+// IQ's vec2 to float hash.
+float hash21(vec2 p){
+    return fract(sin(mod(dot(p, vec2(27.619, 57.583)), 6.2831589))*43758.5453);
+}
+
+// Compact, self-contained version of IQ's 2D value noise function.
+float n2D(vec2 p){
+    const vec2 s = vec2(1, 113);
+    vec2 ip = floor(p); p -= ip;
+    vec4 h = vec4(0., s.x, s.y, s.x + s.y) + dot(ip, s);
+    p = p*p*(3. - 2.*p);
+    h = fract(sin(mod(h, 6.2831589))*43758.5453);
+    h.xy = mix(h.xy, h.zw, p.y);
+    return mix(h.x, h.y, p.x);
+}
+
+// FBM -- 4 accumulated noise layers of modulated amplitudes and frequencies.
+float fbm(vec2 p){ return n2D(p)*.533 + n2D(p*2.)*.267 + n2D(p*4.)*.133 + n2D(p*8.)*.067; }
+
+// This will draw a box (no caps) of width "ew" from point "a "to "b".
+float lBox(vec2 p, vec2 a, vec2 b, float ew){
+    float ang = atan(b.y - a.y, b.x - a.x);
+    p = rot2(ang)*(p - mix(a, b, .5));
+   vec2 l = vec2(length(b - a), ew);
+   vec2 d = abs(p) - (l + ew)/2.;
+   return min(max(d.x, d.y), 0.) + length(max(d, 0.));
+}
+
+// IQ's distance to a regular polygon - takes array like ShaderToy
+float sdPoly4(in vec2 p, in vec2[4] v){
+    float d = dot(p - v[0], p - v[0]);
+    float s = 1.0;
+
+    int j = 3;
+    for(int i = 0; i < 4; i++){
+        vec2 e = v[j] - v[i];
+        vec2 w = p - v[i];
+        vec2 b = w - e*clamp(dot(w, e)/dot(e, e), 0., 1.);
+        d = min(d, dot(b,b));
+
+        bvec3 cond = bvec3(p.y >= v[i].y, p.y < v[j].y, e.x*w.y > e.y*w.x);
+        if(all(cond) || all(not(cond))) s *= -1.0;
+        j = i;
+    }
+    return s*sqrt(d);
+}
+
+// Signed distance to a regular hexagon
+float sdHexagon(in vec2 p, in float r){
+    const vec3 k = vec3(-.8660254, .5, .57735);
+    p = abs(p);
+    p -= 2.*min(dot(k.xy, p), 0.)*k.xy;
+    return length(p - vec2(clamp(p.x, -k.z*r, k.z*r), r))*sign(p.y - r);
+}
+
+vec3 pencil(vec3 col, vec2 p){
+    vec2 q = p*4.;
+    const vec2 sc = vec2(1, 12);
+    q += (vec2(n2D(q*4.), n2D(q*4. + 7.3)) - .5)*.03;
+    q *= rot2(-3.14159/2.5);
+    col = min(col, 1.);
+    float gr = (dot(col, vec3(.299, .587, .114)));
+    float ns = (n2D(q*sc)*.66 + n2D(q*2.*sc)*.34);
+    q *= rot2(3.14159/2.);
+    float ns2 = (n2D(q*sc)*.66 + n2D(q*2.*sc)*.34);
+    q *= rot2(-3.14159/5.);
+    float ns3 = (n2D(q*sc)*.66 + n2D(q*2.*sc)*.34);
+    const float contrast = 1.;
+    ns = (.5 + (gr - (max(max(ns, ns2), ns3)))*contrast);
+    return vec3(clamp(ns, 0., 1.));
+}
+
+// Main cube-circle shader (from ShaderToy)
+/*
+	
+	Cube Circle Sketch
+	------------------
+
+	I see a lot of really classy geometric styled pencil drawings on 
+    the internet by various mathematical artists -- The effort that 
+    goes into some of them is really impressive. Reproducing them in 
+    code form is kind of cheating, but it's a little hard to resist. :)
+
+	This particular arrangement is pretty common and something I've 
+    seen many times in various forms, but most tend to be based off of 
+    the works of mathematical artist Regolo Bizzi -- His Escheresque
+    geometric designs are everywhere, but if you've never chanced upon 
+    one of them, I've provided a link below. A lot of love and effort 
+    would have gone into the original sketch, but the effort that went
+    into the code version was far less impressive: Render 12 hexagons 
+    on the border of a circle, orient them a bit (by PI/6), then shade 
+    the faces. 
+    
+    There's some extra code to give it that tech drawing feel, fake 
+    lighting and a mediocre sketch algorithm included, but that's it.
+
+	Anyway, I was more interested in producing a halfway passable look
+	in order to render more interesting patterns. Suggestions for 
+	simple improvements are always welcome. :)
+
+
+
+    // Links.
+
+    // You can find some of Regolo Bizzi's work at the following:
+    http://impossible-world.blogspot.com/2014/10/new-images-by-regolo-bizzi.html
+    https://www.behance.net/regolo
+
+*/
+
+
+// Cube subdivision lines. Interesting, but a bit much, I think. :)
+//#define SUBDIV_LINES 
+
+// Greyscale sketch -- Sans color.
+//#define GREYSCALE
+
+// Blinking lights: It was an attempt to animate the sketch in a believable
+// way... This isn't it. :D
+//#define BLINKING_LIGHTS
+
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord){
+
+    // Aspect correct screen coordinates.
+	vec2 uv = (fragCoord - iResolution.xy*.5)/iResolution.y;
+    
+    // Scaling and translation.
+    const float gSc = 1.;
+    
+    // Smoothing factor.
+    float sf = gSc/iResolution.y;
+    
+    // Rotation speed -- Rotation seemed like a good idea at the time, but
+    // I decided against it. :)
+    float rT = 0.;//sin(-iTime/6.*3.)/12.;
+
+    // Scaling and rotation.
+    vec2 p = rot2(rT)*uv*gSc;
+    
+    // Distance field holders for the cubes, lines and the previous
+    // cube (used for CSG related to overlap).
+    float d = 1e5, ln = 1e5, prevD = 1e5; 
+    
+    // Edge width. 
+    const float ew = .0025;
+    
+   
+    // The cubes are rendered along the sides of a dodecahedron. These are just some standard
+    // measurements to help place the cubes in the correct positions.
+    //
+    const float cR = .3; // Larger circle radius.
+    const float cAp = cR*cos(6.2831/24.); // Apothem.
+    const float sL = cR*acos(6.2831/24.)/2.; // Side length, which will relate to the hexagon scale.
+    
+    
+        // The offset vertex information.
+    // Hexagon vertices with scaling to enable rendering back in normal space. 
+    vec2 hSc = sL*vec2(.5, .8660254);
+    vec2[6] svV = vec2[6](vID[0]*hSc, vID[1]*hSc, vID[2]*hSc, vID[3]*hSc, vID[4]*hSc, vID[5]*hSc);
+
+   
+    // Coordinate perturbation. There's small rigid one to enhance the hand-drawn look, and
+    // a larger animated one to wave the paper around a bit.
+    vec2 offs = vec2(fbm(p*16.), fbm(p*16. + .35));
+    vec2 offs2 = vec2(fbm(p*1. + iTime/4.), fbm(p*1. + .5 + iTime/4.));
+    const float oFct = .007;
+    const float oFct2 = .05;
+    p -= (offs - .5)*oFct;
+    p -= (offs2 - .5)*oFct2;
+    
+ 
+    
+    
+    float lnL = -cR - sL*.75; // Line length.
+    float a0 = 6.2831/24.; // Initial reference angle.
+    float dA = 6.2831/12.; // One twelth revolution.
+    float inR =  cR - sL/2.*.8660254; // Inner radius. 
+    
+    
+    // Some distance field holders.
+    float gHex = 1e5, gD = 1e5, qLn = 1e5, dSh = 1e5;
+    // Z buffer, for shadows.
+    float zBuf = 0.;
+    
+    
+    
+    // Fake lighting.
+    vec3 lp = vec3(-.75, 3, -1.5);
+    vec3 ld = normalize(lp - vec3(uv, 0)); 
+    ld.xy = rot2(rT)*ld.xy;
+    
+    
+    // Initialize the background.
+    vec3 col = vec3(.95, .975, 1);
+    
+    
+    vec2 q; 
+    
+    // Apply some graph lines.
+    float dim = 9.; // For the lines to match up: dim = 9./(cR*3.);
+    q = p;//uv*gSc - (offs - .5)*oFct  - (offs2 - .5)*oFct2;//uv*gSc - (offs - .5)*oFct;//p;//
+    q = abs(mod(q, 1./dim) - .5/dim);
+    float ln3 = abs(max(q.x, q.y) - .5/dim);
+    col = mix(col, vec3(.35, .65, 1), (1. - smoothstep(0., sf*2., ln3))*.8);
+    dim *= 2.;
+    q = p;//uv*gSc - (offs - .5)*oFct  - (offs2 - .5)*oFct2;//uv*gSc - (offs - .5)*oFct;//p;//
+    q = abs(mod(q, 1./dim) - .5/dim);
+    ln3 = max(abs(max(q.x, q.y) - .5/dim), -ln3);
+    col = mix(col, vec3(.35, .65, 1), (1. - smoothstep(0., sf*2., ln3))*.65);
+    
+    // Applying light and a bit of noise to the background.
+    col *= clamp(dot(normalize(vec3(p, -1.5)), ld), 0., 1.)*.2 + .8;
+    col *= fbm(p*8.)*.1 + .9;
+    
+    
+    // Produce and render the 12 cubes. This is pretty standard stuff -- Position
+    // the cubes and render three rhomboids for the cube faces.
+    
+    // Cube face normals.
+    vec3[3] n = vec3[3](vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, -1));
+       
+
+    // Iterate through all 12 cubes -- Some will note that you could apply polar
+    // coordinates and cut this right down to two iterations, which would definitely
+    // be faster. However, the example isn't too taxing on the system, and the
+    // brute force method simplifies the code a bit... Having said that, I might
+    // cave in an update this later. :)
+    //
+    for(int i = 0; i<12; i++){
+        
+        q = p;
+        
+        // Grey lines point to point lines.
+        vec2 a, b, nA;
+        a =  rot2(a0 + dA*float(i))*vec2(0, inR);
+        b =  rot2(a0 + dA*float(i + 3))*vec2(0, inR);
+        nA = normalize(b - a)*sL*1.6;
+        ln = min(ln, lBox(q, a - nA, b + nA, 0.));
+        
+        
+        // Hexagons.
+        vec2 hCtr = rot2(6.2831/12.*float(11 - i))*vec2(0, cR); // Hexagon center.
+        q -= hCtr; // Move to the border.
+        q = rot2(-6.2831/12.*float(11 - i))*q; // Rotate in situ.
+        //q = rot2(iTime/3.)*q; // Rotate individual hexagons.
+        float dH = sdHexagon(q, sL/2.); // Hexagon distance field.
+        d = dH;
+        
+        // Hexagon or cube shadows.
+        vec2 qSh = p + ld.xy*.03;
+        qSh -= hCtr;
+        qSh = rot2(-6.2831/12.*float(11 - i))*qSh;
+        dSh = sdHexagon(qSh, sL/2.);
+        
+        // All hexagons.
+        gHex = min(gHex, d);
+        
+        // Grey hexagon circle outlines.
+        ln = min(ln, abs(length(q) - sL/2./.8660254));
+        
+        // Cutting out the previous hexagon to avoid overlap. A Z-buffer would
+        // also work, and might be cleaner, but it's done now. :)
+        d = max(d, -(prevD - ew/3.));
+        
+        prevD = d; 
+        
+        // Shadow and shadow buffer -- Needs fixing, but it'll do for now.
+        col = mix(col, mix(vec3(0), col, zBuf), (1. - smoothstep(0., sf*5., dSh - ew/2.))*.35);
+        zBuf = mix(zBuf, 1., (1. - smoothstep(0., sf*5., dSh - ew/2.))); 
+  
+        // Combination of all objects... It was used to rotate things in combination with
+        // the sketch algorithm, but I decided against it.
+        gD = min(gD, min(min(ln, d), dSh));
+        
+        // Rendering the hexagon base -- Not entirely necessary, but it enhance the edges.
+        col = mix(col, vec3(0), (1. - smoothstep(0., sf*6., d - ew/2.))*.35); // Fake AO.
+        col = mix(col, vec3(0), (1. - smoothstep(0., sf, d - ew/2.))*.8);
+        //col = mix(col, vec3(1), (1. - smoothstep(0., sf, d + ew - ew/2.)));
+          
+          
+             
+        // Iterate through the three cube faces.
+        for(int j = 0; j<6; j+=2){
+        
+            // Constructing the edge midpoints and normals at those
+            // points for both the string and corresponding shadows.
+            vec2[4] v = vec2[4](svV[(j + 1)%6].yx, svV[(j + 2)%6].yx, svV[(j + 3)%6].yx, vec2(0));
+
+            // Quad center and local quad ID.
+            vec2 qCtr = (v[0] + v[1] + v[2] + v[3])/4.;
+            vec2 qID = hCtr + qCtr;
+            
+            // Face quad.
+            float quad = max(sdPoly4(q, v), d);
+            
+            // Accumulated quad field.
+            gD = min(gD, quad);
+            
+            // Spectrum or rainbow colors.
+            vec3 rnbCol = .6 + .4*cos(6.2831*float(i)/12. + vec3(0, 1, 2)*1.5 + 3.14159/6.);
+            
+            #ifdef BLINKING_LIGHTS
+            float rndI = hash21(hCtr); rndI = cos(rndI*6.2831 + iTime/1.25 + .5);
+            rndI = smoothstep(.9, .95, sin(rndI*6.2831 + iTime*3.)*.5 + .5);
+            
+            vec3 rCol = vec3(.55) + float(i%3)/12.;//vec3(hash21(hCtr + .6)*.35 + .5);
+            rCol = mix(rCol, dot(rCol, vec3(.299, .587, .114))*vec3(4, 1, .5), rndI);
+            rCol = mix(rCol, rCol.xzy, sin(hash21(hCtr + .44)*6.2831 + iTime)*.35 + .35);
+            
+            // Alternative.
+            //vec3 rCol = rnbCol;
+            //rCol = mix(rCol, rnbCol*1.5, rndI);
+            #else
+            vec3 rCol = rnbCol;
+            #endif
+            
+  
+            // Face normal.
+            vec3 sn = n[j/2];
+            // Rotate the face normals about the XY axis -- Since this isn't 3D, we
+            // need to fake it.
+            sn.xy = rot2(6.2831/12.*float(11 - i))*sn.xy;
+             
+            // Using the quad distance field for a bit of shading. In this case, it
+            // gives the cubes a subtle faux ambient occulsion feel.
+            float sh = clamp(.35 - quad/.03, 0., 1.)*.3 + .7;
+            // Standard diffuse lighting.
+            float dif = max(dot(ld, sn), 0.);
+            // Lit face color.
+            rCol = rCol*(dif + .5)*sh;
+            
+            // Render the face quad.
+            col = mix(col, rCol*.5, (1. - smoothstep(0., sf, quad)));
+            col = mix(col, vec3(rCol), (1. - smoothstep(0., sf, quad + ew)));
+            
+            #ifdef SUBDIV_LINES
+            // Quad lines -- Not used.
+            
+            qLn = lBox(q, mix(v[0], v[1], .5), mix(v[2], v[3], .5), .0);
+            qLn = min(qLn, lBox(q, mix(v[1], v[2], .5), mix(v[3], v[0], .5), .0));
+            /*         
+            qLn = lBox(q, mix(v[0], v[1], .333), mix(v[2], v[3], .666), .0);
+            qLn = min(qLn, lBox(q, mix(v[1], v[2], .333), mix(v[3], v[0], .666), .0));
+            qLn = min(qLn, lBox(q, mix(v[0], v[1], .666), mix(v[2], v[3], .333), .0));
+            qLn = min(qLn, lBox(q, mix(v[1], v[2], .666), mix(v[3], v[0], .333), .0));
+            */
+            qLn = max(qLn, (prevD - ew/3.));
+            
+            vec3 svCol = col;
+            col = mix(col, col*1.35, (1. - smoothstep(0., sf*3., qLn - .003)));
+            col = mix(col, svCol*.65, (1. - smoothstep(0., sf*2., qLn - .001)));
+            #endif
+        }
+        
+         
+    }
+    
+
+    // Faking the ruled guide lines. We'll make them more pronounced outside the colored
+    // cubes and faint over the top.
+    float lAlpha = mix(.25, .125, 1. - smoothstep(0., sf*2., gHex));
+    col = mix(col, vec3(0), (1. - smoothstep(0., sf*2., ln - .001*fbm(p*32. + .5)))*lAlpha);
+    // IQ's suggestion to let a trace amount of the graph paper pattern show through.
+    // The graph paper was a later addition, so I'd forgotten to include it.
+    col = mix(col, vec3(.35, .65, 1)/4., (1. - smoothstep(0., sf*2., max(gHex, ln3)))*.25);
+    
+    
+ 
+    // Subtle pencil overlay... It's cheap and definitely not production worthy,
+    // but it works well enough for the purpose of the example. The idea is based
+    // off of one of Flockaroo's examples.
+    q = p*8.;//mix(p*10., uv*gSc*10. - (offs - .5)*oFct  - (offs2 - .5)*oFct2, smoothstep(0., sf, gD));
+    vec3 colP = pencil(col, q*iResolution.y/450.);
+    #ifdef GREYSCALE
+    // Just the pencil sketch. The last factor ranges from zero to one and 
+    // determines the sketchiness of the rendering... Pun intended. :D
+    col = mix(dot(col, vec3(.299, .587, .114))*vec3(1), colP, .6);
+    #else
+    col = mix(col, 1. - exp(-(col*2.)*(colP + .25)), .85); 
+    #endif
+    //col = mix(col, colP, .5);
+    //col = mix(min(col, colP), max(col, colP), .5); 
+   
+  
+     // Cheap paper grain... Also barely worth the effort. :)
+    vec2 pp = q;//floor(q*1024.);
+    vec3 rn3 = vec3(hash21(pp), hash21(pp + 2.37), hash21(pp + 4.83));
+    vec3 pg = .8 + (rn3.xyz*.35 + rn3.xxx*.65)*.4;
+    col *= min(pg, 1.); 
+    
+    
+    // Rough gamma correction and output to screen.
+    fragColor = vec4(sqrt(max(col, 0.)), 1);
+}
+
+void main() {
+    mainImage(fragColor, gl_FragCoord.xy);
+}
+`;
+
+  // Compile shaders
+  function compileShader(source, type) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
+  const fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
+
+  if (!vertexShader || !fragmentShader) return;
+
+  // Link program
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error('Program link error:', gl.getProgramInfoLog(program));
+    return;
+  }
+
+  gl.useProgram(program);
+
+  // Setup geometry (fullscreen quad)
+  const positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1,
+     1, -1,
+    -1,  1,
+     1,  1
+  ]), gl.STATIC_DRAW);
+
+  const positionLocation = gl.getAttribLocation(program, 'position');
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Set viewport
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  console.log('Viewport set to:', canvas.width, 'x', canvas.height);
+
+  // Get uniform locations (MUST be done AFTER useProgram and BEFORE first render)
+  // Note: Must ensure program is current before getting locations
+  gl.useProgram(program);
+
+  const iResolutionLocation = gl.getUniformLocation(program, 'iResolution');
+  const iTimeLocation = gl.getUniformLocation(program, 'iTime');
+
+  console.log('Uniform locations:', {
+    iResolution: iResolutionLocation,
+    iTime: iTimeLocation
+  });
+
+  // Verify uniforms were found (null or -1 means not found)
+  if (!iResolutionLocation || iResolutionLocation === -1) {
+    console.error('Could not find uniform: iResolution');
+  }
+  if (!iTimeLocation || iTimeLocation === -1) {
+    console.error('Could not find uniform: iTime');
+  }
+
+  // Render loop
+  let startTime = Date.now();
+  function render() {
+    const currentTime = (Date.now() - startTime) / 1000.0;
+
+    // Only set uniforms if locations are valid
+    if (iResolutionLocation && iResolutionLocation !== -1) {
+      gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+    }
+    if (iTimeLocation && iTimeLocation !== -1) {
+      gl.uniform1f(iTimeLocation, currentTime);
+    }
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+
+  console.log('Starting render loop');
+  render();
+}
+
+// Try to initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initShader);
+} else {
+  initShader();
+}
+
+// Also try again on window load
+window.addEventListener('load', function() {
+  const canvas = document.getElementById('nprShaderCanvas');
+  if (canvas && !canvas.getContext('webgl')) {
+    initShader();
+  }
+});
+</script>
 
 <!-- Slide 7: Tech Approach -->
     <section class="slide" data-index="7">
@@ -1220,23 +1983,18 @@
       </div>
       <div class="team-grid">
         <div class="team-member">
+          <div class="member-avatar">🗺️</div>
+          <div class="member-name">Geoff</div>
+          <div class="member-role">Technical Lead<br>GIS + CAD + Full-Stack Engineering</div>
+        </div>
+        <div class="team-member">
           <div class="member-avatar">🌺</div>
           <div class="member-name">Annie</div>
-          <div class="member-role">Nursery Owner & Designer<br>Domain expertise + aesthetics</div>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">🗺️</div>
-          <div class="member-name">You</div>
-          <div class="member-role">CAD/GIS Expert<br>Product strategy + data systems</div>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">⚡</div>
-          <div class="member-name">Jake</div>
-          <div class="member-role">Full-Stack + ML<br>Engineering velocity</div>
+          <div class="member-role">Design & Domain Expert<br>Nursery owner + customer validation</div>
         </div>
       </div>
       <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
-        Right people • Right time • Right domain
+        Technical expertise • Domain knowledge • Customer access
       </p>
     </section>
 <!-- Slide 11: Traction -->
@@ -1245,10 +2003,11 @@
         <h1 class="slide-title">Path to Launch</h1>
       </div>
       <ul class="bullet-list">
-        <li><span class="highlight">3-6 months:</span> Weekend sprints to MVP</li>
-        <li><span class="highlight">Validation:</span> Pilot with Annie's nursery customers</li>
-        <li><span class="highlight">Unfair advantage:</span> GIS/CAD + nursery domain expertise</li>
-        <li><span class="highlight">Next milestone:</span> Demo-ready for seed investors</li>
+        <li><span class="highlight">Completed:</span> Full technical architecture designed & prototyped</li>
+        <li><span class="highlight">Working now:</span> GIS pipeline processing real parcels • NPR shaders rendering</li>
+        <li><span class="highlight">In progress:</span> Illustrator UXP plugin with plant layout algorithms</li>
+        <li><span class="highlight">Next 3 months:</span> Annie pilot program with nursery customers</li>
+        <li><span class="highlight">Unfair advantage:</span> Solved the hard technical problems that keep competitors stuck</li>
       </ul>
     </section>
 
@@ -1273,12 +2032,13 @@
 <!-- Slide 13: Call to Action -->
     <section class="slide title-slide" data-index="13">
       <h1 class="main-title">Let's Build This</h1>
-      <h2 class="main-subtitle">Join us in transforming landscape design</h2>
+      <h2 class="main-subtitle">The foundation is built. Time to launch.</h2>
       <div style="margin-top: 3rem;">
         <ul class="bullet-list" style="text-align: left; display: inline-block;">
-          <li>Annie: Design polish + customer validation</li>
-          <li>Jake: Engineering excellence</li>
-          <li>You: GIS/CAD + product vision</li>
+          <li><span class="highlight">Proven technology stack</span> – Illustrator plugin + GIS pipeline working</li>
+          <li><span class="highlight">Domain expertise</span> – Annie's nursery customers ready to pilot</li>
+          <li><span class="highlight">Technical execution</span> – Complex rendering and geometry algorithms solved</li>
+          <li><span class="highlight">Clear path to revenue</span> – SaaS + nursery partnerships</li>
         </ul>
       </div>
     </section>
@@ -1287,7 +2047,7 @@
 
     <div class="controls">
         <button id="prev" aria-label="Previous slide">←</button>
-        <span id="counter">1 / 13</span>
+        <span id="counter">1 / 16</span>
         <button id="next" aria-label="Next slide">→</button>
     </div>
 

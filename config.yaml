@@ -10,7 +10,10 @@ slides:
 - 02-problem.html
 - 07-solution.html
 - 05-mvp-demo.html
-- 06-value-props.html
+- 06-phase1-overview.html
+- 06a-phase1-data.html
+- 06b-phase1-features.html
+- 06c-phase1-npr.html
 - 07-tech-approach.html
 - 08-business-model.html
 - 05-tipping-point.html

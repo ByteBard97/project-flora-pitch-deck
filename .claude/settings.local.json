@@ -47,7 +47,11 @@
       "Bash(npm run build:*)",
       "Bash(git log:*)",
       "Bash(xargs:*)",
-      "Read(//home/geoff/projects/Leak_Detector_2/**)"
+      "Read(//home/geoff/projects/Leak_Detector_2/**)",
+      "Read(//home/geoff/projects/flora-2.5d-viewer/**)",
+      "Read(//home/geoff/projects/flora_gis_tools/docs/**)",
+      "Read(//home/geoff/projects/flora-uxp/docs/**)",
+      "WebFetch(domain:www.shadertoy.com)"
     ],
     "deny": [],
     "ask": []
