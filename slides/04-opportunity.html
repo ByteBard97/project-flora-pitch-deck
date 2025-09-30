@@ -1,0 +1,162 @@
+<section class="slide" data-index="2">
+      <div class="slide-header">
+        <h1 class="slide-title">The $180B Opportunity</h1>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">$180B</div>
+          <div class="metric-label">U.S. Landscaping Market</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">$3B→$5.6B</div>
+          <div class="metric-label">Software Market by 2030</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">700K+</div>
+          <div class="metric-label">U.S. Businesses</div>
+        </div>
+      </div>
+      <ul class="bullet-list" style="margin-top: 3rem;">
+        <li>72% of landscaping businesses have <span class="highlight">fewer than 10 employees</span></li>
+        <li>Post-pandemic <span class="highlight">outdoor living boom</span> driving demand</li>
+        <li>This is the <span class="highlight clickable-term" onclick="showAltiumModal()">Altium vs. OrCAD moment <span class="info-icon">ⓘ</span></span> for landscaping</li>
+      </ul>
+
+      <!-- Modal for Altium explanation -->
+      <div id="altiumModal" class="modal-overlay" onclick="hideAltiumModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <button class="modal-close" onclick="hideAltiumModal()">×</button>
+          <h3 class="modal-title">The Altium vs. OrCAD Story</h3>
+          <div class="modal-body">
+            <p><strong>OrCAD:</strong> Dominant but dated PCB design tool. Powerful but clunky, expensive, steep learning curve.</p>
+            <p><strong>Altium:</strong> Modern alternative with better UX, more intuitive interface, and integrated workflow. Disrupted the market by being more accessible while still professional.</p>
+            <p class="modal-highlight">🎯 <strong>The Parallel:</strong> AutoCAD/Vectorworks are the "OrCAD" of landscaping. Flora is positioned to be the "Altium" - bringing modern UX and intelligence to an underserved market.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .clickable-term {
+        cursor: pointer;
+        position: relative;
+        border-bottom: 2px dotted var(--accent-primary);
+      }
+
+      .clickable-term:hover {
+        color: var(--accent-glow);
+      }
+
+      .info-icon {
+        font-size: 0.85em;
+        margin-left: 0.25rem;
+        opacity: 0.8;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-secondary));
+        border: 2px solid var(--accent-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: var(--shadow-glow), var(--shadow-xl);
+        position: relative;
+        animation: modalSlideIn 0.3s ease;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        transition: all 0.2s;
+      }
+
+      .modal-close:hover {
+        background: var(--accent-primary);
+        color: var(--bg-primary);
+        transform: rotate(90deg);
+      }
+
+      .modal-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--accent-glow);
+        margin-bottom: 1.5rem;
+        padding-right: 2rem;
+      }
+
+      .modal-body p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+      }
+
+      .modal-body strong {
+        color: var(--accent-primary);
+      }
+
+      .modal-highlight {
+        background: rgba(52, 211, 153, 0.1);
+        border-left: 3px solid var(--accent-primary);
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1.5rem;
+      }
+    </style>
+
+    <script>
+      function showAltiumModal() {
+        document.getElementById('altiumModal').classList.add('active');
+      }
+
+      function hideAltiumModal() {
+        document.getElementById('altiumModal').classList.remove('active');
+      }
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hideAltiumModal();
+        }
+      });
+    </script>

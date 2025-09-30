@@ -44,7 +44,10 @@
       "Bash(pkill:*)",
       "Bash(kill:*)",
       "Bash(netstat:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git log:*)",
+      "Bash(xargs:*)",
+      "Read(//home/geoff/projects/Leak_Detector_2/**)"
     ],
     "deny": [],
     "ask": []

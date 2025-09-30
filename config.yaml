@@ -1,0 +1,28 @@
+presentation:
+  title: 'Project Flora: Seeding the Future of Landscape Design'
+  subtitle: Intelligent design for a living world
+  author: Geoff
+  date: '2025-09-20'
+  venue: Internal Co-Founder Pitch
+slides:
+- 01-title.html
+- 04-opportunity.html
+- 02-problem.html
+- 07-solution.html
+- 05-mvp-demo.html
+- 06-value-props.html
+- 07-tech-approach.html
+- 08-business-model.html
+- 05-tipping-point.html
+- 11-team.html
+- 11-traction.html
+- 12-vision.html
+- 13-call-to-action.html
+build:
+  single_file: true
+  bundle_folder: true
+  webp_quality: 90
+  max_image_width: 1920
+  compress_json: true
+# Colors are now centrally defined in styles.css and byte_bard_colors.css
+# No color definitions should exist in this YAML file!

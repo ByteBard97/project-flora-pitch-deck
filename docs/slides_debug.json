@@ -1,0 +1,93 @@
+[
+  {
+    "file": "01-title.html",
+    "number": 1,
+    "title": "Project Flora",
+    "content": "<section class=\"slide title-slide active\" data-index=\"1\">\n      <div class=\"logo-container\">\n        <div class=\"logo\"></div>\n      </div>\n      <h1 class=\"main-title\">Project Flora</h1>\n      <h2 class=\"main-subtitle\">The Operating System for Sustainable Landscape Design</h2>\n    </section>",
+    "assets": []
+  },
+  {
+    "file": "04-opportunity.html",
+    "number": 2,
+    "title": "The $180B Opportunity",
+    "content": "<section class=\"slide\" data-index=\"2\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">The $180B Opportunity</h1>\n      </div>\n      <div class=\"metrics-grid\">\n        <div class=\"metric-card\">\n          <div class=\"metric-value\">$180B</div>\n          <div class=\"metric-label\">U.S. Landscaping Market</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-value\">$3B→$5.6B</div>\n          <div class=\"metric-label\">Software Market by 2030</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-value\">700K+</div>\n          <div class=\"metric-label\">U.S. Businesses</div>\n        </div>\n      </div>\n      <ul class=\"bullet-list\" style=\"margin-top: 3rem;\">\n        <li>72% of landscaping businesses have <span class=\"highlight\">fewer than 10 employees</span></li>\n        <li>Post-pandemic <span class=\"highlight\">outdoor living boom</span> driving demand</li>\n        <li>This is the <span class=\"highlight clickable-term\" onclick=\"showAltiumModal()\">Altium vs. OrCAD moment <span class=\"info-icon\">ⓘ</span></span> for landscaping</li>\n      </ul>\n\n      <!-- Modal for Altium explanation -->\n      <div id=\"altiumModal\" class=\"modal-overlay\" onclick=\"hideAltiumModal()\">\n        <div class=\"modal-content\" onclick=\"event.stopPropagation()\">\n          <button class=\"modal-close\" onclick=\"hideAltiumModal()\">×</button>\n          <h3 class=\"modal-title\">The Altium vs. OrCAD Story</h3>\n          <div class=\"modal-body\">\n            <p><strong>OrCAD:</strong> Dominant but dated PCB design tool. Powerful but clunky, expensive, steep learning curve.</p>\n            <p><strong>Altium:</strong> Modern alternative with better UX, more intuitive interface, and integrated workflow. Disrupted the market by being more accessible while still professional.</p>\n            <p class=\"modal-highlight\">🎯 <strong>The Parallel:</strong> AutoCAD/Vectorworks are the \"OrCAD\" of landscaping. Flora is positioned to be the \"Altium\" - bringing modern UX and intelligence to an underserved market.</p>\n          </div>\n        </div>\n      </div>\n    </section>\n\n    <style>\n      .clickable-term {\n        cursor: pointer;\n        position: relative;\n        border-bottom: 2px dotted var(--accent-primary);\n      }\n\n      .clickable-term:hover {\n        color: var(--accent-glow);\n      }\n\n      .info-icon {\n        font-size: 0.85em;\n        margin-left: 0.25rem;\n        opacity: 0.8;\n      }\n\n      .modal-overlay {\n        display: none;\n        position: fixed;\n        top: 0;\n        left: 0;\n        right: 0;\n        bottom: 0;\n        background: rgba(0, 0, 0, 0.8);\n        backdrop-filter: blur(4px);\n        z-index: 10000;\n        justify-content: center;\n        align-items: center;\n      }\n\n      .modal-overlay.active {\n        display: flex;\n      }\n\n      .modal-content {\n        background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-secondary));\n        border: 2px solid var(--accent-primary);\n        border-radius: 16px;\n        padding: 2rem;\n        max-width: 600px;\n        width: 90%;\n        box-shadow: var(--shadow-glow), var(--shadow-xl);\n        position: relative;\n        animation: modalSlideIn 0.3s ease;\n      }\n\n      @keyframes modalSlideIn {\n        from {\n          opacity: 0;\n          transform: translateY(-20px);\n        }\n        to {\n          opacity: 1;\n          transform: translateY(0);\n        }\n      }\n\n      .modal-close {\n        position: absolute;\n        top: 1rem;\n        right: 1rem;\n        background: transparent;\n        border: none;\n        color: var(--text-primary);\n        font-size: 2rem;\n        cursor: pointer;\n        line-height: 1;\n        padding: 0;\n        width: 32px;\n        height: 32px;\n        border-radius: 50%;\n        transition: all 0.2s;\n      }\n\n      .modal-close:hover {\n        background: var(--accent-primary);\n        color: var(--bg-primary);\n        transform: rotate(90deg);\n      }\n\n      .modal-title {\n        font-family: 'Playfair Display', serif;\n        font-size: 1.8rem;\n        color: var(--accent-glow);\n        margin-bottom: 1.5rem;\n        padding-right: 2rem;\n      }\n\n      .modal-body p {\n        margin-bottom: 1rem;\n        line-height: 1.6;\n        color: var(--text-primary);\n      }\n\n      .modal-body strong {\n        color: var(--accent-primary);\n      }\n\n      .modal-highlight {\n        background: rgba(52, 211, 153, 0.1);\n        border-left: 3px solid var(--accent-primary);\n        padding: 1rem;\n        border-radius: 4px;\n        margin-top: 1.5rem;\n      }\n    </style>\n\n    <script>\n      function showAltiumModal() {\n        document.getElementById('altiumModal').classList.add('active');\n      }\n\n      function hideAltiumModal() {\n        document.getElementById('altiumModal').classList.remove('active');\n      }\n\n      // Close modal on Escape key\n      document.addEventListener('keydown', (e) => {\n        if (e.key === 'Escape') {\n          hideAltiumModal();\n        }\n      });\n    </script>",
+    "assets": []
+  },
+  {
+    "file": "02-problem.html",
+    "number": 3,
+    "title": "Current Tools Are Broken",
+    "content": "<section class=\"slide\" data-index=\"3\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Current Tools Are Broken</h1>\n      </div>\n      <div class=\"feature-grid\">\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🏗️</div>\n          <div class=\"feature-title\">Pro Tools</div>\n          <div class=\"feature-desc\">AutoCAD, Vectorworks: Powerful but clunky, expensive, and plant-ignorant</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">📱</div>\n          <div class=\"feature-title\">Consumer Apps</div>\n          <div class=\"feature-desc\">iScape, Home Outside: Pretty but shallow – basically clip art</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">✏️</div>\n          <div class=\"feature-title\">Current Reality</div>\n          <div class=\"feature-desc\">Annie does everything manually in Illustrator with no intelligence</div>\n        </div>\n      </div>\n    </section>",
+    "assets": []
+  },
+  {
+    "file": "07-solution.html",
+    "number": 4,
+    "title": "Flora: Intelligence Meets Beauty",
+    "content": "<section class=\"slide\" data-index=\"4\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Flora: Intelligence Meets Beauty</h1>\n      </div>\n      <div class=\"feature-grid\">\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">📍</div>\n          <div class=\"feature-title\">Instant Site Setup</div>\n          <div class=\"feature-desc\">Type address → get parcel + imagery instantly</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🌿</div>\n          <div class=\"feature-title\">Plant Intelligence</div>\n          <div class=\"feature-desc\">Native species, zones, spacing – built-in ecology</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🎨</div>\n          <div class=\"feature-title\">Beautiful Design</div>\n          <div class=\"feature-desc\">Illustrator feel for outdoor spaces</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">📋</div>\n          <div class=\"feature-title\">Auto Takeoffs</div>\n          <div class=\"feature-desc\">One-click plant lists and sales-ready PDFs</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🎮</div>\n          <div class=\"feature-title\">3D Walkthrough</div>\n          <div class=\"feature-desc\">Doom-style exploration of designs</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🤖</div>\n          <div class=\"feature-title\">AI-Powered</div>\n          <div class=\"feature-desc\">Smart recommendations and plant ID</div>\n        </div>\n      </div>\n    </section>",
+    "assets": []
+  },
+  {
+    "file": "05-mvp-demo.html",
+    "number": 5,
+    "title": "MVP in 4 Simple Steps",
+    "content": "<!-- Slide 5: MVP Demo Flow -->\n    <section class=\"slide\" data-index=\"5\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">MVP in 4 Simple Steps</h1>\n      </div>\n      <ul class=\"bullet-list\">\n        <li><span class=\"highlight\">Step 1:</span> Enter address → site instantly appears with parcel + aerial</li>\n        <li><span class=\"highlight\">Step 2:</span> Drag & drop native plants with smart filters and spacing</li>\n        <li><span class=\"highlight\">Step 3:</span> Generate branded plant list PDF with counts & species</li>\n        <li><span class=\"highlight\">Step 4:</span> Click to walk through your design in 3D (optional wow)</li>\n      </ul>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "06-value-props.html",
+    "number": 6,
+    "title": "Everyone Wins",
+    "content": "<!-- Slide 6: Value Props -->\n    <section class=\"slide\" data-index=\"6\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Everyone Wins</h1>\n      </div>\n      <ul class=\"bullet-list\">\n        <li><span class=\"highlight\">Nurseries:</span> Designs convert directly to plant sales</li>\n        <li><span class=\"highlight\">Designers:</span> Hours saved on takeoffs and documentation</li>\n        <li><span class=\"highlight\">Contractors:</span> Professional proposals without CAD expertise</li>\n        <li><span class=\"highlight\">Homeowners:</span> Approachable, confidence-building experience</li>\n        <li><span class=\"highlight\">Planet:</span> More native plants, better ecosystems</li>\n      </ul>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "07-tech-approach.html",
+    "number": 7,
+    "title": "Built for Scale",
+    "content": "<!-- Slide 7: Tech Approach -->\n    <section class=\"slide\" data-index=\"7\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Built for Scale</h1>\n      </div>\n      <div class=\"feature-grid\">\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">⚡</div>\n          <div class=\"feature-title\">Babylon.js Core</div>\n          <div class=\"feature-desc\">Unified 2D/3D rendering with orthographic camera</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🗺️</div>\n          <div class=\"feature-title\">GIS Integration</div>\n          <div class=\"feature-desc\">GeoTIFFs, KMLs, parcel APIs, elevation data</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">📱</div>\n          <div class=\"feature-title\">Progressive Web App</div>\n          <div class=\"feature-desc\">Works everywhere, offline-capable</div>\n        </div>\n      </div>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "08-business-model.html",
+    "number": 8,
+    "title": "Multiple Revenue Streams",
+    "content": "<!-- Slide 8: Business Model -->\n    <section class=\"slide\" data-index=\"8\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Multiple Revenue Streams</h1>\n      </div>\n      <ul class=\"bullet-list\">\n        <li><span class=\"highlight\">Freemium SaaS:</span> Free tier → Pro at $20-50/month</li>\n        <li><span class=\"highlight\">White Label:</span> Branded exports for nursery partners</li>\n        <li><span class=\"highlight\">Affiliate Revenue:</span> Integration with suppliers (Home Depot, local nurseries)</li>\n        <li><span class=\"highlight\">Future Expansion:</span> Full proposals with cost estimation</li>\n      </ul>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "05-tipping-point.html",
+    "number": 9,
+    "title": "Perfect Timing",
+    "content": "<section class=\"slide\" data-index=\"9\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Perfect Timing</h1>\n      </div>\n      <div class=\"feature-grid\">\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🏡</div>\n          <div class=\"feature-title\">Outdoor Living Boom</div>\n          <div class=\"feature-desc\">Post-pandemic shift to home improvement</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">🌱</div>\n          <div class=\"feature-title\">Sustainability Push</div>\n          <div class=\"feature-desc\">Regulations favor native plants & water conservation</div>\n        </div>\n        <div class=\"feature-card\">\n          <div class=\"feature-icon\">☁️</div>\n          <div class=\"feature-title\">Cloud + AI Ready</div>\n          <div class=\"feature-desc\">Small teams can now build magic quickly</div>\n        </div>\n      </div>\n    </section>",
+    "assets": []
+  },
+  {
+    "file": "11-team.html",
+    "number": 10,
+    "title": "The Perfect Team",
+    "content": "<section class=\"slide\" data-index=\"10\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">The Perfect Team</h1>\n      </div>\n      <div class=\"team-grid\">\n        <div class=\"team-member\">\n          <div class=\"member-avatar\">🌺</div>\n          <div class=\"member-name\">Annie</div>\n          <div class=\"member-role\">Nursery Owner & Designer<br>Domain expertise + aesthetics</div>\n        </div>\n        <div class=\"team-member\">\n          <div class=\"member-avatar\">🗺️</div>\n          <div class=\"member-name\">You</div>\n          <div class=\"member-role\">CAD/GIS Expert<br>Product strategy + data systems</div>\n        </div>\n        <div class=\"team-member\">\n          <div class=\"member-avatar\">⚡</div>\n          <div class=\"member-name\">Jake</div>\n          <div class=\"member-role\">Full-Stack + ML<br>Engineering velocity</div>\n        </div>\n      </div>\n      <p style=\"text-align: center; margin-top: 2rem; color: var(--text-secondary);\">\n        Right people • Right time • Right domain\n      </p>\n    </section>",
+    "assets": []
+  },
+  {
+    "file": "11-traction.html",
+    "number": 11,
+    "title": "Path to Launch",
+    "content": "<!-- Slide 11: Traction -->\n    <section class=\"slide\" data-index=\"11\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">Path to Launch</h1>\n      </div>\n      <ul class=\"bullet-list\">\n        <li><span class=\"highlight\">3-6 months:</span> Weekend sprints to MVP</li>\n        <li><span class=\"highlight\">Validation:</span> Pilot with Annie's nursery customers</li>\n        <li><span class=\"highlight\">Unfair advantage:</span> GIS/CAD + nursery domain expertise</li>\n        <li><span class=\"highlight\">Next milestone:</span> Demo-ready for seed investors</li>\n      </ul>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "12-vision.html",
+    "number": 12,
+    "title": "The Vision",
+    "content": "<!-- Slide 12: Vision -->\n    <section class=\"slide\" data-index=\"12\">\n      <div class=\"slide-header\">\n        <h1 class=\"slide-title\">The Vision</h1>\n      </div>\n      <div class=\"slide-content\">\n        <p style=\"font-size: 1.4rem; line-height: 1.8; margin-bottom: 2rem;\">\n          Flora will be the <span class=\"highlight\">operating system for sustainable landscape design</span>.\n        </p>\n        <p style=\"color: var(--text-secondary); margin-bottom: 2rem;\">\n          By uniting instant site data, ecological intelligence, and delightful design, we'll enable small businesses and homeowners to create outdoor spaces that are beautiful, resilient, and ecologically sound.\n        </p>\n        <p style=\"color: var(--text-secondary);\">\n          Long-term: From plant lists to full proposals. From individual yards to urban-scale ecological planning.\n        </p>\n      </div>\n    </section>\n",
+    "assets": []
+  },
+  {
+    "file": "13-call-to-action.html",
+    "number": 13,
+    "title": "Let's Build This",
+    "content": "<!-- Slide 13: Call to Action -->\n    <section class=\"slide title-slide\" data-index=\"13\">\n      <h1 class=\"main-title\">Let's Build This</h1>\n      <h2 class=\"main-subtitle\">Join us in transforming landscape design</h2>\n      <div style=\"margin-top: 3rem;\">\n        <ul class=\"bullet-list\" style=\"text-align: left; display: inline-block;\">\n          <li>Annie: Design polish + customer validation</li>\n          <li>Jake: Engineering excellence</li>\n          <li>You: GIS/CAD + product vision</li>\n        </ul>\n      </div>\n    </section>\n",
+    "assets": []
+  }
+]

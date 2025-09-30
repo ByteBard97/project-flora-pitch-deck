@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Flora: Seeding the Future of Landscape Design</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Code syntax highlighting with Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <!-- Leaflet CSS for GIS demo -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+    <!-- D3 UMD (exposes window.d3) -->
+    <script src="https://d3js.org/d3.v7.min.js" defer></script>
+
+    <!-- D3FC UMD bundle (exposes window.fc, includes label-layout) -->
+    <script src="https://unpkg.com/d3fc@15" defer></script>
+
+    <style>
+:root {
+      --bg-primary: #0a1f1e;
+      --bg-secondary: #0f2826;
+      --bg-gradient-1: #1a3633;
+      --bg-gradient-2: #0d2422;
+      --text-primary: #f0fdf9;
+      --text-secondary: #a7f3d0;
+      --text-muted: #6ee7b7;
+      --accent-primary: #34d399;
+      --accent-secondary: #10b981;
+      --accent-glow: #86efac;
+      --card-bg: rgba(16, 185, 129, 0.05);
+      --border-color: rgba(52, 211, 153, 0.2);
+      --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 60px rgba(52, 211, 153, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: radial-gradient(ellipse at top right, var(--bg-gradient-1), var(--bg-primary)),
+                  radial-gradient(ellipse at bottom left, var(--bg-gradient-2), var(--bg-primary));
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: drift 60s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes drift {
+      to { transform: translate(50px, 50px); }
+    }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 8vh 8vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+
+    .slide.prev {
+      transform: translateX(-100px);
+    }
+
+    /* Title Slide */
+    .title-slide {
+      text-align: center;
+      align-items: center;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .logo {
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow), var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      content: '🌿';
+      font-size: 80px;
+      filter: brightness(0) invert(1);
+      z-index: 2;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    h1.main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-glow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2.main-subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 300;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Regular Slides */
+    .slide-header {
+      margin-bottom: 3rem;
+    }
+
+    h1.slide-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1.slide-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-primary), transparent);
+      border-radius: 2px;
+    }
+
+    .slide-content {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      line-height: 1.8;
+    }
+
+    /* Cards and Lists */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-primary);
+      box-shadow: 0 10px 30px rgba(52, 211, 153, 0.2);
+    }
+
+    .feature-card:hover::before {
+      transform: translateX(0);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--accent-glow);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Bullet Points */
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      animation: slideIn 0.6s ease backwards;
+    }
+
+    .bullet-list li:nth-child(1) { animation-delay: 0.1s; }
+    .bullet-list li:nth-child(2) { animation-delay: 0.2s; }
+    .bullet-list li:nth-child(3) { animation-delay: 0.3s; }
+    .bullet-list li:nth-child(4) { animation-delay: 0.4s; }
+    .bullet-list li:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .bullet-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+
+    .highlight {
+      color: var(--accent-glow);
+      font-weight: 600;
+    }
+
+    /* Metrics */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .metric-card {
+      text-align: center;
+      animation: fadeInUp 0.6s ease backwards;
+    }
+
+    .metric-card:nth-child(1) { animation-delay: 0.1s; }
+    .metric-card:nth-child(2) { animation-delay: 0.2s; }
+    .metric-card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .metric-value {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--accent-primary); /* Fallback color */
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      display: inline-block; /* Ensure gradient covers full text */
+    }
+
+    .metric-label {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Team Section */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .team-member {
+      text-align: center;
+    }
+
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--accent-primary));
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .member-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .member-role {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(10, 31, 30, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-xl);
+      z-index: 100;
+      transition: opacity 1s ease;
+      opacity: 1;
+    }
+
+    .controls.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .controls.fade-in {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .controls button {
+      background: transparent;
+      border: 2px solid var(--accent-primary);
+      color: var(--accent-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .controls button:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      transform: scale(1.05);
+    }
+
+    #counter {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-primary);
+    }
+
+    /* Help */
+    .help {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .help:hover {
+      opacity: 1;
+    }
+
+    kbd {
+      background: rgba(255,255,255,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    /* Mobile indicator */
+    .mobile-swipe-hint {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Enhanced Mobile Responsive - Small Phones */
+    @media (max-width: 480px) {
+      .slide {
+        padding: 1rem;
+        padding-top: 3rem;
+        padding-bottom: 7rem; /* Increased to account for controls */
+        justify-content: flex-start;
+      }
+
+      /* Make slides scrollable on mobile */
+      .slide.active {
+        overflow-y: auto;
+      }
+
+      /* Shrink logo on mobile */
+      .logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .logo::before {
+        font-size: 60px;
+      }
+
+      .logo-container {
+        margin-bottom: 2rem;
+      }
+
+      /* Adjust title sizes */
+      h1.main-title {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      h2.main-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+
+      h1.slide-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .slide-header {
+        margin-bottom: 1.5rem;
+      }
+
+      /* Stack all grids vertically */
+      .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      /* Smaller cards on mobile */
+      .feature-card {
+        padding: 1rem;
+      }
+
+      .feature-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-title {
+        font-size: 1.1rem;
+      }
+
+      .feature-desc {
+        font-size: 0.9rem;
+      }
+
+      /* Adjust metrics */
+      .metric-value {
+        font-size: 2rem;
+      }
+
+      .metric-label {
+        font-size: 0.9rem;
+      }
+
+      /* Smaller avatars */
+      .member-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+      }
+
+      .member-name {
+        font-size: 1.1rem;
+      }
+
+      .member-role {
+        font-size: 0.85rem;
+      }
+
+      /* Adjust bullet points */
+      .bullet-list li {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+      }
+
+      /* Compact mobile controls */
+      .controls {
+        bottom: 0.5rem;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        transform: none;
+        padding: 0.4rem;
+        gap: 0;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        background: rgba(10, 31, 30, 0.95);
+        border-radius: 18px;
+        max-width: none;
+        height: 56px; /* Fixed height for consistency */
+        transition: opacity 1s ease;
+      }
+
+      .controls.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .controls.fade-in {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .controls button {
+        padding: 0;
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        min-width: auto;
+        border-width: 2px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(52, 211, 153, 0.1);
+      }
+
+      .controls button:active {
+        transform: scale(0.95);
+        background: var(--accent-primary);
+        color: var(--bg-primary);
+      }
+
+      #prev {
+        justify-self: start;
+        margin-left: 0.4rem;
+      }
+
+      #next {
+        justify-self: end;
+        margin-right: 0.4rem;
+      }
+
+      #counter {
+        font-size: 0.9rem;
+        white-space: nowrap;
+        color: var(--accent-glow);
+        font-weight: 600;
+        padding: 0 0.75rem;
+      }
+
+      /* Hide help text on mobile */
+      .help {
+        display: none;
+      }
+
+      /* Better swipe hint */
+      .mobile-swipe-hint {
+        display: block;
+        bottom: 70px; /* Adjusted for new control height */
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        background: rgba(10, 31, 30, 0.7);
+        padding: 0.2rem 0.8rem;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+      }
+
+      /* Adjust general text */
+      .slide-content {
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .slide-content p {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Medium Mobile */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .slide {
+        padding: 2rem;
+        padding-top: 3rem;
+        padding-bottom: 6rem; /* Added more padding for controls */
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1.main-title {
+        font-size: 3.5rem;
+      }
+
+      h1.slide-title {
+        font-size: 2.25rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      
+      .controls {
+        bottom: 1rem;
+        padding: 0.65rem 1.25rem;
+      }
+
+      .controls button {
+        padding: 0.6rem 1.1rem;
+        font-size: 1rem;
+      }
+      
+      .help {
+        display: none;
+      }
+
+      .mobile-swipe-hint {
+        display: block;
+      }
+    }
+
+    /* Landscape orientation for small screens */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .slide {
+        padding: 1rem 2rem;
+        padding-bottom: 4rem;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .logo::before {
+        font-size: 40px;
+      }
+
+      h1.main-title {
+        font-size: 2rem;
+      }
+
+      h1.slide-title {
+        font-size: 1.5rem;
+      }
+
+      .slide-header {
+        margin-bottom: 1rem;
+      }
+
+      .metrics-grid,
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .controls {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #111;
+      }
+      
+      #deck {
+        height: auto;
+      }
+      
+      .slide {
+        position: static;
+        page-break-after: always;
+        opacity: 1;
+        transform: none;
+      }
+      
+      .controls, .help, .progress-container, .mobile-swipe-hint {
+        display: none;
+      }
+    }
+
+        /* Code block styling */
+        pre code {
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            display: block;
+        }
+
+        /* Maintain our colored container backgrounds */
+        .bad-code, .code-example {
+            background: linear-gradient(180deg, rgba(255,123,123,0.08), rgba(255,123,123,0.04)) !important;
+            border-left: 4px solid var(--accent3) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+
+        .good-code, .code-solution {
+            background: linear-gradient(180deg, rgba(155,255,176,0.08), rgba(155,255,176,0.04)) !important;
+            border-left: 4px solid var(--accent2) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+
+        .implementation-example {
+            background: linear-gradient(180deg, rgba(156,39,176,0.08), rgba(156,39,176,0.04)) !important;
+            border-left: 4px solid #9C27B0 !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+
+        .universal-class {
+            background: linear-gradient(180deg, rgba(33,150,243,0.08), rgba(33,150,243,0.04)) !important;
+            border-left: 4px solid #2196F3 !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+
+        .approach-bad, .approach-good {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            border-radius: 8px !important;
+            padding: 1em !important;
+        }
+
+        /* Crisp "halo" under label text to keep it readable */
+        svg text {
+            paint-order: stroke;
+            stroke: rgba(8,12,16,.75);
+            stroke-width: 3;
+        }
+        /* Optional: keep strokes consistent when scaling */
+        svg *[stroke] {
+            vector-effect: non-scaling-stroke;
+        }
+    </style>
+
+    <!-- Math rendering with MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']]
+            },
+            options: {
+                renderActions: {
+                    addMenu: []  // Disable context menu for cleaner presentation
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div id="deck">
+        <section class="slide title-slide active" data-index="1">
+      <div class="logo-container">
+        <div class="logo"></div>
+      </div>
+      <h1 class="main-title">Project Flora</h1>
+      <h2 class="main-subtitle">The Operating System for Sustainable Landscape Design</h2>
+    </section>
+<section class="slide" data-index="2">
+      <div class="slide-header">
+        <h1 class="slide-title">The $180B Opportunity</h1>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">$180B</div>
+          <div class="metric-label">U.S. Landscaping Market</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">$3B→$5.6B</div>
+          <div class="metric-label">Software Market by 2030</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">700K+</div>
+          <div class="metric-label">U.S. Businesses</div>
+        </div>
+      </div>
+      <ul class="bullet-list" style="margin-top: 3rem;">
+        <li>72% of landscaping businesses have <span class="highlight">fewer than 10 employees</span></li>
+        <li>Post-pandemic <span class="highlight">outdoor living boom</span> driving demand</li>
+        <li>This is the <span class="highlight clickable-term" onclick="showAltiumModal()">Altium vs. OrCAD moment <span class="info-icon">ⓘ</span></span> for landscaping</li>
+      </ul>
+
+      <!-- Modal for Altium explanation -->
+      <div id="altiumModal" class="modal-overlay" onclick="hideAltiumModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <button class="modal-close" onclick="hideAltiumModal()">×</button>
+          <h3 class="modal-title">The Altium vs. OrCAD Story</h3>
+          <div class="modal-body">
+            <p><strong>OrCAD:</strong> Dominant but dated PCB design tool. Powerful but clunky, expensive, steep learning curve.</p>
+            <p><strong>Altium:</strong> Modern alternative with better UX, more intuitive interface, and integrated workflow. Disrupted the market by being more accessible while still professional.</p>
+            <p class="modal-highlight">🎯 <strong>The Parallel:</strong> AutoCAD/Vectorworks are the "OrCAD" of landscaping. Flora is positioned to be the "Altium" - bringing modern UX and intelligence to an underserved market.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .clickable-term {
+        cursor: pointer;
+        position: relative;
+        border-bottom: 2px dotted var(--accent-primary);
+      }
+
+      .clickable-term:hover {
+        color: var(--accent-glow);
+      }
+
+      .info-icon {
+        font-size: 0.85em;
+        margin-left: 0.25rem;
+        opacity: 0.8;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-secondary));
+        border: 2px solid var(--accent-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: var(--shadow-glow), var(--shadow-xl);
+        position: relative;
+        animation: modalSlideIn 0.3s ease;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        transition: all 0.2s;
+      }
+
+      .modal-close:hover {
+        background: var(--accent-primary);
+        color: var(--bg-primary);
+        transform: rotate(90deg);
+      }
+
+      .modal-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--accent-glow);
+        margin-bottom: 1.5rem;
+        padding-right: 2rem;
+      }
+
+      .modal-body p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+      }
+
+      .modal-body strong {
+        color: var(--accent-primary);
+      }
+
+      .modal-highlight {
+        background: rgba(52, 211, 153, 0.1);
+        border-left: 3px solid var(--accent-primary);
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1.5rem;
+      }
+    </style>
+
+    <script>
+      function showAltiumModal() {
+        document.getElementById('altiumModal').classList.add('active');
+      }
+
+      function hideAltiumModal() {
+        document.getElementById('altiumModal').classList.remove('active');
+      }
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hideAltiumModal();
+        }
+      });
+    </script>
+<section class="slide" data-index="3">
+      <div class="slide-header">
+        <h1 class="slide-title">Current Tools Are Broken</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏗️</div>
+          <div class="feature-title">Pro Tools</div>
+          <div class="feature-desc">AutoCAD, Vectorworks: Powerful but clunky, expensive, and plant-ignorant</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Consumer Apps</div>
+          <div class="feature-desc">iScape, Home Outside: Pretty but shallow – basically clip art</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✏️</div>
+          <div class="feature-title">Current Reality</div>
+          <div class="feature-desc">Annie does everything manually in Illustrator with no intelligence</div>
+        </div>
+      </div>
+    </section>
+<section class="slide" data-index="4">
+      <div class="slide-header">
+        <h1 class="slide-title">Flora: Intelligence Meets Beauty</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <div class="feature-title">Instant Site Setup</div>
+          <div class="feature-desc">Type address → get parcel + imagery instantly</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <div class="feature-title">Plant Intelligence</div>
+          <div class="feature-desc">Native species, zones, spacing – built-in ecology</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Beautiful Design</div>
+          <div class="feature-desc">Illustrator feel for outdoor spaces</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Auto Takeoffs</div>
+          <div class="feature-desc">One-click plant lists and sales-ready PDFs</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎮</div>
+          <div class="feature-title">3D Walkthrough</div>
+          <div class="feature-desc">Doom-style exploration of designs</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">AI-Powered</div>
+          <div class="feature-desc">Smart recommendations and plant ID</div>
+        </div>
+      </div>
+    </section>
+<!-- Slide 5: MVP Demo Flow -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <h1 class="slide-title">MVP in 4 Simple Steps</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Step 1:</span> Enter address → site instantly appears with parcel + aerial</li>
+        <li><span class="highlight">Step 2:</span> Drag & drop native plants with smart filters and spacing</li>
+        <li><span class="highlight">Step 3:</span> Generate branded plant list PDF with counts & species</li>
+        <li><span class="highlight">Step 4:</span> Click to walk through your design in 3D (optional wow)</li>
+      </ul>
+    </section>
+
+<!-- Slide 6: Value Props -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <h1 class="slide-title">Everyone Wins</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Nurseries:</span> Designs convert directly to plant sales</li>
+        <li><span class="highlight">Designers:</span> Hours saved on takeoffs and documentation</li>
+        <li><span class="highlight">Contractors:</span> Professional proposals without CAD expertise</li>
+        <li><span class="highlight">Homeowners:</span> Approachable, confidence-building experience</li>
+        <li><span class="highlight">Planet:</span> More native plants, better ecosystems</li>
+      </ul>
+    </section>
+
+<!-- Slide 7: Tech Approach -->
+    <section class="slide" data-index="7">
+      <div class="slide-header">
+        <h1 class="slide-title">Built for Scale</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Babylon.js Core</div>
+          <div class="feature-desc">Unified 2D/3D rendering with orthographic camera</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-title">GIS Integration</div>
+          <div class="feature-desc">GeoTIFFs, KMLs, parcel APIs, elevation data</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Progressive Web App</div>
+          <div class="feature-desc">Works everywhere, offline-capable</div>
+        </div>
+      </div>
+    </section>
+
+<!-- Slide 8: Business Model -->
+    <section class="slide" data-index="8">
+      <div class="slide-header">
+        <h1 class="slide-title">Multiple Revenue Streams</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">Freemium SaaS:</span> Free tier → Pro at $20-50/month</li>
+        <li><span class="highlight">White Label:</span> Branded exports for nursery partners</li>
+        <li><span class="highlight">Affiliate Revenue:</span> Integration with suppliers (Home Depot, local nurseries)</li>
+        <li><span class="highlight">Future Expansion:</span> Full proposals with cost estimation</li>
+      </ul>
+    </section>
+
+<section class="slide" data-index="9">
+      <div class="slide-header">
+        <h1 class="slide-title">Perfect Timing</h1>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏡</div>
+          <div class="feature-title">Outdoor Living Boom</div>
+          <div class="feature-desc">Post-pandemic shift to home improvement</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌱</div>
+          <div class="feature-title">Sustainability Push</div>
+          <div class="feature-desc">Regulations favor native plants & water conservation</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">☁️</div>
+          <div class="feature-title">Cloud + AI Ready</div>
+          <div class="feature-desc">Small teams can now build magic quickly</div>
+        </div>
+      </div>
+    </section>
+<section class="slide" data-index="10">
+      <div class="slide-header">
+        <h1 class="slide-title">The Perfect Team</h1>
+      </div>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-avatar">🌺</div>
+          <div class="member-name">Annie</div>
+          <div class="member-role">Nursery Owner & Designer<br>Domain expertise + aesthetics</div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">🗺️</div>
+          <div class="member-name">You</div>
+          <div class="member-role">CAD/GIS Expert<br>Product strategy + data systems</div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">⚡</div>
+          <div class="member-name">Jake</div>
+          <div class="member-role">Full-Stack + ML<br>Engineering velocity</div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+        Right people • Right time • Right domain
+      </p>
+    </section>
+<!-- Slide 11: Traction -->
+    <section class="slide" data-index="11">
+      <div class="slide-header">
+        <h1 class="slide-title">Path to Launch</h1>
+      </div>
+      <ul class="bullet-list">
+        <li><span class="highlight">3-6 months:</span> Weekend sprints to MVP</li>
+        <li><span class="highlight">Validation:</span> Pilot with Annie's nursery customers</li>
+        <li><span class="highlight">Unfair advantage:</span> GIS/CAD + nursery domain expertise</li>
+        <li><span class="highlight">Next milestone:</span> Demo-ready for seed investors</li>
+      </ul>
+    </section>
+
+<!-- Slide 12: Vision -->
+    <section class="slide" data-index="12">
+      <div class="slide-header">
+        <h1 class="slide-title">The Vision</h1>
+      </div>
+      <div class="slide-content">
+        <p style="font-size: 1.4rem; line-height: 1.8; margin-bottom: 2rem;">
+          Flora will be the <span class="highlight">operating system for sustainable landscape design</span>.
+        </p>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+          By uniting instant site data, ecological intelligence, and delightful design, we'll enable small businesses and homeowners to create outdoor spaces that are beautiful, resilient, and ecologically sound.
+        </p>
+        <p style="color: var(--text-secondary);">
+          Long-term: From plant lists to full proposals. From individual yards to urban-scale ecological planning.
+        </p>
+      </div>
+    </section>
+
+<!-- Slide 13: Call to Action -->
+    <section class="slide title-slide" data-index="13">
+      <h1 class="main-title">Let's Build This</h1>
+      <h2 class="main-subtitle">Join us in transforming landscape design</h2>
+      <div style="margin-top: 3rem;">
+        <ul class="bullet-list" style="text-align: left; display: inline-block;">
+          <li>Annie: Design polish + customer validation</li>
+          <li>Jake: Engineering excellence</li>
+          <li>You: GIS/CAD + product vision</li>
+        </ul>
+      </div>
+    </section>
+
+    </div>
+
+    <div class="controls">
+        <button id="prev" aria-label="Previous slide">←</button>
+        <span id="counter">1 / 13</span>
+        <button id="next" aria-label="Next slide">→</button>
+    </div>
+
+    <div class="help">
+        Use ← / → arrows • <kbd>F</kbd> fullscreen • <kbd>P</kbd> print • <kbd>Space</kbd> next
+    </div>
+
+    <div class="mobile-swipe-hint">
+        Swipe left/right to navigate
+    </div>
+
+    <!-- Code highlighting JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+
+    <!-- Leaflet JavaScript for GIS demo -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- PixiJS for interactive math demos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.4.0/pixi.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            hljs.highlightAll();
+
+            // Sanity check for D3 and fc libraries
+            console.log("✅ D3 loaded?", typeof d3);
+            console.log("✅ fc loaded?", typeof fc);
+
+            if (typeof d3 !== 'undefined' && typeof fc !== 'undefined') {
+                console.log("✅ D3 version:", d3.version);
+                console.log("✅ fc.layoutLabel exists?", typeof fc.layoutLabel);
+            } else {
+                console.error("❌ D3 or fc libraries failed to load!");
+            }
+        });
+
+        // Helper function to expand SVG viewBox to prevent text cutoff
+        function expandViewBox(svg, pad = 20) {
+            console.log("📐 expandViewBox called with padding:", pad);
+            const node = svg.node ? svg.node() : svg;
+            const box = node.getBBox();
+            const oldViewBox = node.getAttribute("viewBox");
+            const newViewBox = [
+                box.x - pad,
+                box.y - pad,
+                box.width + 2 * pad,
+                box.height + 2 * pad
+            ].join(" ");
+
+            console.log("   Old viewBox:", oldViewBox);
+            console.log("   New viewBox:", newViewBox);
+
+            if (svg.attr) {
+                svg.attr("viewBox", newViewBox);
+            } else {
+                node.setAttribute("viewBox", newViewBox);
+            }
+        }
+
+        // Helper function to wait for libraries to load
+        function waitForLibraries(callback, maxRetries = 20) {
+            let retries = 0;
+            const checkInterval = setInterval(() => {
+                retries++;
+                if (window.d3 && window.fc) {
+                    console.log("✅ D3 and fc libraries loaded");
+                    clearInterval(checkInterval);
+                    callback();
+                } else if (retries >= maxRetries) {
+                    console.warn("⚠️ Timeout waiting for D3/fc libraries after", retries, "attempts");
+                    clearInterval(checkInterval);
+                } else {
+                    console.log("⏳ Waiting for D3/fc libraries... attempt", retries);
+                }
+            }, 100);
+        }
+
+        // Helper function to fix SVG text layout and prevent overlap
+        function fixSVGLayout(svgElement) {
+            console.log("🔧 fixSVGLayout called for SVG element");
+
+            if (!window.d3 || !window.fc) {
+                console.warn("⚠️ D3 or fc libraries not loaded yet, will retry...");
+                waitForLibraries(() => {
+                    console.log("🔄 Retrying fixSVGLayout after libraries loaded");
+                    fixSVGLayout(svgElement);
+                });
+                return;
+            }
+
+            const svg = d3.select(svgElement);
+            console.log("   SVG selected with D3");
+
+            // Expand viewBox to prevent edge clipping
+            expandViewBox(svg, 25);
+
+            // Optional: Apply label layout if there are many text elements
+            const textElements = svg.selectAll("text");
+            console.log('   Found ' + textElements.size() + ' text elements');
+
+            if (textElements.size() > 4) {
+                console.log("   Applying d3fc label layout for", textElements.size(), "text elements");
+                // For complex layouts with many labels, use d3fc-label-layout
+                try {
+                    const labels = textElements.nodes();
+                    const layout = fc.layoutLabel()
+                        .size(d => {
+                            const box = d.getBBox();
+                            return [box.width, box.height];
+                        })
+                        .position(d => {
+                            const x = parseFloat(d.getAttribute("x") || 0);
+                            const y = parseFloat(d.getAttribute("y") || 0);
+                            return [x, y];
+                        });
+
+                    svg.datum(labels).call(layout);
+                    console.log("   ✅ Label layout applied successfully");
+                } catch (e) {
+                    console.warn("   ❌ Label layout failed:", e);
+                }
+            } else {
+                console.log("   Skipping label layout (not enough text elements)");
+            }
+        }
+
+        // Helper function to compute safe SVG bounds
+        function computeSvgBounds(svgNode) {
+            const svg = d3.select(svgNode);
+            const vbAttr = svg.attr("viewBox");
+            if (vbAttr) {
+                const nums = vbAttr.trim().split(/\s+/).map(Number);
+                if (nums.length === 4 && nums.every(Number.isFinite)) {
+                    const [vx, vy, vw, vh] = nums;
+                    if (vw > 0 && vh > 0) return { x: vx, y: vy, width: vw, height: vh };
+                }
+            }
+            // fallback: bbox + padding, and set a sane viewBox
+            const b = svgNode.getBBox();
+            const bounds = { x: b.x - 16, y: b.y - 16, width: b.width + 32, height: b.height + 32 };
+            svg.attr("viewBox", bounds.x + " " + bounds.y + " " + bounds.width + " " + bounds.height);
+            return bounds;
+        }
+
+        // Move existing <text> elements with d3fc (no new labels are created)
+        window.applyLabelLayout = function applyLabelLayout(svgNode, { anneal = false } = {}) {
+            if (!window.d3 || !window.fc) {
+                console.warn("applyLabelLayout: d3/fc not present");
+                return;
+            }
+
+            console.log('🏷️ Applying label layout (reuse existing labels)');
+            const svg = d3.select(svgNode);
+            const textsSel = svg.selectAll("text");
+            const textNodes = textsSel.nodes();
+
+            if (textNodes.length < 2) {
+                console.log('   Skipping layout (less than 2 text elements)');
+                return; // nothing to resolve
+            }
+
+            // normalize anchors to reduce surprises
+            textsSel
+                .attr("dominant-baseline", function () { return this.getAttribute("dominant-baseline") || "middle"; })
+                .attr("text-anchor", function () { return this.getAttribute("text-anchor") || "middle"; });
+
+            const bounds = computeSvgBounds(svgNode);
+            console.log('   Using bounds:', bounds);
+
+            // pick strategy
+            const base = anneal ? fc.layoutAnnealing() : fc.layoutGreedy();
+            const strategy = fc.layoutRemoveOverlaps(base.bounds(bounds));
+
+            // NO component: we don't want new nodes rendered
+            const noop = () => {};
+
+            // layout that measures & reads current positions off each datum (the SVGTextElement)
+            const layout = fc.layoutLabel(strategy)
+                .size(function (d) {
+                    const bb = d.getBBox();
+                    return [bb.width + 8, bb.height + 6];  // padding around label boxes
+                })
+                .position(function (d) {
+                    return [ +d.getAttribute("x") || 0, +d.getAttribute("y") || 0 ];
+                })
+                .component(noop);
+
+            // bind nodes as data and run layout
+            svg.datum(textNodes).call(layout);
+
+            // now bind those datums to the text selection
+            textsSel.data(textNodes);
+
+            // write solved positions back; keep old value as fallback
+            textsSel
+                .attr("x", function (d) { return (d && Number.isFinite(d.x)) ? d.x : +this.getAttribute("x"); })
+                .attr("y", function (d) { return (d && Number.isFinite(d.y)) ? d.y : +this.getAttribute("y"); });
+            console.log('   ✅ Label layout applied to', textNodes.length, 'existing text elements (no new nodes created)');
+        };
+
+        // Move every <text> to the end of its parent so it paints on top
+        function bringTextToFront(svgEl) {
+            console.log('📤 Bringing text elements to front');
+            const texts = svgEl.querySelectorAll('text');
+            texts.forEach(t => t.parentNode.appendChild(t)); // append = top of paint order
+            console.log('   ✅ Moved', texts.length, 'text elements to front');
+        }
+
+        // Ensure SVG has the filter definitions for labels
+        function ensureLabelFilters(svgEl) {
+            const NS = "http://www.w3.org/2000/svg";
+            let defs = svgEl.querySelector("defs");
+            if (!defs) {
+                defs = document.createElementNS(NS, "defs");
+                svgEl.insertBefore(defs, svgEl.firstChild);
+            }
+
+            if (!svgEl.querySelector("#label-shadow")) {
+                const f = document.createElementNS(NS, "filter");
+                f.setAttribute("id", "label-shadow");
+                f.innerHTML = '<feDropShadow dx="0" dy=".7" stdDeviation="1.2" flood-color="#000" flood-opacity=".55"/>';
+                defs.appendChild(f);
+            }
+            if (!svgEl.querySelector("#label-glow")) {
+                const f = document.createElementNS(NS, "filter");
+                f.setAttribute("id", "label-glow");
+                f.setAttribute("x", "-20%");
+                f.setAttribute("y", "-20%");
+                f.setAttribute("width", "140%");
+                f.setAttribute("height", "140%");
+                f.innerHTML = '<feGaussianBlur in="SourceAlpha" stdDeviation="1.4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+                defs.appendChild(f);
+            }
+        }
+
+        // Apply styling filters to labels
+        function styleLabels(svgEl, { use = "shadow" } = {}) {
+            console.log('🎨 Applying', use, 'filter to text labels');
+            ensureLabelFilters(svgEl);
+            const texts = svgEl.querySelectorAll("text");
+            texts.forEach(t => {
+                t.setAttribute("filter", 'url(#label-' + use + ')');
+            });
+            console.log('   ✅ Applied', use, 'filter to', texts.length, 'text elements');
+        }
+
+        // Reduce the size of filled endpoint circles; leave stroked rings alone
+        function shrinkEndpoints(svgEl, targetR = 5) {
+            console.log('🔴 Shrinking endpoint bulbs to radius', targetR);
+            let shrunkCount = 0;
+            svgEl.querySelectorAll('circle').forEach(c => {
+                const r0 = +c.getAttribute('r') || 0;
+                const fill = (c.getAttribute('fill') || '').trim().toLowerCase();
+                const hasFill = fill && fill !== 'none';
+                // Heuristic: rings in your slides have fill="none", endpoints are filled
+                if (hasFill && r0 > targetR) {
+                    c.setAttribute('r', targetR);
+                    shrunkCount++;
+                }
+            });
+            console.log('   ✅ Shrunk', shrunkCount, 'filled circles from larger sizes to', targetR);
+        }
+
+        // Called after each slide's SVG is inserted (comprehensive enhancement pipeline)
+        window.fixSVGLayoutAndLabels = function fixSVGLayoutAndLabels(svgEl) {
+            console.log('🔧 fixSVGLayoutAndLabels called - running full enhancement pipeline');
+
+            if (window.fixSVGLayout) {
+                window.fixSVGLayout(svgEl);         // your viewBox pad step
+            }
+            if (window.applyLabelLayout) {
+                window.applyLabelLayout(svgEl);     // space labels (greedy)
+            }
+            bringTextToFront(svgEl);                // labels above graphics
+            styleLabels(svgEl, { use: "shadow" });  // halo + subtle shadow
+            shrinkEndpoints(svgEl, 5);              // smaller bulbs globally
+
+            console.log('   ✅ Enhancement pipeline completed');
+        };
+
+        // Auto-fix all SVGs when a slide is loaded
+        window.addEventListener("slideLoaded", () => {
+            console.log("📄 slideLoaded event received");
+            const svgs = document.querySelectorAll("#slide-content svg");
+            console.log('   Found ' + svgs.length + ' SVG(s) in slide content');
+
+            if (svgs.length > 0) {
+                // Wait for libraries to be ready before processing SVGs
+                if (!window.d3 || !window.fc) {
+                    console.log("⏳ Libraries not ready, waiting...");
+                    waitForLibraries(() => {
+                        svgs.forEach((svg, index) => {
+                            console.log('   Processing SVG ' + (index + 1) + '/' + svgs.length);
+                            fixSVGLayoutAndLabels(svg);
+                        });
+                    });
+                } else {
+                    svgs.forEach((svg, index) => {
+                        console.log('   Processing SVG ' + (index + 1) + '/' + svgs.length);
+                        fixSVGLayoutAndLabels(svg);
+                    });
+                }
+            }
+        });
+    </script>
+
+    <script>
+// No embedded data needed for this presentation
+console.log('Presentation loaded - no external data dependencies');
+
+
+// This function contains all the logic for the aerial photography scheduling slide
+// Shows why vector embedding matters for "time to optimal window" calculations
+
+function initFlightPhotoWindow() {
+  try {
+    console.log("📸 Initializing Flight Photo Window demo...");
+
+    // Get DOM elements
+    const departureSlider = document.getElementById("departure-time");
+    const durationSlider = document.getElementById("flight-duration");
+    const timezonesSlider = document.getElementById("timezones");
+
+    const departureValue = document.getElementById("departure-value");
+    const durationValue = document.getElementById("duration-value");
+    const timezoneValue = document.getElementById("timezone-value");
+
+    const depClock = document.getElementById("departure-clock");
+    const arrClock = document.getElementById("arrival-clock");
+    const depHand = document.getElementById("dep-hand");
+    const arrHand = document.getElementById("arr-hand");
+
+    const vectorSpace = document.getElementById("vector-space");
+    const depVector = document.getElementById("dep-vector");
+    const arrVector = document.getElementById("arr-vector");
+    const depPoint = document.getElementById("dep-point");
+    const arrPoint = document.getElementById("arr-point");
+    const depLabel = document.getElementById("dep-label");
+    const arrLabel = document.getElementById("arr-label");
+
+    const distanceArc = document.getElementById("distance-arc");
+    const distanceLabel = document.getElementById("distance-label");
+
+    // Time toggle button and labels
+    const timeToggle = document.getElementById("time-toggle");
+    const labelNorth = document.getElementById("label-north");
+    const labelEast = document.getElementById("label-east");
+    const labelSouth = document.getElementById("label-south");
+    const labelWest = document.getElementById("label-west");
+    let isMilitaryTime = true;
+
+    const naiveDistance = document.getElementById("naive-distance");
+    const vectorDistance = document.getElementById("vector-distance");
+    const morningDistance = document.getElementById("morning-distance");
+    const photoQuality = document.getElementById("photo-quality");
+
+    const naiveResult = document.getElementById("naive-result");
+    const vectorResult = document.getElementById("vector-result");
+    const morningResult = document.getElementById("morning-result");
+    const photoReady = document.getElementById("photo-ready");
+
+    // Pedagogical elements
+    const hintButton = document.getElementById("hint-button");
+    const hintContent = document.getElementById("hint-content");
+    const methodDifference = document.getElementById("method-difference");
+    const differenceExplanation = document.getElementById(
+      "difference-explanation"
+    );
+    const explanationText = document.getElementById("explanation-text");
+
+    // Photo windows (in 24h format)
+    const MORNING_START = 9; // 9 AM
+    const MORNING_END = 11; // 11 AM
+    const AFTERNOON_START = 14; // 2 PM
+    const AFTERNOON_END = 16; // 4 PM
+
+    // THE KEY FUNCTION: Embed time-of-day as 2D vector
+    function embedTimeAsVector(hours) {
+      // Convert to clock position:
+      // - 0 hours (midnight) should be at top (angle = -π/2 in standard coords)
+      // - Hours increase clockwise
+      const theta = (2 * Math.PI * hours) / 24 - Math.PI / 2;
+      return {
+        x: Math.cos(theta),
+        y: Math.sin(theta),
+        angle: theta,
+      };
+    }
+
+    // Compute circular distance between two times (in hours)
+    function circularDistance(hours1, hours2) {
+      const vec1 = embedTimeAsVector(hours1);
+      const vec2 = embedTimeAsVector(hours2);
+
+      // Dot product gives us cos(angle between)
+      const dotProduct = vec1.x * vec2.x + vec1.y * vec2.y;
+      const angleDistance = Math.acos(Math.max(-1, Math.min(1, dotProduct)));
+
+      // Convert radians to hours
+      return (angleDistance * 12) / Math.PI;
+    }
+
+    // NAIVE distance calculation (what most systems do wrong)
+    function naiveTimeDistance(currentTime, targetWindow) {
+      // Most flight planning software does this simple subtraction
+      let distance = targetWindow - currentTime;
+
+      // Handle negative by adding 24 (but this is where it goes wrong!)
+      if (distance < 0) {
+        distance += 24;
+      }
+
+      // This gives you "hours until next occurrence" but not shortest distance!
+      return distance;
+    }
+
+    // Find OPTIMAL photo window - this is where embedding shines!
+    function findOptimalWindow(arrivalTime) {
+      // Check all windows and find the best one
+      const windows = [
+        { start: MORNING_START, end: MORNING_END, name: "Morning" },
+        { start: AFTERNOON_START, end: AFTERNOON_END, name: "Afternoon" },
+      ];
+
+      let bestWindow = null;
+      let shortestWait = 24;
+
+      // Naive approach - find the CHRONOLOGICALLY NEXT window
+      let naiveChoice = null;
+      let naiveWait = 24;
+
+      // First, try to find a window later today
+      for (const window of windows) {
+        const windowCenter = (window.start + window.end) / 2;
+
+        if (windowCenter > arrivalTime) {
+          const waitTime = windowCenter - arrivalTime;
+          if (waitTime < naiveWait) {
+            naiveWait = waitTime;
+            naiveChoice = window;
+          }
+        }
+      }
+
+      // If no window found later today, pick the earliest tomorrow
+      if (!naiveChoice) {
+        // Morning comes first tomorrow
+        naiveChoice = windows[0]; // Morning window
+        naiveWait = (MORNING_START + MORNING_END) / 2 + 24 - arrivalTime;
+      }
+
+      // Vector embedding approach - finds TRUE shortest distance in either direction
+      for (const window of windows) {
+        const windowCenter = (window.start + window.end) / 2;
+        const vectorDist = circularDistance(arrivalTime, windowCenter);
+
+        if (vectorDist < shortestWait) {
+          shortestWait = vectorDist;
+          bestWindow = window;
+        }
+      }
+
+      return {
+        optimal: bestWindow,
+        optimalWait: shortestWait,
+        naive: naiveChoice,
+        naiveWait: naiveWait,
+        differentChoice: bestWindow.name !== naiveChoice.name,
+      };
+    }
+
+    // Draw photo windows on clock
+    function drawPhotoWindows(svg) {
+      const windows = svg.querySelector(".photo-windows");
+      windows.innerHTML = "";
+
+      // Morning window arc
+      const morningStart = (MORNING_START * 360) / 24 - 90;
+      const morningEnd = (MORNING_END * 360) / 24 - 90;
+      const morningArc = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+      const morningPath = describeArc(100, 100, 80, morningStart, morningEnd);
+      morningArc.setAttribute("d", morningPath);
+      morningArc.setAttribute("fill", "none");
+      morningArc.setAttribute("stroke", "var(--bb-gold)");
+      morningArc.setAttribute("stroke-width", "8");
+      morningArc.setAttribute("opacity", "0.4");
+      windows.appendChild(morningArc);
+
+      // Afternoon window arc
+      const afternoonStart = (AFTERNOON_START * 360) / 24 - 90;
+      const afternoonEnd = (AFTERNOON_END * 360) / 24 - 90;
+      const afternoonArc = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+      const afternoonPath = describeArc(
+        100,
+        100,
+        80,
+        afternoonStart,
+        afternoonEnd
+      );
+      afternoonArc.setAttribute("d", afternoonPath);
+      afternoonArc.setAttribute("fill", "none");
+      afternoonArc.setAttribute("stroke", "var(--bb-info)");
+      afternoonArc.setAttribute("stroke-width", "8");
+      afternoonArc.setAttribute("opacity", "0.4");
+      windows.appendChild(afternoonArc);
+    }
+
+    // Helper to create SVG arc path
+    function describeArc(x, y, radius, startAngle, endAngle) {
+      const start = polarToCartesian(x, y, radius, endAngle);
+      const end = polarToCartesian(x, y, radius, startAngle);
+      const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+      return [
+        "M",
+        start.x,
+        start.y,
+        "A",
+        radius,
+        radius,
+        0,
+        largeArcFlag,
+        0,
+        end.x,
+        end.y,
+      ].join(" ");
+    }
+
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+      const angleInRadians = (angleInDegrees * Math.PI) / 180;
+      return {
+        x: centerX + radius * Math.cos(angleInRadians),
+        y: centerY + radius * Math.sin(angleInRadians),
+      };
+    }
+
+    // Draw vector space visualization
+    function drawVectorSpace() {
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+
+      // Draw photo window sectors in vector space
+      const morningStartVec = embedTimeAsVector(MORNING_START);
+      const morningEndVec = embedTimeAsVector(MORNING_END);
+      const morningArc = document.getElementById("morning-arc");
+
+      const morningPath = [
+        "M",
+        centerX,
+        centerY,
+        "L",
+        centerX + morningStartVec.x * radius,
+        centerY + morningStartVec.y * radius,
+        "A",
+        radius,
+        radius,
+        0,
+        0,
+        1, // Changed sweep-flag from 0 to 1 for clockwise
+        centerX + morningEndVec.x * radius,
+        centerY + morningEndVec.y * radius,
+        "Z",
+      ].join(" ");
+      morningArc.setAttribute("d", morningPath);
+
+      const afternoonStartVec = embedTimeAsVector(AFTERNOON_START);
+      const afternoonEndVec = embedTimeAsVector(AFTERNOON_END);
+      const afternoonArc = document.getElementById("afternoon-arc");
+
+      const afternoonPath = [
+        "M",
+        centerX,
+        centerY,
+        "L",
+        centerX + afternoonStartVec.x * radius,
+        centerY + afternoonStartVec.y * radius,
+        "A",
+        radius,
+        radius,
+        0,
+        0,
+        1, // Changed sweep-flag from 0 to 1 for clockwise
+        centerX + afternoonEndVec.x * radius,
+        centerY + afternoonEndVec.y * radius,
+        "Z",
+      ].join(" ");
+      afternoonArc.setAttribute("d", afternoonPath);
+
+      // Position labels at the center of each pie slice
+      const morningCenter = (MORNING_START + MORNING_END) / 2;
+      const afternoonCenter = (AFTERNOON_START + AFTERNOON_END) / 2;
+
+      const morningCenterVec = embedTimeAsVector(morningCenter);
+      const afternoonCenterVec = embedTimeAsVector(afternoonCenter);
+
+      // Position labels at 100px radius from center (closer than the 150px arc)
+      const morningLabel = document.getElementById("morning-label");
+      const afternoonLabel = document.getElementById("afternoon-label");
+
+      if (morningLabel) {
+        morningLabel.setAttribute("x", centerX + morningCenterVec.x * 100);
+        morningLabel.setAttribute("y", centerY + morningCenterVec.y * 100 + 4); // +4 for text baseline
+      }
+
+      if (afternoonLabel) {
+        afternoonLabel.setAttribute("x", centerX + afternoonCenterVec.x * 100);
+        afternoonLabel.setAttribute(
+          "y",
+          centerY + afternoonCenterVec.y * 100 + 4
+        ); // +4 for text baseline
+      }
+    }
+
+    // Update visualization
+    function update() {
+      const departureHours = parseFloat(departureSlider.value);
+      const flightDuration = parseFloat(durationSlider.value);
+      const timezoneCrossed = parseFloat(timezonesSlider.value);
+
+      // Calculate arrival time (with timezone change)
+      const arrivalHours =
+        (departureHours + flightDuration + timezoneCrossed + 24) % 24;
+
+      // Update displays
+      const formatTime = (h) => {
+        const hours = Math.floor(h);
+        const minutes = Math.round((h - hours) * 60);
+        return `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}`;
+      };
+
+      departureValue.textContent = formatTime(departureHours);
+      durationValue.textContent = `${flightDuration.toFixed(1)}h`;
+      timezoneValue.textContent =
+        timezoneCrossed > 0 ? `+${timezoneCrossed}h` : `${timezoneCrossed}h`;
+
+      // Update clock hands
+      const depAngle = (departureHours * 360) / 24 - 90;
+      const arrAngle = (arrivalHours * 360) / 24 - 90;
+
+      depHand.setAttribute(
+        "x2",
+        100 + 70 * Math.cos((depAngle * Math.PI) / 180)
+      );
+      depHand.setAttribute(
+        "y2",
+        100 + 70 * Math.sin((depAngle * Math.PI) / 180)
+      );
+
+      arrHand.setAttribute(
+        "x2",
+        100 + 70 * Math.cos((arrAngle * Math.PI) / 180)
+      );
+      arrHand.setAttribute(
+        "y2",
+        100 + 70 * Math.sin((arrAngle * Math.PI) / 180)
+      );
+
+      // VECTOR EMBEDDING
+      const depVec = embedTimeAsVector(departureHours);
+      const arrVec = embedTimeAsVector(arrivalHours);
+
+      // Update vector visualization with new dimensions
+      const centerX = 200;
+      const centerY = 200;
+      const radius = 150;
+
+      const depX = centerX + depVec.x * radius;
+      const depY = centerY + depVec.y * radius;
+      const arrX = centerX + arrVec.x * radius;
+      const arrY = centerY + arrVec.y * radius;
+
+      depVector.setAttribute("x2", depX);
+      depVector.setAttribute("y2", depY);
+      depPoint.setAttribute("cx", depX);
+      depPoint.setAttribute("cy", depY);
+      depLabel.setAttribute("x", depX);
+      depLabel.setAttribute("y", depY - 10);
+
+      arrVector.setAttribute("x2", arrX);
+      arrVector.setAttribute("y2", arrY);
+      arrPoint.setAttribute("cx", arrX);
+      arrPoint.setAttribute("cy", arrY);
+      arrLabel.setAttribute("x", arrX);
+      arrLabel.setAttribute("y", arrY - 10);
+
+      // Draw arc between vectors
+      // Calculate the angular difference to determine the shorter path
+      let angularDiff = arrivalHours - departureHours;
+
+      // Normalize to [-12, 12] range to find shorter path
+      if (angularDiff > 12) {
+        angularDiff -= 24;
+      } else if (angularDiff < -12) {
+        angularDiff += 24;
+      }
+
+      // For the arc to follow the circle:
+      // - largeArcFlag: 0 if angular distance < 12 hours (180°), 1 if >= 12 hours
+      // - sweepFlag: 1 if going clockwise (positive angular difference), 0 if counter-clockwise
+      const largeArcFlag = Math.abs(angularDiff) >= 12 ? 1 : 0;
+      const sweepFlag = angularDiff >= 0 ? 1 : 0;
+
+      const arcPath = [
+        "M",
+        depX,
+        depY,
+        "A",
+        radius,
+        radius,
+        0,
+        largeArcFlag,
+        sweepFlag,
+        arrX,
+        arrY,
+      ].join(" ");
+      distanceArc.setAttribute("d", arcPath);
+
+      // THIS IS THE KEY COMPARISON!
+      const windowAnalysis = findOptimalWindow(arrivalHours);
+
+      // Show pedagogical explanation when methods disagree
+      if (
+        windowAnalysis.differentChoice ||
+        Math.abs(windowAnalysis.naiveWait - windowAnalysis.optimalWait) > 2
+      ) {
+        // Methods disagree significantly - explain why!
+        methodDifference.style.display = "block";
+
+        const formatTime = (h) => {
+          const hours = Math.floor(h);
+          const minutes = Math.round((h - hours) * 60);
+          return `${hours.toString().padStart(2, "0")}:${minutes
+            .toString()
+            .padStart(2, "0")}`;
+        };
+
+        differenceExplanation.innerHTML = `
+          <strong>Arrival time: ${formatTime(arrivalHours)}<\/strong><br>
+          <strong>Naive method:<\/strong> Looks forward chronologically and says "wait ${windowAnalysis.naiveWait.toFixed(
+            1
+          )} hours until ${windowAnalysis.naive.name} window"<br>
+          <strong>Vector method:<\/strong> Checks ALL directions on the clock and finds "${
+            windowAnalysis.optimal.name
+          } window is only ${windowAnalysis.optimalWait.toFixed(
+          1
+        )} hours away"<br>
+          <br>
+          <strong>Why it breaks:<\/strong> The naive method doesn't understand that time is circular! 
+          It treats 23:00 and 01:00 as 22 hours apart instead of just 2 hours. 
+          Vector embedding treats time as a circle where midnight connects back to itself.
+        `;
+
+        explanationText.textContent =
+          "⚠️ The methods disagree! See explanation below.";
+      } else {
+        methodDifference.style.display = "none";
+        explanationText.textContent =
+          "Try different settings to see when naive calculation fails.";
+      }
+
+      // Show which window each approach recommends
+      if (windowAnalysis.differentChoice) {
+        naiveDistance.textContent = `${
+          windowAnalysis.naive.name
+        } (${windowAnalysis.naiveWait.toFixed(1)}h)`;
+        vectorDistance.textContent = `${
+          windowAnalysis.optimal.name
+        } (${windowAnalysis.optimalWait.toFixed(1)}h)`;
+
+        naiveResult.className = "result-card bad";
+        vectorResult.className = "result-card good";
+      } else {
+        naiveDistance.textContent = `${windowAnalysis.naiveWait.toFixed(
+          1
+        )}h wait`;
+        vectorDistance.textContent = `${windowAnalysis.optimalWait.toFixed(
+          1
+        )}h wait`;
+
+        naiveResult.className =
+          Math.abs(windowAnalysis.naiveWait - windowAnalysis.optimalWait) > 1
+            ? "result-card bad"
+            : "result-card";
+        vectorResult.className = "result-card good";
+      }
+
+      // Show to nearest window
+      morningDistance.textContent = `${windowAnalysis.optimalWait.toFixed(1)}h`;
+
+      // Photo quality assessment
+      let quality = "";
+      let qualityClass = "";
+      const inMorningWindow =
+        arrivalHours >= MORNING_START && arrivalHours < MORNING_END;
+      const inAfternoonWindow =
+        arrivalHours >= AFTERNOON_START && arrivalHours < AFTERNOON_END;
+
+      if (inMorningWindow || inAfternoonWindow) {
+        quality = "In window! 🟢";
+        qualityClass = "good";
+      } else if (windowAnalysis.optimalWait < 1) {
+        quality = "< 1h wait 🟡";
+        qualityClass = "good";
+      } else if (windowAnalysis.optimalWait < 3) {
+        quality = `${windowAnalysis.optimalWait.toFixed(1)}h wait 🟠`;
+        qualityClass = "";
+      } else {
+        quality = "Long wait 🔴";
+        qualityClass = "bad";
+      }
+
+      photoQuality.textContent = quality;
+      morningResult.className = `result-card ${
+        windowAnalysis.optimalWait < 2 ? "good" : ""
+      }`;
+      photoReady.className = `result-card ${qualityClass}`;
+
+      // Update distance label (now in HTML outside the SVG)
+      const flightTime = circularDistance(departureHours, arrivalHours);
+      if (distanceLabel) {
+        distanceLabel.textContent = `Flight spans: ${flightTime.toFixed(
+          1
+        )}h on clock`;
+      }
+    }
+
+    // Initialize photo windows
+    drawPhotoWindows(depClock);
+    drawPhotoWindows(arrClock);
+    drawVectorSpace();
+
+    // Event listeners
+    departureSlider.addEventListener("input", update);
+    durationSlider.addEventListener("input", update);
+    timezonesSlider.addEventListener("input", update);
+
+    // Toggle button for time display format
+    if (timeToggle) {
+      timeToggle.addEventListener("click", () => {
+        isMilitaryTime = !isMilitaryTime;
+        timeToggle.textContent = isMilitaryTime ? "24h" : "12h";
+
+        // Update labels based on the time format
+        if (isMilitaryTime) {
+          if (labelNorth) labelNorth.textContent = "00:00";
+          if (labelEast) labelEast.textContent = "06:00";
+          if (labelSouth) labelSouth.textContent = "12:00";
+          if (labelWest) labelWest.textContent = "18:00";
+        } else {
+          if (labelNorth) labelNorth.textContent = "12 AM";
+          if (labelEast) labelEast.textContent = "6 AM";
+          if (labelSouth) labelSouth.textContent = "12 PM";
+          if (labelWest) labelWest.textContent = "6 PM";
+        }
+      });
+    }
+
+    // Hint button toggle
+    if (hintButton) {
+      hintButton.addEventListener("click", () => {
+        const isHidden = hintContent.style.display === "none";
+        hintContent.style.display = isHidden ? "block" : "none";
+        hintButton.textContent = isHidden
+          ? "💡 Hide Hint"
+          : "💡 How to Break Naive Calculation";
+      });
+    }
+
+    // Set initial values that show a subtle difference
+    // Start with something that works, let users discover the breaking case
+    departureSlider.value = "14"; // 2 PM departure
+    durationSlider.value = "3"; // 3 hour flight
+    timezonesSlider.value = "-1"; // Cross 1 timezone west
+
+    // Initial update
+    update();
+
+    console.log("✅ Flight Photo Window demo initialized");
+  } catch (error) {
+    console.error("Error initializing Flight Photo Window demo:", error);
+  }
+}
+
+
+// GIS longitude wraparound demo for slide 12-gis-demo.html
+
+function initGISDemo() {
+  // Check if Leaflet is loaded
+  if (typeof L === "undefined") {
+    console.log("Leaflet not loaded yet, retrying...");
+    setTimeout(initGISDemo, 200);
+    return;
+  }
+
+  // Check if map container exists
+  const mapContainer = document.getElementById("map");
+  if (!mapContainer) {
+    console.log("Map container not found");
+    return;
+  }
+
+  // Clear any existing map
+  if (window.gisMap) {
+    window.gisMap.remove();
+    window.gisMap = null;
+  }
+
+  try {
+    // Add CSS styles for marker labels
+    const style = document.createElement('style');
+    style.textContent = `
+      .wrong-label {
+        background-color: #FF1744 !important;
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 12px !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 4px 8px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+      }
+      .wrong-label::before {
+        border-top-color: #FF1744 !important;
+      }
+      .right-label {
+        background-color: #00C853 !important;
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 12px !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 4px 8px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+      }
+      .right-label::before {
+        border-top-color: #00C853 !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Center between the Pacific (where pins are) and Atlantic (where wrong answer appears)
+    const MAP_CENTER = [10.0, 90.0]; // Centered to show both Pacific pins and Atlantic error
+
+    // Map zoomed out to show both correct answer (Pacific) and wrong answer (Atlantic)
+    const map = L.map("map", {
+      center: MAP_CENTER,
+      zoom: 2, // Zoom out more to show both hemispheres
+      worldCopyJump: false,
+    });
+    window.gisMap = map; // Store reference for cleanup
+
+    // OSM tiles with attribution
+    let tiles = L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap<\/a> contributors',
+      }
+    ).addTo(map);
+    window.gisTiles = tiles;
+
+    // Two draggable points that straddle the International Date Line (the REAL wraparound!)
+    const blueIcon = L.divIcon({
+      className: "custom-marker",
+      html: '<div style="background:var(--bb-info); width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3);"><\/div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 10],
+    });
+    const orangeIcon = L.divIcon({
+      className: "custom-marker",
+      html: '<div style="background:var(--bb-gold); width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3);"><\/div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 10],
+    });
+
+    const marker1 = L.marker([5.0, 170.0], { draggable: true, icon: blueIcon })
+      .addTo(map)
+      .bindTooltip("170°E", { permanent: true, direction: "right" });
+    // Use +190° instead of -170° to ensure it appears on the same map copy as 170°
+    const marker2 = L.marker([15.0, 190.0], {
+      draggable: true,
+      icon: orangeIcon,
+    })
+      .addTo(map)
+      .bindTooltip("190°E (-170°)", { permanent: true, direction: "left" });
+    const pts = [marker1, marker2];
+    window.gisMarkers = pts;
+
+    console.log(
+      "Created GIS markers:",
+      pts.length,
+      "markers at positions:",
+      pts.map((m) => `${m.getLatLng().lat},${m.getLatLng().lng}`)
+    );
+
+    // Circular mean helper function
+    function meanLonDeg(ds) {
+      let x = 0,
+        y = 0;
+      for (const d of ds) {
+        const r = (d * Math.PI) / 180;
+        x += Math.cos(r);
+        y += Math.sin(r);
+      }
+      let m = (Math.atan2(y, x) * 180) / Math.PI;
+      // For this demo, keep result in range [-180, 180] but prefer positive values near dateline
+      if (m < -180) m += 360;
+      if (m > 180) m -= 360;
+      return m;
+    }
+
+    // Result markers - RED for wrong, GREEN for correct with permanent labels
+    const wrongMarker = L.circleMarker(MAP_CENTER, {
+      radius: 12,
+      color: "#FF1744",
+      fillColor: "#FF5252",
+      fillOpacity: 0.9,
+      weight: 3,
+    })
+      .addTo(map)
+      .bindTooltip("WRONG", {
+        permanent: true,
+        direction: "top",
+        className: "wrong-label",
+        offset: [0, -15]
+      });
+
+    const correctMarker = L.circleMarker(MAP_CENTER, {
+      radius: 15,
+      color: "#00C853",
+      fillColor: "#4CAF50",
+      fillOpacity: 0.9,
+      weight: 3,
+    })
+      .addTo(map)
+      .bindTooltip("RIGHT", {
+        permanent: true,
+        direction: "top",
+        className: "right-label",
+        offset: [0, -15]
+      });
+    const readout = document.getElementById("readout");
+
+    window.gisResultMarkers = [wrongMarker, correctMarker];
+
+    function update() {
+      const lats = pts.map((m) => m.getLatLng().lat);
+      const lons = pts.map((m) => m.getLatLng().lng);
+      const latAvg = lats.reduce((a, b) => a + b, 0) / lats.length;
+
+      // Update marker tooltips with current positions
+      // Normalize longitude for display (keep in -180 to 180 range)
+      let displayLon1 = lons[0];
+      let displayLon2 = lons[1];
+      if (displayLon2 > 180) displayLon2 -= 360; // Convert 190° back to -170° for display
+
+      marker1.setTooltipContent(`${displayLon1.toFixed(1)}°`);
+      marker2.setTooltipContent(`${displayLon2.toFixed(1)}°`);
+
+      // Naive linear mean - just averages the longitude values directly
+      // When points are on opposite sides of date line (e.g. 170° and -170°),
+      // this gives 180° which is wrong (should be 180°)
+      const naiveLinMean = (displayLon1 + displayLon2) / 2;
+
+      // Correct circular mean - use the normalized display values
+      const circMean = meanLonDeg([displayLon1, displayLon2]);
+
+      // Debug logging
+      console.log(`Blue: ${displayLon1.toFixed(1)}°, Orange: ${displayLon2.toFixed(1)}°`);
+      console.log(`Naive linear: ${naiveLinMean.toFixed(1)}°, Circular: ${circMean.toFixed(1)}°`);
+
+      // Ensure markers appear on the main visible map copy
+      let correctLon = circMean;
+      let wrongLon = naiveLinMean;
+
+      // Fix the green pin positioning - if it's in the western hemisphere near dateline, convert to positive equivalent
+      if (correctLon < -90) {
+        correctLon += 360; // Convert negative western longitudes to positive equivalent
+      }
+
+      // For the red pin, if it's in the eastern hemisphere when pins are western,
+      // it should stay where it is (the naive wrong answer)
+
+      wrongMarker.setLatLng([latAvg, wrongLon]);
+      correctMarker.setLatLng([latAvg, correctLon]);
+
+      // Show a reference line at the Prime Meridian (0°) when naive mean is wrong
+      if (window.crossLine) map.removeLayer(window.crossLine);
+      if (Math.abs(naiveLinMean - circMean) > 90) {
+        // Large difference means we're crossing the date line
+        window.crossLine = L.polyline(
+          [
+            [latAvg - 5, 0],
+            [latAvg + 5, 0],
+          ],
+          { color: "#FFC107", weight: 2, dashArray: "5,5" }
+        ).addTo(map);
+      }
+
+      if (readout) {
+        // For display, show the mathematical result but indicate position
+        let displayCorrectLon = circMean;
+        if (correctLon > 180) {
+          displayCorrectLon = circMean; // Show original calculation (-176°)
+        }
+        readout.textContent = `✅ Circular mean: ${displayCorrectLon.toFixed(
+          1
+        )}° | ❌ Naive linear mean: ${wrongLon.toFixed(1)}°`;
+      }
+    }
+
+    pts.forEach((m) => m.on("drag dragend", update));
+    update();
+
+    // UI toggles
+    const worldCopyCheckbox = document.getElementById("worldCopy");
+    const noWrapTilesCheckbox = document.getElementById("noWrapTiles");
+
+    if (worldCopyCheckbox) {
+      worldCopyCheckbox.addEventListener("change", (e) => {
+        map.options.worldCopyJump = !!e.target.checked;
+        map.panBy([1, 0]); // nudge to apply visually
+      });
+    }
+
+    if (noWrapTilesCheckbox) {
+      noWrapTilesCheckbox.addEventListener("change", (e) => {
+        const noWrap = !!e.target.checked;
+        map.removeLayer(tiles);
+        tiles = L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          {
+            maxZoom: 19,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap<\/a> contributors',
+            noWrap,
+          }
+        ).addTo(map);
+        window.gisTiles = tiles;
+      });
+    }
+
+    console.log("GIS demo initialized");
+  } catch (error) {
+    console.error("Error initializing GIS demo:", error);
+  }
+}
+
+
+function initHueDragWheel() {
+  // Get reference to the SVG element
+  const svg = document.getElementById("dwSVG");
+  if (!svg) {
+    console.error("Could not find hue drag wheel SVG element");
+    return;
+  }
+
+  // Define constants for the hue wheel
+  const R = 179;  // Radius corrected to visual center of the ring
+  const S = 100;  // Saturation percentage for HSL colors
+  const L = 50;   // Lightness percentage for HSL colors
+
+  const lineA = svg.querySelector("#lineA");
+  const lineB = svg.querySelector("#lineB");
+  const lineMid = svg.querySelector("#lineMid");
+  const lineNaive = svg.querySelector("#lineNaive");
+  const hA = svg.querySelector("#handleA");
+  const hB = svg.querySelector("#handleB");
+  const hMid = svg.querySelector("#handleMid");
+  const hNaive = svg.querySelector("#handleNaive");
+  const labA = svg.querySelector("#labelA");
+  const labB = svg.querySelector("#labelB");
+  const labMid = svg.querySelector("#labelMid");
+  const labNaive = svg.querySelector("#labelNaive");
+  const arc = svg.querySelector("#dwArc");
+
+  const degA = document.getElementById("degA");
+  const degB = document.getElementById("degB");
+  const degMid = document.getElementById("degMid");
+  const degNaive = document.getElementById("degNaive");
+  const dotA = document.getElementById("dotA");
+  const dotB = document.getElementById("dotB");
+  const dotMid = document.getElementById("dotMid");
+  const dotNaive = document.getElementById("dotNaive");
+  const barCircular = document.getElementById("barCircular");
+  const barNaive = document.getElementById("barNaive");
+
+  // Helpers
+  const clamp360 = (h) => ((h % 360) + 360) % 360;
+  const deg2rad = (d) => (d * Math.PI) / 180;
+  const rad2deg = (r) => (r * 180) / Math.PI;
+
+  // Rotated hue wheel: red at North (0°), hue increases clockwise
+  function posOnRing(h) {
+    const a = deg2rad(h - 90); // Apply -90deg rotation
+    return [200 + R * Math.cos(a), 200 + R * Math.sin(a)];
+  }
+  function hueFromPoint(x, y) {
+    const a = Math.atan2(y - 200, x - 200);
+    return clamp360(rad2deg(a) + 90); // Apply +90deg rotation
+  }
+  function shortestDelta(a, b) {
+    return ((b - a + 540) % 360) - 180;
+  } // [-180,180)
+  function circularMid(h1, h2) {
+    return clamp360(h1 + 0.5 * shortestDelta(h1, h2));
+  }
+  function naiveMid(h1, h2) {
+    return clamp360((h1 + h2) / 2);
+  }
+
+  function setVector(elLine, elHandle, elLabel, hue, width = 7, dash = null) {
+    const [x, y] = posOnRing(hue);
+    elLine.setAttribute("x2", x);
+    elLine.setAttribute("y2", y);
+    // Color the line according to its hue
+    elLine.setAttribute("stroke", `hsl(${hue}, ${S}%, ${L}%)`);
+    elLine.setAttribute("stroke-width", width);
+    if (dash) {
+      elLine.setAttribute("stroke-dasharray", dash);
+    } else {
+      elLine.removeAttribute("stroke-dasharray");
+    }
+    elHandle.setAttribute("cx", x);
+    elHandle.setAttribute("cy", y);
+    // Color the handle with the same hue, slightly lighter
+    elHandle.setAttribute(
+      "fill",
+      `hsl(${hue}, ${S}%, ${Math.min(70, L + 20)}%)`
+    );
+    // Position label slightly outside the handle
+    const labelOffset = 18;
+    const angle = deg2rad(hue - 90); // Apply rotation for label positioning
+    elLabel.setAttribute("x", x + labelOffset * Math.cos(angle));
+    elLabel.setAttribute("y", y + labelOffset * Math.sin(angle));
+  }
+  function setChip(dot, degree, hue) {
+    dot.style.background = `hsl(${hue}, ${S}%, ${L}%)`;
+    degree.textContent = `${Math.round(hue)}°`;
+  }
+  function setArc(h1, h2) {
+    const dShort = shortestDelta(h1, h2);
+    // Always draw the shortest arc
+    const large = Math.abs(dShort) > 180 ? 1 : 0;
+    const sweepFlag = dShort > 0 ? 1 : 0; // Positive delta = clockwise sweep
+    const [ax, ay] = posOnRing(h1);
+    const [bx, by] = posOnRing(h2);
+    arc.setAttribute(
+      "d",
+      `M ${ax} ${ay} A ${R} ${R} 0 ${large} ${sweepFlag} ${bx} ${by}`
+    );
+  }
+  function setBars(h1, h2) {
+    const steps = 30;
+    const colsCirc = [],
+      colsNaive = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const hm = clamp360(h1 + shortestDelta(h1, h2) * t);
+      const hn = clamp360(h1 + (h2 - h1) * t);
+      colsCirc.push(`hsl(${hm}, ${S}%, ${L}%)`);
+      colsNaive.push(`hsl(${hn}, ${S}%, ${L}%)`);
+    }
+    barCircular.style.background = `linear-gradient(90deg, ${colsCirc.join(
+      ","
+    )})`;
+    barNaive.style.background = `linear-gradient(90deg, ${colsNaive.join(
+      ","
+    )})`;
+  }
+
+  // State
+  let H1 = 340, // Start with red-magenta
+    H2 = 40;  // Start with orange
+  function render() {
+    const Hmid = circularMid(H1, H2);
+    const Hnaive = naiveMid(H1, H2);
+    setVector(lineA, hA, labA, H1, 7, null);
+    setVector(lineB, hB, labB, H2, 7, null);
+    setVector(lineMid, hMid, labMid, Hmid, 7, null);
+    setVector(lineNaive, hNaive, labNaive, Hnaive, 5, "4,6");
+    setChip(dotA, degA, H1);
+    setChip(dotB, degB, H2);
+    setChip(dotMid, degMid, Hmid);
+    setChip(dotNaive, degNaive, Hnaive);
+    setArc(H1, H2);
+    setBars(H1, H2);
+  }
+
+  // Dragging
+  function makeDraggable(handle, which) {
+    let dragging = false;
+    function onDown(e) {
+      dragging = true;
+      e.preventDefault();
+      handle.setPointerCapture?.(e.pointerId);
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      const r = svg.getBoundingClientRect();
+      const x = e.clientX - r.left,
+        y = e.clientY - r.top;
+      const hue = hueFromPoint(x, y);
+      if (which === "A") H1 = hue;
+      else H2 = hue;
+      render();
+    }
+    function onUp(e) {
+      dragging = false;
+      handle.releasePointerCapture?.(e.pointerId);
+    }
+    handle.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  }
+  makeDraggable(hA, "A");
+  makeDraggable(hB, "B");
+
+  // Click on ring to set nearest handle
+  svg.addEventListener("pointerdown", (e) => {
+    const r = svg.getBoundingClientRect();
+    const x = e.clientX - r.left,
+      y = e.clientY - r.top;
+    const hue = hueFromPoint(x, y);
+    const dA = Math.abs(shortestDelta(hue, H1)),
+      dB = Math.abs(shortestDelta(hue, H2));
+    if (dA <= dB) H1 = hue;
+    else H2 = hue;
+    render();
+  });
+
+  render();
+}
+
+
+// Interactive angle averaging demo for slide 11-interactive-demo.html
+
+function initInteractiveDemo() {
+  const angle1Input = document.getElementById("angle1");
+  const angle2Input = document.getElementById("angle2");
+  const angle1Display = document.getElementById("angle1-display");
+  const angle2Display = document.getElementById("angle2-display");
+  const wrongResult = document.getElementById("wrong-result");
+  const correctResult = document.getElementById("correct-result");
+
+  // Check if elements exist (safety check)
+  if (!angle1Input || !angle2Input) {
+    console.log("Interactive demo elements not found");
+    return;
+  }
+
+  function updateDemo() {
+    const a1 = parseInt(angle1Input.value);
+    const a2 = parseInt(angle2Input.value);
+
+    // Update displays
+    angle1Display.textContent = a1 + "°";
+    angle2Display.textContent = a2 + "°";
+
+    // Calculate wrong (linear) average
+    const wrongAvg = (a1 + a2) / 2;
+    wrongResult.textContent = Math.round(wrongAvg) + "°";
+
+    // Calculate correct (circular) average
+    const theta1 = (a1 * Math.PI) / 180;
+    const theta2 = (a2 * Math.PI) / 180;
+    const v1 = [Math.cos(theta1), Math.sin(theta1)];
+    const v2 = [Math.cos(theta2), Math.sin(theta2)];
+    const avgVec = [(v1[0] + v2[0]) / 2, (v1[1] + v2[1]) / 2];
+    const norm = Math.sqrt(avgVec[0] ** 2 + avgVec[1] ** 2);
+    avgVec[0] /= norm;
+    avgVec[1] /= norm;
+    const correctAvg = (Math.atan2(avgVec[1], avgVec[0]) * 180) / Math.PI;
+    const correctAvgNormalized = (correctAvg + 360) % 360;
+    correctResult.textContent = Math.round(correctAvgNormalized) + "°";
+
+    // Update visual
+    updateVisual(a1, a2, wrongAvg, correctAvgNormalized);
+
+    // Show/hide wrong result based on how wrong it is
+    const wrongness = Math.abs(wrongAvg - correctAvgNormalized);
+    const adjustedWrongness = Math.min(wrongness, 360 - wrongness);
+    const opacity = adjustedWrongness > 30 ? 1 : 0;
+
+    const wrongLine = document.getElementById("avg-wrong-line");
+    const wrongPoint = document.getElementById("avg-wrong-point");
+    if (wrongLine) wrongLine.style.opacity = opacity;
+    if (wrongPoint) wrongPoint.style.opacity = opacity;
+  }
+
+  function updateVisual(a1, a2, wrongAvg, correctAvg) {
+    const cx = 200,
+      cy = 200,
+      r = 150;
+
+    // Convert angles to positions
+    function angleToPos(angle) {
+      const rad = ((angle - 90) * Math.PI) / 180; // -90 to start from top
+      return {
+        x: cx + r * Math.cos(rad),
+        y: cy + r * Math.sin(rad),
+      };
+    }
+
+    const pos1 = angleToPos(a1);
+    const pos2 = angleToPos(a2);
+    const wrongPos = angleToPos(wrongAvg);
+    const correctPos = angleToPos(correctAvg);
+
+    // Update lines and points safely
+    const elements = [
+      { id: "angle1-line", x2: pos1.x, y2: pos1.y },
+      { id: "angle1-point", cx: pos1.x, cy: pos1.y },
+      { id: "angle2-line", x2: pos2.x, y2: pos2.y },
+      { id: "angle2-point", cx: pos2.x, cy: pos2.y },
+      { id: "avg-wrong-line", x2: wrongPos.x, y2: wrongPos.y },
+      { id: "avg-wrong-point", cx: wrongPos.x, cy: wrongPos.y },
+      { id: "avg-correct-line", x2: correctPos.x, y2: correctPos.y },
+      { id: "avg-correct-point", cx: correctPos.x, cy: correctPos.y },
+    ];
+
+    elements.forEach((elem) => {
+      const element = document.getElementById(elem.id);
+      if (element) {
+        if (elem.x2 !== undefined) element.setAttribute("x2", elem.x2);
+        if (elem.y2 !== undefined) element.setAttribute("y2", elem.y2);
+        if (elem.cx !== undefined) element.setAttribute("cx", elem.cx);
+        if (elem.cy !== undefined) element.setAttribute("cy", elem.cy);
+      }
+    });
+  }
+
+  // Set up event listeners
+  angle1Input.addEventListener("input", updateDemo);
+  angle2Input.addEventListener("input", updateDemo);
+
+  // Initial update
+  updateDemo();
+
+  console.log("Interactive demo initialized");
+}
+
+
+const slides = Array.from(document.querySelectorAll('.slide'));
+    const progressBar = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    const controls = document.querySelector('.controls');
+    let currentIndex = 0;
+    let fadeTimer = null;
+
+    // Auto-fade controls
+    function startFadeTimer() {
+      // Clear any existing timer
+      if (fadeTimer) {
+        clearTimeout(fadeTimer);
+      }
+      
+      // Show controls immediately
+      controls.classList.remove('fade-out');
+      controls.classList.add('fade-in');
+      
+      // Start fade out after 2 seconds (1 second stable + 1 second fade)
+      fadeTimer = setTimeout(() => {
+        controls.classList.remove('fade-in');
+        controls.classList.add('fade-out');
+      }, 2000);
+    }
+
+    // Show controls when user interacts
+    function showControls() {
+      controls.classList.remove('fade-out');
+      controls.classList.add('fade-in');
+      startFadeTimer();
+    }
+
+    function showSlide(index) {
+      // Remove all classes
+      slides.forEach(s => {
+        s.classList.remove('active', 'prev');
+      });
+      
+      // Wrap around
+      currentIndex = (index + slides.length) % slides.length;
+      
+      // Set classes
+      slides[currentIndex].classList.add('active');
+      if (currentIndex > 0) {
+        slides[currentIndex - 1].classList.add('prev');
+      } else {
+        slides[slides.length - 1].classList.add('prev');
+      }
+      
+      // Reset scroll position for new slide
+      slides[currentIndex].scrollTop = 0;
+      
+      // Update UI
+      counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+      progressBar.style.width = `${((currentIndex + 1) / slides.length) * 100}%`;
+      
+      // Show controls and start fade timer
+      showControls();
+    }
+
+    // Navigation with control show
+    document.getElementById('prev').onclick = () => {
+      showControls();
+      showSlide(currentIndex - 1);
+    };
+    
+    document.getElementById('next').onclick = () => {
+      showControls();
+      showSlide(currentIndex + 1);
+    };
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowRight':
+        case ' ':
+          e.preventDefault();
+          showSlide(currentIndex + 1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          showSlide(currentIndex - 1);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+          } else {
+            document.exitFullscreen();
+          }
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          window.print();
+          break;
+        case 'Home':
+          e.preventDefault();
+          showSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          showSlide(slides.length - 1);
+          break;
+      }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+      // Show controls when touching
+      showControls();
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const horizontalDiff = Math.abs(touchEndX - touchStartX);
+      const verticalDiff = Math.abs(touchEndY - touchStartY);
+      
+      // Only trigger if horizontal swipe is stronger than vertical
+      if (horizontalDiff > verticalDiff && horizontalDiff > 50) {
+        if (touchEndX < touchStartX) {
+          showSlide(currentIndex + 1); // Swipe left = next
+        } else {
+          showSlide(currentIndex - 1); // Swipe right = previous
+        }
+      }
+    }
+
+    // Initialize
+    showSlide(0);
+
+    // Hide mobile hint after first interaction
+    let hasInteracted = false;
+    function hideHint() {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        const hint = document.querySelector('.mobile-swipe-hint');
+        if (hint) {
+          hint.style.opacity = '0';
+          setTimeout(() => hint.style.display = 'none', 500);
+        }
+      }
+    }
+
+    document.addEventListener('touchstart', hideHint);
+    document.addEventListener('click', hideHint);
+
+    // Show controls if user taps anywhere on screen
+    document.addEventListener('click', (e) => {
+      // Don't trigger if clicking on controls themselves
+      if (!e.target.closest('.controls')) {
+        showControls();
+      }
+    });
+
+
+    </script>
+</body>
+</html>
